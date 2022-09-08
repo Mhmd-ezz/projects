@@ -1,0 +1,24 @@
+.nav{
+    margin-left: 4px;
+    min-width: 0!important;
+    height: 40px!important;
+    padding: 0 20px!important;
+    border-radius: 9999px!important;
+    color: rgba(100,116,139);
+    height: 48px;
+    padding: 0 24px;
+    cursor: pointer;
+    box-sizing: border-box;
+    opacity: .6;
+    min-width: 160px;
+    text-align: center;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    white-space: nowrap;
+    position: relative;
+}
+.nav.is-active{
+    color: rgba(30,41,59);
+    background-color: rgb(51 65 85 / 0.1)!important;
+}

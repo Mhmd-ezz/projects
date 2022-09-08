@@ -1,0 +1,22 @@
+.inventory-grid {
+    grid-template-columns: 10px 130px 130px repeat(7, 1fr);
+    
+    // grid-template-columns: 48px auto 40px;
+    // grid-template-columns: 20px 115px 115px auto auto auto auto auto;
+    // @screen sm {
+    //     grid-template-columns: 48px auto 112px 72px;
+    // }
+
+    // @screen md {
+    //     grid-template-columns: 48px 112px auto 112px 72px;
+    // }
+
+    // @screen lg {
+    //     grid-template-columns: 48px 112px auto 112px 96px 96px 72px;
+    // }
+}
+
+.rowDetails .mat-form-field-flex{
+    min-height: 40px!important;
+    height: 40px;
+  }

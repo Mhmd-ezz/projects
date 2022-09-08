@@ -1,0 +1,28 @@
+<h1 mat-dialog-title class="flex justify-between">
+  <span>{{data.original_name}}</span>
+  <div class="flex items-center justify-center p-1 rounded-full bg-primary-100 dark:bg-gray-600 cursor-pointer">
+    <mat-icon class="icon-size-6 text-primary-500 dark:text-primary-300" (click)="onClose()"
+      [svgIcon]="'heroicons_outline:x'">
+    </mat-icon>
+  </div>
+</h1>
+
+<div mat-dialog-content>
+
+  <!-- <div class="overlay loading_overlay">
+    <div class="flex flex-col items-center">
+      <mat-icon class="icon-size-16 text-primary-500 mb-4">check_circle</mat-icon>
+      <h1 class="text-2xl">Loading..</h1>
+      <h4>Please, wait while fetching data.</h4>
+    </div>
+  </div> -->
+
+ 
+  <ngx-doc-viewer
+
+    [url]="data.path"
+
+    viewer="url" style="width:100%;height:100%;">
+  </ngx-doc-viewer>
+
+</div>

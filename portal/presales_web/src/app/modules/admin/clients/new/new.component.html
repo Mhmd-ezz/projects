@@ -1,0 +1,130 @@
+<div class="flex flex-col flex-auto min-w-0">
+
+  <!-- Header -->
+  <div
+    class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 sm:py-4 sm:px-10 border-b bg-card dark:bg-transparent">
+    <div class="flex-1 min-w-0">
+      <!-- Breadcrumbs -->
+      <div class="flex flex-wrap items-center font-medium">
+        <div>
+          <a class="whitespace-nowrap text-primary-500" [routerLink]="['/clients']">Clients</a>
+        </div>
+        <div class="flex items-center ml-1 whitespace-nowrap">
+          <mat-icon class="icon-size-5 text-secondary" [svgIcon]="'heroicons_solid:chevron-right'"></mat-icon>
+          <a class="ml-1 text-primary-500">New</a>
+        </div>
+      </div>
+      <!-- Title -->
+      <div class="mt-2">
+        <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
+          New Client
+        </h2>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div class="flex flex-wrap p-5 gap-5 w-5/12" style="justify-content: center;">
+
+    <!-- p-6 sm:p-10 max-w-4xl -->
+    <div class="flex-auto ">
+
+      <app-error-box [error]="error"></app-error-box>
+
+      <!-- Horizontal stepper -->
+      <form class="p-4 bg-card shadow rounded overflow-hidden h-full relative" [formGroup]="form">
+
+        <div class="flex mt-5">
+
+          <!-- PRODUCT CARD -->
+          <div class="flex flex-col flex-auto gt-xs:flex-row">
+
+            <mat-form-field class="flex-auto">
+              <mat-label>Client name</mat-label>
+              <input matInput formControlName="name" placeholder="Client name">
+              <mat-icon class="icon-size-5" matSuffix [svgIcon]="'heroicons_solid:office-building'"></mat-icon>
+              <mat-error *ngIf="form.get('name').hasError('required')">Client name is required.</mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="flex-auto">
+              <mat-label>Client Abbreviation</mat-label>
+              <input matInput formControlName="abbreviation" placeholder="Client abbreviation">
+              <mat-icon class="icon-size-5" matSuffix [svgIcon]="'heroicons_solid:hashtag'"></mat-icon>
+              <mat-error *ngIf="form.get('abbreviation').hasError('required')">Client abbreviation is required.
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="flex-auto">
+              <mat-label>Country</mat-label>
+              <mat-select formControlName="country_code">
+                <mat-option *ngFor="let country of countries" [value]="country.countryCode">{{
+                  country.countryName }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="flex-auto">
+              <mat-label>Client Industry</mat-label>
+              <mat-select formControlName="industry">
+                <mat-option value="goverment">Goverment</mat-option>
+                <mat-option value="aerospace">Aerospace</mat-option>
+                <mat-option value="agriculture">Agriculture </mat-option>
+                <mat-option value="construction">Construction </mat-option>
+                <mat-option value="education">Education </mat-option>
+                <mat-option value="information technology">Information Technology </mat-option>
+                <mat-option value="energy">Energy </mat-option>
+                <mat-option value="financial services">Financial Services </mat-option>
+                <mat-option value="food and beverage">Food and Beverage </mat-option>
+                <mat-option value="healthcare">Healthcare </mat-option>
+                <mat-option value="hospitality">Hospitality </mat-option>
+                <mat-option value="manufacturing">Manufacturing </mat-option>
+                <mat-option value="media">Media </mat-option>
+                <mat-option value="telecommunication">Telecommunication </mat-option>
+                <mat-option value="transport">Transport </mat-option>
+                <mat-option value="other">Other </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="flex-auto">
+              <mat-label>Client Size</mat-label>
+              <mat-select formControlName="size">
+                <mat-option value="large">large Enterprise</mat-option>
+                <mat-option value="medium">Medium-sized business</mat-option>
+                <mat-option value="small">Small-sized business </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="flex-auto">
+              <mat-label>Number of Employees</mat-label>
+              <mat-select formControlName="number_employees">
+                <mat-option value="1-10">1-10 employyes</mat-option>
+                <mat-option value="11-50">11-50 employyes</mat-option>
+                <mat-option value="51-200">51-200 employyes</mat-option>
+                <mat-option value="201-500">201-500 employyes</mat-option>
+                <mat-option value="501-1000">501-1000 employyes</mat-option>
+                <mat-option value="1001-5000">1001-5000 employyes</mat-option>
+                <mat-option value="50001-10000">5001-10,000 employyes</mat-option>
+                <mat-option value="10000+">10,000+ employyes</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+
+          </div>
+          <!-- PRODUCT CARD -->
+
+        </div>
+
+        <div class="flex justify-end">
+
+          <button class="px-8" mat-flat-button [color]="'primary'" type="button" [class.spinner_btn]="loading"
+            [disabled]="loading" (click)="save()">
+            Save
+          </button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+
+
+
+</div>

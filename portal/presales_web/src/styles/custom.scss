@@ -1,0 +1,99 @@
+.overlay.loading_overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgb(255 255 255 / 82%);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loader_1,
+.loader_1:before,
+.loader_1:after {
+  border-radius: 50%;
+  width: 2.5em;
+  height: 2.5em;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  -webkit-animation: load7 1.8s infinite ease-in-out;
+  animation: load7 1.8s infinite ease-in-out;
+  // top: -30px;
+}
+.loader_1 {
+  color: #ffffff;
+  font-size: 10px;
+  margin: 0px auto;
+  position: relative;
+  text-indent: -9999em;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+.loader_1:before,
+.loader_1:after {
+  content: "";
+  position: absolute;
+  top: 0;
+}
+.loader_1:before {
+  left: -3.5em;
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+.loader_1:after {
+  left: 3.5em;
+}
+@-webkit-keyframes load7 {
+  0%,
+  80%,
+  100% {
+    box-shadow: 0 2.5em 0 -1.3em;
+  }
+  40% {
+    box-shadow: 0 2.5em 0 0;
+  }
+}
+@keyframes load7 {
+  0%,
+  80%,
+  100% {
+    box-shadow: 0 2.5em 0 -1.3em;
+  }
+  40% {
+    box-shadow: 0 2.5em 0 0;
+  }
+}
+
+tasks .text-hint a span {
+  text-decoration: line-through;
+}
+
+mat-dialog-container {
+  app-file-viewer-dialog {
+    height: 100%;
+  }
+  .mat-dialog-content {
+    height: 100%;
+    max-height: calc(100% - 100px);
+    padding: 0;
+  }
+}
+
+.description_tooltip {
+  font-size: 14px;
+  white-space: break-spaces;
+}
+
+.logo_bg {
+  width: 4.9rem;
+  padding: 0.25rem;
+  background-color: #fff;
+  border-radius: 3px;
+  box-shadow: 1px 1px 39px #5c5f67;
+}

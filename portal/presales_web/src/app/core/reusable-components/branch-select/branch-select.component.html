@@ -1,0 +1,18 @@
+<mat-form-field class="flex-auto">
+  <mat-label>{{label}}</mat-label>
+  <mat-select [formControl]="branchControl" placeholder="Branch" [compareWith]="compareById">
+    <!-- place ngx-mat-select-search inside mat-option to allow opening without initial selection -->
+    <mat-option>
+      <ngx-mat-select-search [formControl]="filterCtrl" [searching]="searching"
+        [placeholderLabel]="'Search'" [required]="required"
+        [noEntriesFoundLabel]="!searching ? 'No matching branches.' : 'Loading..'">
+        <!-- <mat-icon ngxMatSelectSearchClear>delete</mat-icon> -->
+        <mat-icon >delete</mat-icon>
+      </ngx-mat-select-search>
+    </mat-option>
+    <mat-option *ngFor="let record of branches$ | async" [value]="record">
+      {{record?.name}}
+    </mat-option>
+  </mat-select>
+  <mat-error *ngIf="form.get(controlName).hasError('required')">This field is required.</mat-error>
+</mat-form-field>

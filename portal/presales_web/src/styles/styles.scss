@@ -1,0 +1,28 @@
+/* ----------------------------------------------------------------------------------------------------- */
+/*  @ Import/write your custom styles here.
+/*  @ Styles from this file will override 'vendors.scss' and Fuse's base styles.
+/* ----------------------------------------------------------------------------------------------------- */
+
+@keyframes spinner_btn {
+    to {transform: rotate(360deg);}
+  }
+   
+  .spinner_btn:before {
+    content: '';
+    box-sizing: border-box;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin-top: -10px;
+    margin-left: -10px;
+    border-radius: 50%;
+    border: 2px solid #ffffff;
+    border-top-color: #4f46e5;
+    animation: spinner_btn .8s linear infinite;
+  }
+
+  .uppy-Dashboard-inner{
+    background-color: #fff;
+}

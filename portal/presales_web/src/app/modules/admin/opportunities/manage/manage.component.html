@@ -1,0 +1,129 @@
+<div class="flex flex-col flex-auto min-w-0">
+
+  <!-- Header -->
+  <div
+    class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 sm:py-4 sm:px-10 border-b bg-card dark:bg-transparent">
+    <div class="flex-1 min-w-0">
+      <!-- Breadcrumbs -->
+      <div class="flex flex-wrap items-center font-medium">
+        <div>
+          <a class="whitespace-nowrap text-primary-500">Opportunities</a>
+        </div>
+        <div class="flex items-center ml-1 whitespace-nowrap">
+          <mat-icon class="icon-size-5 text-secondary" [svgIcon]="'heroicons_solid:chevron-right'"></mat-icon>
+          <a class="ml-1 text-primary-500">Manage</a>
+        </div>
+      </div>
+      <!-- Title -->
+      <div class="mt-2">
+        <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
+          Manage Opportunity
+        </h2>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Main -->
+  <div class="flex flex-wrap p-5 gap-5" style="justify-content: center;">
+
+    <!-- p-6 sm:p-10 max-w-4xl -->
+    <div class="flex-auto ">
+
+      <app-error-box [error]="error"></app-error-box>
+
+      <!-- Horizontal stepper -->
+      <form class="p-4 bg-card shadow rounded overflow-hidden h-full relative w-5/12" [formGroup]="form">
+
+        <div class="overlay loading_overlay" *ngIf="formLoading">
+          <div class="flex flex-col items-center">
+            <div class="loader_1 text-indigo-400 mb-15">Loading...</div>
+            <h1 class="text-2xl">Loading..</h1>
+            <h4>Please, wait while fetching data.</h4>
+          </div>
+        </div>
+
+        <div class="flex mt-5">
+
+          <!-- PRODUCT CARD -->
+          <div class="flex flex-col flex-auto gt-xs:flex-row">
+
+            <mat-form-field class="flex-auto">
+              <mat-label>Proposed value</mat-label>
+              <input matInput formControlName="proposed_value" placeholder="Proposed value">
+            </mat-form-field>
+
+            <mat-form-field class="flex-auto">
+              <mat-label>Awarded amount</mat-label>
+              <input matInput formControlName="awarded_amount" placeholder="Awarded amount">
+            </mat-form-field>
+
+            <mat-form-field class="flex-auto">
+              <mat-label>Status</mat-label>
+              <mat-select formControlName="status">
+                <mat-option value="evaluation">Evaluation</mat-option>
+                <mat-option value="shortlisted">Shortlisted</mat-option>
+                <mat-option value="won">Won</mat-option>
+                <mat-option value="lost">Lost</mat-option>
+                <mat-option value="dropped">Dropped</mat-option>
+                <mat-option value="pending">Pending</mat-option>
+                <mat-option value="cancelled">Cancelled</mat-option>
+                <!-- <mat-option value="retender">Retender</mat-option> -->
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="flex-auto">
+              <mat-label>Solution</mat-label>
+              <mat-select formControlName="solution">
+                <mat-option value="product">Product</mat-option>
+                <mat-option value="Product initiat">Product initiat</mat-option>
+                <mat-option value="Presales solution">Presales solution</mat-option>
+                <mat-option value="Portal intranet">Portal intranet</mat-option>
+                <mat-option value="Portal internet">Portal internet</mat-option>
+                <mat-option value="Digital transformation">Digital transformation</mat-option>
+                <mat-option value="Odoo">Odoo</mat-option>
+                <mat-option value="Mobile App">Mobile App</mat-option>
+                <mat-option value="Outsourcing">Outsourcing</mat-option>
+                <mat-option value="Other">Other</mat-option>
+
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="flex-auto">
+              <mat-label>RFP status</mat-label>
+              <mat-select formControlName="rfp_status">
+                <mat-option value="qualification">Qualification</mat-option>
+                <mat-option value="inprogress">In progress</mat-option>
+                <mat-option value="submitted">Submitted</mat-option>
+                <mat-option value="nogo">No GO</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="flex-auto">
+              <mat-label>Lost reason</mat-label>
+              <input matInput formControlName="lost_reason" placeholder="Lost reason">
+            </mat-form-field>
+
+          </div>
+          <!-- PRODUCT CARD -->
+
+        </div>
+
+        <div class="flex justify-end">
+
+          <button class="px-8 mr-4 ml-2 self-center bg-indigo-100" mat-flat-button type="button" [routerLink]="['/opportunities']">
+            Cancel
+          </button>
+
+          <button class="px-8" mat-flat-button [color]="'primary'" type="button" [class.spinner_btn]="saveLoading"
+            [disabled]="saveLoading" (click)="save()">
+            Save
+          </button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+
+
+</div>

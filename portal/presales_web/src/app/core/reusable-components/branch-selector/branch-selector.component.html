@@ -1,0 +1,11 @@
+<mat-form-field class="flex-auto" appearance="fill">
+  <mat-label>Branch</mat-label>
+  <input type="text" placeholder="Branch" matInput [formControl]="branchControl" [matAutocomplete]="auto" (blur)="forceSelection()">
+  <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="onBranchSelected($event)">
+    <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+      {{option.name}}  <small class="text-secondary"></small>
+    </mat-option>
+  </mat-autocomplete>
+  <mat-icon class="icon-size-5" matSuffix [svgIcon]="'heroicons_solid:globe-alt'"></mat-icon>
+  <mat-spinner *ngIf="loading" class="icon-size-5" matPrefix></mat-spinner>
+</mat-form-field>

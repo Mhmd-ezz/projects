@@ -1,0 +1,92 @@
+<div class="flex flex-col flex-auto min-w-0">
+
+  <!-- Header -->
+  <div
+    class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 sm:py-4 sm:px-10 border-b bg-card dark:bg-transparent">
+    <div class="flex-1 min-w-0">
+      <!-- Breadcrumbs -->
+      <div class="flex flex-wrap items-center font-medium">
+        <div>
+          <a class="whitespace-nowrap text-primary-500" [routerLink]="['/branches']">Branches</a>
+        </div>
+        <div class="flex items-center ml-1 whitespace-nowrap">
+          <mat-icon class="icon-size-5 text-secondary" [svgIcon]="'heroicons_solid:chevron-right'"></mat-icon>
+          <a class="ml-1 text-primary-500">Edit</a>
+        </div>
+      </div>
+      <!-- Title -->
+      <div class="mt-2">
+        <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
+          Edit branch
+        </h2>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div class="flex flex-wrap p-5 gap-5 w-5/12" style="justify-content: center;">
+
+    <!-- p-6 sm:p-10 max-w-4xl -->
+    <div class="flex-auto ">
+
+      <app-error-box [error]="error"></app-error-box>
+
+      <!-- Horizontal stepper -->
+      <form class="p-4 bg-card shadow rounded overflow-hidden h-full relative" [formGroup]="form">
+
+        <div class="overlay loading_overlay" *ngIf="isFormLoading">
+          <div class="flex flex-col items-center">
+            <div class="loader_1 text-indigo-400 mb-15">Loading...</div>
+            <!-- <mat-icon class="icon-size-16 text-primary-500 mb-4">check_circle</mat-icon> -->
+            <h1 class="text-2xl">Loading..</h1>
+            <h4>Please, wait while fetching data.</h4>
+          </div>
+        </div>
+
+        <div class="flex mt-5">
+
+          <!-- PRODUCT CARD -->
+          <div class="flex flex-col flex-auto gt-xs:flex-row">
+
+            <mat-form-field class="flex-auto">
+              <mat-label>Branch name</mat-label>
+              <input matInput formControlName="name" placeholder="Branch name">
+              <mat-error *ngIf="form.get('name').hasError('required')">Branch name is required.</mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="flex-auto">
+              <mat-label>Country</mat-label>
+              <mat-select formControlName="country_code">
+                <mat-option *ngFor="let country of countries" [value]="country.countryCode">
+                  {{ country.countryName }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="flex-auto">
+              <mat-label>Currency</mat-label>
+              <mat-select formControlName="currency_code">
+                <mat-option *ngFor="let country of countries" [value]="country.currencyCode">
+                  {{ country.currencyCode }} - {{ country.countryName }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+          </div>
+          <!-- PRODUCT CARD -->
+
+        </div>
+
+        <div class="flex justify-end">
+
+          <button class="px-8" mat-flat-button [color]="'primary'" type="button" [class.spinner_btn]="isSaveLoading"
+            [disabled]="isSaveLoading" (click)="save()">
+            Save
+          </button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+
+
+
+</div>

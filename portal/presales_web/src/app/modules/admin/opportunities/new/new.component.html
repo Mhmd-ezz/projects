@@ -1,0 +1,387 @@
+<div class="flex flex-col flex-auto min-w-0">
+
+  <!-- Header -->
+  <div
+    class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 sm:py-4 sm:px-10 border-b bg-card dark:bg-transparent">
+    <div class="flex-1 min-w-0">
+      <!-- Breadcrumbs -->
+      <div class="flex flex-wrap items-center font-medium">
+        <div>
+          <a class="whitespace-nowrap text-primary-500">Opportunities</a>
+        </div>
+        <div class="flex items-center ml-1 whitespace-nowrap">
+          <mat-icon class="icon-size-5 text-secondary" [svgIcon]="'heroicons_solid:chevron-right'"></mat-icon>
+          <a class="ml-1 text-primary-500">New</a>
+        </div>
+      </div>
+      <!-- Title -->
+      <div class="mt-2">
+        <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
+          New Opportunity
+        </h2>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div class="flex flex-wrap p-5 gap-5" style="justify-content: center;">
+
+    <!-- p-6 sm:p-10 max-w-4xl -->
+    <div class="flex-auto ">
+
+      <app-error-box [error]="error"></app-error-box>
+
+      <!-- Horizontal stepper -->
+      <form class="p-4 bg-card shadow rounded overflow-hidden h-full relative" [formGroup]="horizontalStepperForm">
+
+        <div class="overlay" *ngIf="isOpportunityCreated">
+          <div class="flex flex-col items-center">
+            <mat-icon class="icon-size-16 text-primary-500 mb-4">check_circle</mat-icon>
+            <h1 class="text-2xl">Opportunity created.</h1>
+            <h4>Please, wait while uploading files.</h4>
+          </div>
+        </div>
+
+        <mat-horizontal-stepper [linear]="true" #horizontalStepper>
+
+          <!-- SENDER -->
+          <mat-step [formGroupName]="'sender'" [stepControl]="horizontalStepperForm.get('sender')" #senderStep>
+            <ng-template matStepLabel>Sender</ng-template>
+
+            <div class="flex mt-5" style="justify-content: center;" *ngIf="userRole !== 'presales_manager'">
+
+              <!-- USER CARD -->
+              <fuse-card class="flex flex-col max-w-80 w-full p-8" style="background: #f1f5f9;">
+                <div class="text-2xl font-semibold leading-tight">Sender</div>
+
+                <hr class="w-full border-t my-6">
+                <div class="flex flex-col">
+
+                  <div class="flex items-center mt-4">
+                    <mat-icon class="icon-size-5 mr-3" [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
+                    <span class="leading-none">{{currentUser?.first_name || ''}} {{currentUser?.last_name || ''}}</span>
+                  </div>
+
+                  <div class="flex items-center">
+                    <mat-icon class="icon-size-5 mr-3" [svgIcon]="'heroicons_solid:location-marker'"></mat-icon>
+                    <span class="leading-none">{{currentUser?.branch?.name}}</span>
+                  </div>
+
+                  <div class="flex items-center">
+                    <mat-icon class="icon-size-5 mr-3" [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
+                    <span class="leading-none">{{currentUser?.role_list[0]}}</span>
+                  </div>
+
+                </div>
+
+              </fuse-card>
+              <!-- USER CARD -->
+
+            </div>
+
+            <div class="flex flex-col" *ngIf="userRole === 'presales_manager'">
+
+              <!-- SELECT USER / PRESALES MANAGER PERMISSION -->
+              <app-user-selector class="flex" [usersRoles]="userSelectorRoles" [form]="horizontalStepperForm.controls['sender']"
+                (userSelected)="onUserSelected($event)"></app-user-selector>
+              <!-- SELECT USER / PRESALES MANAGER PERMISSION -->
+
+            </div>
+
+            <div class="flex justify-end">
+              <button class="px-8" mat-flat-button [color]="'primary'" type="button"
+                [disabled]="senderStep.stepControl.invalid" matStepperNext>
+                Next
+              </button>
+            </div>
+
+          </mat-step>
+          <!-- SENDER -->
+
+          <!-- CLIENT -->
+          <mat-step [formGroupName]="'step1'" [stepControl]="horizontalStepperForm.get('step1')"
+            #horizontalStepperStep1>
+            <ng-template matStepLabel>Client</ng-template>
+            <!-- <p class="my-6 font-medium">
+              Fill in your basic information to let us know your preferences
+            </p> -->
+
+            <div class="flex flex-col gt-xs:flex-row">
+
+              <app-client-selector class="flex" (clientSelected)="clientSelected($event)"
+                [form]="horizontalStepperForm.controls['step1']"></app-client-selector>
+
+              <div class="flex gap-3">
+
+                <mat-form-field class="flex-auto gt-xs:pr-3">
+                  <mat-label>Contact name</mat-label>
+                  <input matInput [formControlName]="'contact_name'" placeholder="Contact name">
+                  <mat-icon class="icon-size-5" matSuffix [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
+                </mat-form-field>
+
+                <mat-form-field class="flex-auto gt-xs:pr-3">
+                  <mat-label>Contact title</mat-label>
+                  <input matInput [formControlName]="'contact_title'" placeholder="Contact title">
+                  <mat-icon class="icon-size-5" matSuffix [svgIcon]="'heroicons_solid:library'"></mat-icon>
+                </mat-form-field>
+
+              </div>
+
+              <div class="flex gap-3">
+                <mat-form-field class="flex-auto gt-xs:pr-3">
+                  <mat-label>Contact email</mat-label>
+                  <input matInput [formControlName]="'contact_email'" placeholder="Contact email">
+                  <mat-icon class="icon-size-5" matSuffix [svgIcon]="'heroicons_solid:inbox'"></mat-icon>
+                </mat-form-field>
+
+                <mat-form-field class="flex-auto gt-xs:pr-3">
+                  <mat-label>Contact phone</mat-label>
+                  <input matInput [formControlName]="'contact_phone'" placeholder="Contact phone">
+                  <mat-icon class="icon-size-5" matSuffix [svgIcon]="'heroicons_solid:phone'"></mat-icon>
+                </mat-form-field>
+              </div>
+
+            </div>
+            <div class="flex justify-end">
+              <button class="px-8 mr-2" mat-flat-button [color]="'accent'" type="button" matStepperPrevious>
+                Back
+              </button>
+
+              <button class="px-8" mat-flat-button [color]="'primary'"
+                [disabled]="horizontalStepperStep1.stepControl.invalid" type="button" matStepperNext>
+                Next
+              </button>
+            </div>
+          </mat-step>
+          <!-- / CLIENT -->
+
+          <!-- OPP DETAILS -->
+          <mat-step [formGroupName]="'step2'" [stepControl]="horizontalStepperForm.get('step2')"
+            #horizontalStepperStep2>
+            <ng-template matStepLabel>Opportunity Details</ng-template>
+            <!-- <p class="my-6 font-medium">
+              Fill in your basic information to let us know your preferences
+            </p> -->
+
+            <div class="flex flex-col gt-xs:flex-row">
+
+              <div class="flex gap-3">
+
+                <mat-form-field class="flex-auto gt-xs:pr-3">
+                  <mat-label>Release date</mat-label>
+                  <input matInput [matDatepicker]="release_date_picker"  [formControlName]="'release_date'"
+                    placeholder="Release date" (dateChange)="onReleaseAndSubmissionDateChange($event,'release_date')" required>
+                  <mat-datepicker-toggle matSuffix [for]="release_date_picker"></mat-datepicker-toggle>
+                  <mat-datepicker #release_date_picker></mat-datepicker>
+                </mat-form-field>
+
+                <mat-form-field class="flex-auto gt-xs:pr-3">
+                  <mat-label>Submission date</mat-label>
+                  <input matInput [matDatepicker]="submission_date_picker" [formControlName]="'submission_date'"
+                    [min]="submissionMinDate" (dateChange)="onReleaseAndSubmissionDateChange($event,'submission_date')" placeholder="Submission date" required>
+                  <mat-datepicker-toggle matSuffix [for]="submission_date_picker"></mat-datepicker-toggle>
+                  <mat-datepicker #submission_date_picker></mat-datepicker>
+                </mat-form-field>
+
+              </div>
+
+              <div class="flex gap-3">
+                
+                <mat-form-field class="flex-1">
+                  <mat-label>Category</mat-label>
+                  <mat-select [formControlName]="'category'" required>
+                    <mat-option value="proposal" selected='true'>Proposal</mat-option>
+                    <mat-option value="demo">Demo</mat-option>
+                    <mat-option value="rfp writing">Rfp writing</mat-option>
+                    <mat-option value="presentation">Presentation</mat-option>
+                  </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class="flex-1">
+                  <mat-label>Demo date</mat-label>
+                  <input matInput [matDatepicker]="demo_date_picker" [formControlName]="'demo_date'"
+                     placeholder="Demo date">
+                  <mat-datepicker-toggle matSuffix [for]="demo_date_picker"></mat-datepicker-toggle>
+                  <mat-datepicker #demo_date_picker></mat-datepicker>
+                </mat-form-field>
+
+              </div>
+
+              <div class="flex gap-3">
+
+                <mat-form-field class="flex-auto fuse-mat-textarea">
+                  <mat-label>Description</mat-label>
+                  <textarea matInput [rows]="2" [formControlName]="'description'" placeholder="Description" required
+                    matTextareaAutosize></textarea>
+                  <mat-icon class="icon-size-5" matSuffix [svgIcon]="'heroicons_solid:annotation'"></mat-icon>
+                </mat-form-field>
+
+                <mat-form-field class="flex-auto fuse-mat-textarea">
+                  <mat-label>Other Observation</mat-label>
+                  <textarea matInput [rows]="1" [formControlName]="'observation'" placeholder="Other Observation"
+                    matTextareaAutosize></textarea>
+                  <mat-icon class="icon-size-5" matSuffix [svgIcon]="'heroicons_solid:backspace'"></mat-icon>
+                </mat-form-field>
+
+              </div>
+
+
+              <div class="flex gap-3">
+                <mat-form-field class="flex-auto">
+                  <mat-label>Project Duration</mat-label>
+                  <mat-select [formControlName]="'duration'">
+                    <mat-option value="other">Other</mat-option>
+                    <mat-option value="6 months">6 Months</mat-option>
+                    <mat-option value="12 months">12 Months</mat-option>
+                    <mat-option value="24 months">24 Months</mat-option>
+                  </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class="flex-auto">
+                  <mat-label>Required Technology</mat-label>
+                  <mat-select [formControlName]="'required_technology'">
+                    <mat-option value="Open Source">Open Source</mat-option>
+                    <mat-option value="Commercial">Commercial</mat-option>
+                    <mat-option value="Liferay">Liferay</mat-option>
+                    <mat-option value="SharePoint">SharePoint</mat-option>
+                    <mat-option value="Microsoft">Microsoft</mat-option>
+                    <mat-option value="Oracle">Oracle</mat-option>
+                    <mat-option value="Java">Java</mat-option>
+                    <mat-option value="Other">Other</mat-option>
+                  </mat-select>
+                </mat-form-field>
+
+              </div>
+
+              <div class="flex gap-3">
+                <mat-form-field class="flex-auto">
+                  <mat-label>Change of Winning</mat-label>
+                  <mat-select [formControlName]="'winning_chance'">
+                    <mat-option value="very low">Very Low</mat-option>
+                    <mat-option value="low">Low</mat-option>
+                    <mat-option value="medium">Medium</mat-option>
+                    <mat-option value="high">High</mat-option>
+                  </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class="flex-auto">
+                  <mat-label>RFP Type</mat-label>
+                  <mat-select [formControlName]="'learned'" required>
+                    <mat-option value="public rfp">Public RFP</mat-option>
+                    <mat-option value="private invitation">Private invitation</mat-option>
+                    <mat-option value="direct">Direct</mat-option>
+                    <mat-option value="other">Other</mat-option>
+                  </mat-select>
+                </mat-form-field>
+
+              </div>
+
+              <div class="flex gap-3">
+
+                <mat-form-field class="flex-auto fuse-mat-textarea">
+                  <mat-label>Competitors</mat-label>
+                  <textarea matInput [rows]="1" [formControlName]="'competitors'" placeholder="Competitors"
+                    matTextareaAutosize></textarea>
+                  <mat-icon class="icon-size-5" matSuffix [svgIcon]="'heroicons_solid:bookmark'"></mat-icon>
+                </mat-form-field>
+
+                <mat-form-field class="flex-auto fuse-mat-textarea">
+                  <mat-label>Other links</mat-label>
+                  <textarea matInput [rows]="1" [formControlName]="'external_resources'" placeholder="Other links"
+                    matTextareaAutosize></textarea>
+                  <mat-icon class="icon-size-5" matSuffix [svgIcon]="'heroicons_solid:link'"></mat-icon>
+                </mat-form-field>
+
+              </div>
+
+              <div class="flex gap-3">
+
+                <mat-form-field class="flex-auto gt-xs:pr-3">
+                  <mat-label>Budget</mat-label>
+                  <input matInput [formControlName]="'budget'" placeholder="Budget">
+                </mat-form-field>
+
+                <mat-form-field class="flex-auto gt-xs:pr-3">
+                  <mat-label>Currency</mat-label>
+                  <!-- <input matInput [formControlName]="'currency_code'" placeholder="Currency"> -->
+                  <mat-select [formControlName]="'currency_code'" placeholder="Currency">
+                    <mat-option value="USD">USD</mat-option>
+                    <mat-option value="EUR">EUR</mat-option>
+                    <mat-option value="GBP">GBP</mat-option>
+                    <mat-option value="EGP">EGP</mat-option>
+                    <mat-option value="SAR">SAR</mat-option>
+                    <mat-option value="QAR">QAR</mat-option>
+                    <mat-option value="AED">AED</mat-option>
+                    <mat-option value="KWD">KWD</mat-option>
+                    <mat-option value="DZD">DZD</mat-option>
+                    <mat-option value="MAD">MAD</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+            </div>
+
+            <div class="flex justify-end">
+              <button class="px-8 mr-2" mat-flat-button [color]="'accent'" type="button" matStepperPrevious>
+                Back
+              </button>
+
+              <button class="px-8" mat-flat-button [color]="'primary'"
+                [disabled]="horizontalStepperStep2.stepControl.pristine || horizontalStepperStep2.stepControl.invalid"
+                type="button" matStepperNext>
+                Next
+              </button>
+            </div>
+          </mat-step>
+          <!-- OPP DETAILS -->
+
+          <!-- SENDER -->
+          <mat-step [formGroupName]="'step3'" [stepControl]="horizontalStepperForm.get('step3')" #step3>
+            <ng-template matStepLabel>Submission</ng-template>
+
+            <div class="flex gap-3">
+
+              <mat-form-field class="flex-auto gt-xs:pr-3">
+                <mat-label>Proposal Submission Type</mat-label>
+                <mat-select [formControlName]="'submission_type'">
+                  <mat-option value="email" selected='true'>Email</mat-option>
+                  <mat-option value="hard copy">Hard Copy</mat-option>
+                  <mat-option value="other">Other</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field class="flex-auto gt-xs:pr-3">
+                <mat-label>Due date to Subsidiary</mat-label>
+                <input matInput [matDatepicker]="subsidiary_date_picker" [formControlName]="'subsidiary_date'"
+                  placeholder="Due date to Subsidiary"  required>
+                <mat-datepicker-toggle matSuffix [for]="subsidiary_date_picker"></mat-datepicker-toggle>
+                <mat-datepicker #subsidiary_date_picker></mat-datepicker>
+              </mat-form-field>
+
+            </div>
+
+            <div class="flex justify-end">
+              <button class="px-8 mr-2" mat-flat-button [color]="'accent'" type="button" matStepperPrevious>
+                Back
+              </button>
+
+              <button class="px-8" mat-flat-button [color]="'primary'" type="button"
+                [disabled]="step3.stepControl.invalid" [class.spinner_btn]="loading" [disabled]="loading" (click)="save()">
+                Save
+              </button>
+            </div>
+
+          </mat-step>
+          <!-- SENDER -->
+
+        </mat-horizontal-stepper>
+      </form>
+    </div>
+
+    <div class="uppy flex-auto"></div>
+
+  </div>
+
+
+
+</div>

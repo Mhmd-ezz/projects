@@ -1,0 +1,76 @@
+<h2 mat-dialog-title>Create Client</h2>
+
+<mat-dialog-content class="mat-typography">
+
+  <form class="">
+
+    <app-error-box [error]="error"></app-error-box>
+
+    <div class="flex flex-col ">
+      <mat-form-field class="flex-auto">
+        <mat-label>Client name</mat-label>
+        <input matInput [(ngModel)]="client.name" name="name" placeholder="Client name">
+      </mat-form-field>
+
+      <mat-form-field class="flex-auto">
+        <mat-label>Client Abbreviation</mat-label>
+        <input matInput [(ngModel)]="client.abbreviation" name="abbreviation" placeholder="Client abbreviation">
+      </mat-form-field>
+
+      <mat-form-field class="flex-auto">
+        <mat-label>Client Industry</mat-label>
+        <mat-select [(ngModel)]="client.industry" name="industry">
+          <mat-option value="goverment">Goverment</mat-option>
+          <mat-option value="aerospace">Aerospace</mat-option>
+          <mat-option value="agriculture">Agriculture </mat-option>
+          <mat-option value="construction">Construction </mat-option>
+          <mat-option value="education">Education </mat-option>
+          <mat-option value="information technology">Information Technology </mat-option>
+          <mat-option value="energy">Energy </mat-option>
+          <mat-option value="financial services">Financial Services </mat-option>
+          <mat-option value="food and beverage">Food and Beverage </mat-option>
+          <mat-option value="healthcare">Healthcare </mat-option>
+          <mat-option value="hospitality">Hospitality </mat-option>
+          <mat-option value="manufacturing">Manufacturing </mat-option>
+          <mat-option value="media">Media </mat-option>
+          <mat-option value="telecommunication">Telecommunication </mat-option>
+          <mat-option value="transport">Transport </mat-option>
+          <mat-option value="other">Other </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="flex-auto">
+        <mat-label>Client Size</mat-label>
+        <mat-select [(ngModel)]="client.size" name="size">
+          <mat-option value="large">large Enterprise</mat-option>
+          <mat-option value="medium">Medium-sized business</mat-option>
+          <mat-option value="small">Small-sized business </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="flex-auto">
+        <mat-label>Number of Employees</mat-label>
+        <mat-select [(ngModel)]="client.number_employees" name="number">
+          <mat-option value="1-10">1-10 employyes</mat-option>
+          <mat-option value="11-50">11-50 employyes</mat-option>
+          <mat-option value="51-200">51-200 employyes</mat-option>
+          <mat-option value="201-500">201-500 employyes</mat-option>
+          <mat-option value="501-1000">501-1000 employyes</mat-option>
+          <mat-option value="1001-5000">1001-5000 employyes</mat-option>
+          <mat-option value="50001-10000">5001-10,000 employyes</mat-option>
+          <mat-option value="10000+">10,000+ employyes</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+    </div>
+
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <!-- <button mat-button (click)="cancel()">Cancel</button> -->
+  <!-- <button mat-button>Install</button> -->
+  <button class="px-8" mat-flat-button type="button" (click)="cancel()"> Cancel </button>
+  <button class="px-8" mat-flat-button [color]="'primary'" type="button" (click)="save()" [class.spinner_btn]="loading" [disabled]="loading"> Save </button>
+</mat-dialog-actions>

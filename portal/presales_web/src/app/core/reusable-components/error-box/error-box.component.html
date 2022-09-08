@@ -1,0 +1,6 @@
+<fuse-alert [type]="'warning'" *ngIf="error" class="mb-5">
+  <span fuseAlertTitle style="word-break: break-all;">{{error.message || 'Warning: unexpected error while processing the request.'}}</span>
+  <div *ngFor="let item of error.errors | keyvalue">
+    {{item.value}}
+  </div>
+</fuse-alert>

@@ -1,0 +1,138 @@
+<div class="flex flex-col flex-auto min-w-0">
+
+  <!-- Header -->
+  <div
+    class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 sm:py-4 sm:px-10 border-b bg-card dark:bg-transparent">
+    <div class="flex-1 min-w-0">
+      <!-- Breadcrumbs -->
+      <div class="flex flex-wrap items-center font-medium">
+        <div>
+          <a class="whitespace-nowrap text-primary-500" [routerLink]="['/users']">Users</a>
+        </div>
+        <div class="flex items-center ml-1 whitespace-nowrap">
+          <mat-icon class="icon-size-5 text-secondary" [svgIcon]="'heroicons_solid:chevron-right'"></mat-icon>
+          <a class="ml-1 text-primary-500">New</a>
+        </div>
+      </div>
+      <!-- Title -->
+      <div class="mt-2">
+        <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
+          New User
+        </h2>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div class="flex flex-wrap p-5 gap-5 w-6/12" style="justify-content: center;">
+
+    <!-- p-6 sm:p-10 max-w-4xl -->
+    <div class="flex-auto ">
+
+      <app-error-box [error]="error"></app-error-box>
+
+      <!-- Horizontal stepper -->
+      <form class="p-4 bg-card shadow rounded overflow-hidden h-full relative" [formGroup]="form">
+
+        <div class="flex mt-5">
+
+          <!-- PRODUCT CARD -->
+          <div class="flex flex-auto flex-col gt-xs:flex-row">
+
+            <div class="flex gap-3">
+
+              <mat-form-field class="flex-auto gt-xs:pr-3">
+                <mat-label>First name</mat-label>
+                <input matInput formControlName="first_name" placeholder="First name">
+                <mat-icon class="icon-size-5" matSuffix [svgIcon]="'heroicons_solid:user'"></mat-icon>
+                <mat-error *ngIf="form.get('first_name').hasError('required')">First name is required.</mat-error>
+              </mat-form-field>
+
+              <mat-form-field class="flex-auto gt-xs:pr-3">
+                <mat-label>Last name</mat-label>
+                <input matInput formControlName="last_name" placeholder="Last name">
+                <mat-icon class="icon-size-5" matSuffix [svgIcon]="'heroicons_solid:user'"></mat-icon>
+                <mat-error *ngIf="form.get('last_name').hasError('required')">Last name is required.</mat-error>
+              </mat-form-field>
+
+            </div>
+
+            <div class="flex gap-3">
+
+              <mat-form-field class="flex-auto gt-xs:pr-3 w-0.5">
+                <mat-label>Password</mat-label>
+                <input matInput formControlName="password" placeholder="Password">
+                <mat-icon class="icon-size-5" matSuffix [svgIcon]="'heroicons_solid:lock-closed'"></mat-icon>
+                <mat-error *ngIf="form.get('password').hasError('required')">This field is required.</mat-error>
+              </mat-form-field>
+
+              <mat-form-field class="flex-auto gt-xs:pr-3 w-0.5">
+                <mat-label>Confirm Password</mat-label>
+                <input matInput formControlName="confirm_password" placeholder="Confirm Password">
+                <mat-icon class="icon-size-5" matSuffix [svgIcon]="'heroicons_solid:lock-closed'"></mat-icon>
+                <mat-error *ngIf="form.get('confirm_password').hasError('required')">This field is required.</mat-error>
+                <mat-error *ngIf="form.get('confirm_password').hasError('password_mismatch')">Password does not match confirm password.</mat-error>
+              </mat-form-field>
+
+            </div>
+
+            <div class="flex gap-3">
+
+              <mat-form-field class="flex-auto gt-xs:pr-3 w-">
+                <mat-label>Email</mat-label>
+                <input matInput formControlName="email" placeholder="Email">
+                <mat-error *ngIf="form.get('email').hasError('email')">Enter a valid email address.</mat-error>
+              </mat-form-field>
+
+              <mat-form-field class="flex-auto gt-xs:pr-3">
+                <mat-label>Contact number</mat-label>
+                <input matInput formControlName="contact_number" placeholder="Contact number">
+              </mat-form-field>
+
+            </div>
+
+            <div class="flex gap-3">
+
+              <app-branch-select class="flex flex-auto" [form]="form" [label]="'Branch'" [controlName]="'branch'"
+                [required]="true"></app-branch-select>
+
+              <app-user-select class="flex flex-auto" [form]="form" [label]="'Reporting to'"
+                [controlName]="'reporting_to'" [filter_by_branches]="[form.get('branch').value.id]">
+              </app-user-select>
+
+            </div>
+
+            <div class="flex gap-3">
+
+              <mat-form-field class="flex-auto w-0.5">
+                <mat-label>Role</mat-label>
+                <mat-select formControlName="role_list">
+                  <mat-option *ngFor="let role of roles" [value]="role">{{role.alt_name}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="form.get('role_list').hasError('required')">This field is required.</mat-error>
+              </mat-form-field>
+
+              <div class="flex-auto"></div>
+
+            </div>
+
+          </div>
+          <!-- PRODUCT CARD -->
+
+        </div>
+
+        <div class="flex justify-end">
+
+          <button class="px-8" mat-flat-button [color]="'primary'" type="button" [class.spinner_btn]="loading"
+            [disabled]="loading" (click)="save()">
+            Save
+          </button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+
+
+
+</div>

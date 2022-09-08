@@ -1,0 +1,403 @@
+<div class="flex flex-col flex-auto min-w-0">
+
+  <!-- Header -->
+  <div
+    class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 sm:py-4 sm:px-10 border-b bg-card dark:bg-transparent relative">
+    <div class="flex-1 min-w-0">
+      <!-- Breadcrumbs -->
+      <div class="flex flex-wrap items-center font-medium">
+        <div>
+          <a class="whitespace-nowrap text-primary-500">Opportunities</a>
+        </div>
+        <div class="flex items-center ml-1 whitespace-nowrap">
+          <mat-icon class="icon-size-5 text-secondary" [svgIcon]="'heroicons_solid:chevron-right'"></mat-icon>
+          <a class="ml-1 text-primary-500">Details</a>
+        </div>
+      </div>
+      <!-- Title -->
+      <div class="mt-2">
+        <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
+          Opportunity details
+        </h2>
+      </div>
+    </div>
+
+    <div class="absolute inset-x-0 bottom-0" *ngIf="isLoading">
+      <mat-progress-bar [mode]="'indeterminate'"></mat-progress-bar>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div class="flex flex-wrap p-5 gap-5" style="justify-content: center;">
+
+    <div class="overlay loading_overlay" *ngIf="formLoading">
+      <div class="flex flex-col items-center">
+        <div class="loader_1 text-indigo-400 mb-15">Loading...</div>
+        <h1 class="text-2xl">Loading..</h1>
+        <h4>Please, wait while fetching data.</h4>
+      </div>
+    </div>
+
+    <!-- p-6 sm:p-10 max-w-4xl -->
+    <div class="flex-auto ">
+
+      <app-error-box [error]="error"></app-error-box>
+
+      <div class="shadow-lg overflow-hidden rowDetails">
+        <div class="flex border-b">
+          <!-- Selected opportunity form -->
+          <form class="flex flex-col w-full">
+
+            <div class="flex flex-col sm:flex-row p-4 pb-1 bg-card">
+
+              <div class="flex flex-auto flex-wrap">
+
+                <!-- COLUMN 1 -->
+                <div class="flex flex-col w-full lg:w-1/4 ">
+
+                  <!-- Sender -->
+                  <div class="flex ">
+                    <mat-form-field class="w-1/3 pr-2 flex-auto">
+                      <mat-label>Created by</mat-label>
+                      <input matInput [value]="opportunity?.user?.name" disabled>
+                    </mat-form-field>
+                  </div>
+
+                  <!-- client name -->
+                  <div class="flex ">
+                    <mat-form-field class="w-1/3 pr-2 flex-auto">
+                      <mat-label>Client</mat-label>
+                      <input matInput [value]="opportunity?.client?.name" disabled>
+                    </mat-form-field>
+                  </div>
+
+                  <!-- Contact name -->
+                  <div class="flex ">
+                    <mat-form-field class="w-1/3 pr-2 flex-auto">
+                      <mat-label>Contact name</mat-label>
+                      <input matInput [value]="opportunity?.contact_name" disabled>
+                    </mat-form-field>
+                  </div>
+
+                  <!-- Contact title -->
+                  <div class="flex ">
+                    <mat-form-field class="w-1/3 pr-2 flex-auto">
+                      <mat-label>Contact title</mat-label>
+                      <input matInput [value]="opportunity?.contact_title" disabled>
+                    </mat-form-field>
+                  </div>
+
+                  <!-- Contact email -->
+                  <div class="flex ">
+                    <mat-form-field class="w-1/3 pr-2 flex-auto">
+                      <mat-label>Contact email</mat-label>
+                      <input matInput [value]="opportunity?.contact_email" disabled>
+                    </mat-form-field>
+                  </div>
+
+
+                  <!-- Contact email -->
+                  <div class="flex ">
+                    <mat-form-field class="w-1/3 pr-2 flex-auto">
+                      <mat-label>Contact phone number</mat-label>
+                      <input matInput [value]="opportunity?.contact_number" disabled>
+                    </mat-form-field>
+                  </div>
+
+
+                </div>
+
+                <!-- COLUMN 2 -->
+                <div class="flex flex-col w-full lg:w-1/4 ">
+
+                  <!-- Release -->
+                  <div class="flex ">
+                    <mat-form-field class="w-1/3 pr-2 flex-auto">
+                      <mat-label>Release date</mat-label>
+                      <input matInput [value]="opportunity?.release_date | date:'mediumDate'" disabled>
+                    </mat-form-field>
+                  </div>
+
+                  <!-- Submission -->
+                  <div class="flex">
+                    <mat-form-field class="w-1/3 pr-2 flex-auto">
+                      <mat-label>Submission date</mat-label>
+                      <input matInput [value]="opportunity?.submission_date | date:'mediumDate'" disabled>
+                    </mat-form-field>
+                  </div>
+
+                  <!-- Other observation -->
+                  <div class="flex">
+                    <mat-form-field class="w-1/3 pr-2 flex-auto">
+                      <mat-label>Other observation</mat-label>
+                      <input matInput [value]="opportunity?.observation" disabled>
+                    </mat-form-field>
+                  </div>
+
+                  <!-- Project Duration -->
+                  <div class="flex ">
+                    <mat-form-field class="w-1/3 pr-2 flex-auto">
+                      <mat-label>Project Duration</mat-label>
+                      <input matInput [value]="opportunity?.duration" disabled>
+                    </mat-form-field>
+
+                  </div>
+
+                  <!-- Required Technology -->
+                  <div class="flex">
+                    <mat-form-field class="w-1/3 pr-2 flex-auto">
+                      <mat-label>Required Technology</mat-label>
+                      <input matInput [value]="opportunity?.required_technology" disabled>
+                    </mat-form-field>
+                  </div>
+
+                  <!-- Description -->
+                  <div class="flex ">
+                    <mat-form-field class="w-1/3 pr-2 flex-auto" >
+                      <mat-label>Description</mat-label>
+                      <textarea matInput [value]="opportunity?.description" style="height: 106px;" disabled></textarea>
+                    </mat-form-field>
+                  </div>
+
+                </div>
+
+                <!-- COLUMN 3 -->
+                <div class="flex flex-col w-full lg:w-1/4 ">
+
+                  <!-- Change of Winning -->
+                  <div class="flex">
+                    <mat-form-field class="w-1/3 pr-2 flex-auto">
+                      <mat-label> Change of Winning</mat-label>
+                      <input matInput [value]="opportunity?.winning_chance" disabled>
+                    </mat-form-field>
+                  </div>
+
+                  <!-- How did we learn about the opportunity? -->
+                  <div class="flex">
+                    <mat-form-field class="w-1/3 pr-2 flex-auto">
+                      <mat-label>How did we learn about the opportunity?</mat-label>
+                      <input matInput [value]="opportunity?.learned" disabled>
+                    </mat-form-field>
+
+                  </div>
+
+                  <!-- Competitors -->
+                  <div class="flex ">
+                    <mat-form-field class="w-1/3 pr-2 flex-auto">
+                      <mat-label>Competitors</mat-label>
+                      <input matInput [value]="opportunity?.competitors" disabled>
+                    </mat-form-field>
+                  </div>
+
+                  <!-- External resources -->
+                  <div class="flex">
+                    <mat-form-field class="w-1/3 pr-2 flex-auto">
+                      <mat-label>External resources</mat-label>
+                      <input matInput [value]="opportunity?.external_resources" disabled>
+                    </mat-form-field>
+                  </div>
+
+                  <!-- budget -->
+                  <div class="flex">
+                    <mat-form-field class="w-1/3 pr-2 flex-auto">
+                      <mat-label> Budget</mat-label>
+                      <input matInput [value]="opportunity?.budget" disabled>
+                      <small matPrefix>{{opportunity?.currency_code}}</small>
+                    </mat-form-field>
+                  </div>
+
+                  <!-- Submission type -->
+                  <div class="flex">
+                    <mat-form-field class="w-1/3 pr-2 flex-auto">
+                      <mat-label>Submission type?</mat-label>
+                      <input matInput [value]="opportunity?.submission_type" disabled>
+                    </mat-form-field>
+
+                  </div>
+
+                  <!-- Subsidiary -->
+                  <div class="flex">
+                    <mat-form-field class="w-1/3 pr-2 flex-auto">
+                      <mat-label>Subsidiary date</mat-label>
+                      <input matInput [value]="opportunity?.subsidiary_date | date:'mediumDate'" disabled>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <!-- Manager opp details -->
+                <!-- PRESALES MANAGER PERMISSION -->
+                <div class="flex flex-col w-full lg:w-1/4" *ngIf="user && userRole === RolesEnum_.presales_manager">
+
+                  <!-- Awarded amount -->
+                  <div class="flex ">
+                    <mat-form-field class="w-1/3 pr-2 flex-auto">
+                      <mat-label>Awarded amount</mat-label>
+                      <input matInput [value]="opportunity?.reminder_date  | date:'mediumDate'" disabled>
+                    </mat-form-field>
+
+                  </div>
+
+                  <!-- Proposed value -->
+                  <div class="flex">
+                    <mat-form-field class="w-1/3 pr-2 flex-auto">
+                      <mat-label>Proposed value?</mat-label>
+                      <input matInput [value]="opportunity?.proposed_value" disabled>
+                    </mat-form-field>
+                  </div>
+
+                  <!-- Department action -->
+                  <div class="flex">
+                    <mat-form-field class="w-1/3 pr-2 flex-auto">
+                      <mat-label>Department action</mat-label>
+                      <input matInput [value]="opportunity?.department_action" disabled>
+                    </mat-form-field>
+                  </div>
+
+                  <!-- Department manager action -->
+                  <div class="flex">
+                    <mat-form-field class="w-1/3 pr-2 flex-auto">
+                      <mat-label> Department manager action</mat-label>
+                      <input matInput [value]="opportunity?.department_manager_action" disabled>
+                    </mat-form-field>
+                  </div>
+
+
+                </div>
+
+                <div class="flex flex-auto flex-col" *ngIf="opportunity?.files?.length">
+                  <div class="font-medium">Files</div>
+                  <div class="flex flex-wrap m-2 mt-2 gap-3">
+                    <ng-container *ngFor="let file of opportunity?.files; trackBy:trackByFn">
+
+                      <fuse-card class="flex items-center max-w-80 w-full p-4 filter-info bg-gray-50">
+                        <div class="flex flex-auto items-center justify-between">
+                          <div class="flex cursor-pointer" (click)="viewFile(file)">
+                            <div class="relative">
+                              <mat-icon class="icon-size-10 text-hint mr-3" [svgIcon]="'iconsmind:file'"></mat-icon>
+                              <div style="font-size: 8px;"
+                                class=" bg-green-600 absolute left-0 bottom-0 px-1.5 rounded font-semibold leading-5 text-white"
+                                [class.bg-red-600]="file.type.startsWith('application')"
+                                [class.bg-blue-600]="file.type === 'application/msword'"
+                                [class.bg-green-600]="file.type.indexOf('vnd') > -1"
+                                [class.bg-gray-600]="file.type === 'text/plain'"
+                                [class.bg-amber-600]="file.type.startsWith('image')">
+                                {{
+                                file.type.startsWith('image') ? 'JPG' :
+                                file.type.startsWith('video') ? 'JPG' :
+                                file.type === 'text/plain' ? 'TXT' :
+                                file.type === 'application/pdf' ? 'PDF' :
+                                file.type === 'image/webp' ? 'WEBP' :
+                                file.type === 'application/pdf' ? 'PDF' :
+                                file.type === 'text/html' ? 'HTML' :
+                                file.type === 'text/application/vnd.rar' ? 'RAR' :
+                                file.type ===
+                                'application/vnd.openxmlformats-officedocument.presentationml.presentation' ? 'PPTX' :
+                                file.type === 'application/zip' ? 'ZIP' :
+                                file.type === 'application/vnd.ms-powerpoint' ? 'PPT' :
+                                file.type ===
+                                'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ? 'DOCX' :
+                                file.type === 'application/msword' ? 'doc' :
+                                file.type === 'application/vnd.ms-excel' ? 'XLS' :
+                                file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ?
+                                'XLSX' :
+                                'FILE'
+                                }}
+                              </div>
+                            </div>
+                            <div class="flex flex-col w-40">
+                              <div class="text-lg font-semibold leading-tight truncate"
+                                [matTooltip]="file.original_name">{{file.original_name}}</div>
+                              <div class="text-md text-secondary">{{file.created_at | date}}</div>
+                            </div>
+                          </div>
+
+                          <div class="ml-2">
+                            <button mat-icon-button [matMenuTriggerFor]="listCard08Menu">
+                              <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:dots-vertical'"></mat-icon>
+                            </button>
+                            <mat-menu #listCard08Menu="matMenu">
+                              <button mat-menu-item><a target="_blank"
+                                  (click)="downloadFile(file)">Download</a></button>
+                              <button mat-menu-item (click)="deleteFile(file,opportunity?.id)">Delete</button>
+                            </mat-menu>
+                          </div>
+
+                        </div>
+
+                        <!-- <mat-icon
+                            class="icon-size-12 mr-6"
+                            [svgIcon]="'iconsmind:mail'"></mat-icon> -->
+
+                      </fuse-card>
+
+                      <!-- [routerLink]="['./details/', file.id]" -->
+                      <!-- <a class="flex flex-col w-40 h-40 m-2 p-4 shadow rounded-2xl cursor-pointer bg-card">
+                        <div class="aspect-w-9 aspect-h-6">
+                          <div class="flex items-center justify-center">
+                            <div class="relative">
+                              <mat-icon class="icon-size-14 text-hint" [svgIcon]="'iconsmind:file'"></mat-icon>
+                              <div
+                                class=" bg-green-600 absolute left-0 bottom-0 px-1.5 rounded text-sm font-semibold leading-5 text-white"
+                                [class.bg-red-600]="file.type.startsWith('application')"
+                                [class.bg-blue-600]="file.type === 'application/msword'"
+                                [class.bg-green-600]="file.type.indexOf('vnd') > -1"
+                                [class.bg-gray-600]="file.type === 'text/plain'"
+                                [class.bg-amber-600]="file.type.startsWith('image')">
+                                {{
+                                file.type.startsWith('image') ? 'JPG' :
+                                file.type.startsWith('video') ? 'JPG' :
+                                file.type === 'text/plain' ? 'TXT' :
+                                file.type === 'application/pdf' ? 'PDF' :
+                                file.type === 'image/webp' ? 'WEBP' :
+                                file.type === 'application/pdf' ? 'PDF' :
+                                file.type === 'text/html' ? 'HTML' :
+                                file.type === 'text/application/vnd.rar' ? 'RAR' :
+                                file.type ===
+                                'application/vnd.openxmlformats-officedocument.presentationml.presentation' ? 'PPTX' :
+                                file.type === 'application/zip' ? 'ZIP' :
+                                file.type === 'application/vnd.ms-powerpoint' ? 'PPT' :
+                                file.type ===
+                                'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ? 'DOCX' :
+                                file.type === 'application/msword' ? 'doc' :
+                                file.type === 'application/vnd.ms-excel' ? 'XLS' :
+                                file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ?
+                                'XLSX' :
+                                'FILE'
+                                }}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="flex flex-col flex-auto justify-center text-center text-sm font-medium w-40">
+                          <div class="truncate" [matTooltip]="file.original_name">{{file.original_name}}</div>
+                        </div>
+                      </a> -->
+                    </ng-container>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+
+            <div class="flex items-center justify-between w-full border-t px-8 py-4">
+              <div class="flex items-center">
+                <button class="mr-2" mat-flat-button [color]="'primary'" [routerLink]="['../../']">
+                  Back
+                </button>
+                <button class="mr-2" mat-flat-button [color]="'primary'" [routerLink]="['../../edit',opportunity?.id]">
+                  Edit
+                </button>
+                <button class="mr-2" mat-flat-button [color]="'primary'" [routerLink]="['../../tasks',opportunity?.id]"
+                  *ngIf="user && userRole === RolesEnum_.presales_manager">
+                  Allocate
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

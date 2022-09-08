@@ -1,0 +1,503 @@
+<div class="flex flex-col flex-auto min-w-0">
+
+    <!-- Header -->
+    <div class="dark bg-card dark:border-b">
+        <div class="flex flex-col w-full max-w-screen-xl mx-auto px-6 sm:px-8">
+            <div class="flex flex-col sm:flex-row flex-auto sm:items-center min-w-0 my-8 sm:my-12">
+                <div class="flex flex-auto items-center min-w-0">
+                    <!-- <div class="flex-0 w-16 h-16 rounded-full overflow-hidden">
+                      <img
+                          class="w-full h-full object-cover"
+                          src="assets/images/avatars/brian-hughes.jpg">
+                  </div> -->
+                    <div class="flex flex-col min-w-0 ml-4">
+                        <ng-container *transloco="let t">
+                            <div
+                                class="text-2xl md:text-5xl font-semibold tracking-tight leading-7 md:leading-snug truncate">
+                                Dashboard</div>
+                        </ng-container>
+                        <!-- <div class="flex items-center">
+                          <mat-icon
+                              class="icon-size-5"
+                              [svgIcon]="'heroicons_solid:bell'"></mat-icon>
+                          <div class="ml-1.5 leading-6 truncate text-secondary">You have 2 new messages and 15 new tasks</div>
+                      </div> -->
+                    </div>
+                </div>
+                <!-- Actions -->
+                <div class="flex items-center mt-6 sm:mt-0 sm:ml-2 space-x-3">
+                    <mat-button-toggle-group value="this_week" (change)="onDashboardDateChange($event)">
+                        <!-- <mat-button-toggle value="this_week">This Week</mat-button-toggle> -->
+                        <mat-button-toggle value="this_month">This Month</mat-button-toggle>
+                    </mat-button-toggle-group>
+                    <!-- <button
+                      class="fuse-mat-button-rounded bg-accent-600"
+                      mat-flat-button
+                      [color]="'accent'">
+                      <mat-icon
+                          class="icon-size-5"
+                          [svgIcon]="'heroicons_solid:mail'"></mat-icon>
+                      <span class="ml-2">Messages</span>
+                  </button>
+                  <button
+                      class="fuse-mat-button-rounded"
+                      mat-flat-button
+                      [color]="'primary'">
+                      <mat-icon
+                          class="icon-size-5"
+                          [svgIcon]="'heroicons_solid:cog'"></mat-icon>
+                      <span class="ml-2">Settings</span>
+                  </button> -->
+                </div>
+            </div>
+            <!-- Project selector -->
+            <!-- <div class="flex items-center">
+              <div class="px-4 py-2 rounded-tl-xl overflow-hidden bg-hover">
+                  <div class="sm:text-lg leading-6 truncate">{{selectedProject}}</div>
+              </div>
+              <div class="ml-px rounded-tr-xl bg-hover">
+                  <button
+                      [matMenuTriggerFor]="projectsMenu"
+                      mat-icon-button>
+                      <mat-icon [svgIcon]="'heroicons_outline:dots-horizontal'"></mat-icon>
+                  </button>
+                  <mat-menu #projectsMenu="matMenu">
+                      <button
+                          mat-menu-item
+                          (click)="selectedProject='ACME Corp. Backend App'">ACME Corp. Backend App
+                      </button>
+                      <button
+                          mat-menu-item
+                          (click)="selectedProject='ACME Corp. Frontend App'">ACME Corp. Frontend App
+                      </button>
+                      <button
+                          mat-menu-item
+                          (click)="selectedProject='Creapond'">Creapond
+                      </button>
+                      <button
+                          mat-menu-item
+                          (click)="selectedProject='Withinpixels'">Withinpixels
+                      </button>
+                  </mat-menu>
+              </div>
+          </div> -->
+        </div>
+    </div>
+    <!-- Main -->
+
+    <div class="flex-auto mt-4 sm:mt-6">
+
+        <div class="w-full max-w-screen-xl mx-auto">
+
+            <!-- Tabs -->
+            <mat-tab-group class="sm:px-2" [animationDuration]="'0'">
+
+                <!-- Home -->
+                <mat-tab label="Home">
+                    <ng-template matTabContent>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 w-full min-w-0">
+                            <!-- Summary -->
+                            <div class="flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden relative cursor-pointer"
+                                (click)="filter('inprogress_monthly')">
+                                <div class="overlay loading_overlay" *ngIf="(isDashboardLoading$ | async)">
+                                    <div class="flex flex-col items-center">
+                                        <div class="loader_1 text-indigo-400 mb-8">Loading...</div>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start justify-between">
+                                    <div class="text-lg font-medium tracking-tight leading-6 truncate">Summary</div>
+
+                                </div>
+                                <div class="flex flex-col items-center mt-2">
+                                    <div
+                                        class="text-7xl sm:text-8xl font-bold tracking-tight leading-none text-blue-500">
+                                        {{(dashboard | async)?.stats?.inprogress || 0}}</div>
+                                    <div class="text-lg font-medium text-blue-600 dark:text-blue-500">In Progress</div>
+                                    <div class="flex items-center justify-center w-full mt-5 text-secondary">
+                                        <div class="text-md font-medium truncate">Monthly</div>
+                                        <!-- <div class="ml-1.5 text-lg font-semibold">{{(dashboard |
+                                            async)?.stats?.highPriorityTasks}}</div> -->
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Overdue -->
+                            <div
+                                class="flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden relative cursor-pointer"
+                                (click)="filter('due_10')">
+                                <div class="overlay loading_overlay" *ngIf="(isDashboardLoading$ | async)">
+                                    <div class="flex flex-col items-center">
+                                        <div class="loader_1 text-indigo-400 mb-8">Loading...</div>
+                                    </div>
+                                </div>
+                                <div class="flex items-start justify-between">
+                                    <div class="text-lg font-medium tracking-tight leading-6 truncate">Due Status</div>
+                                </div>
+                                <div class="flex flex-col items-center mt-2">
+                                    <div
+                                        class="text-7xl sm:text-8xl font-bold tracking-tight leading-none text-red-500">
+                                        {{(dashboard | async)?.stats?.nextTenDays || 0}}</div>
+                                    <div class="text-lg font-medium text-red-600 dark:text-red-500">Due Opportunities
+                                    </div>
+                                    <div class="flex items-center justify-center w-full mt-5 text-secondary">
+                                        <div class="text-md font-medium truncate">Within 10 days</div>
+                                        <!-- <div class="ml-1.5 text-lg font-semibold">{{(dashboard |
+                                            async)?.stats?.completed}}</div> -->
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Issues -->
+                            <div
+                                class="flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden relative cursor-pointer"
+                                (click)="filter('overdue_month')">
+                                <div class="overlay loading_overlay" *ngIf="(isDashboardLoading$ | async)">
+                                    <div class="flex flex-col items-center">
+                                        <div class="loader_1 text-indigo-400 mb-8">Loading...</div>
+
+                                    </div>
+                                </div>
+                                <div class="flex items-start justify-between">
+                                    <div class="text-lg font-medium tracking-tight leading-6 truncate">Overdue Status
+                                    </div>
+                                </div>
+                                <div class="flex flex-col items-center mt-2">
+                                    <div
+                                        class="text-7xl sm:text-8xl font-bold tracking-tight leading-none text-amber-500">
+                                        {{(dashboard | async)?.stats?.overDue || 0}}</div>
+                                    <div class="text-lg font-medium text-amber-600 dark:text-amber-500">Overdue
+                                    </div>
+                                    <div class="flex items-center justify-center w-full mt-5 text-secondary">
+                                        <div class="text-md font-medium truncate">Monthly</div>
+                                        <!-- <div class="ml-1.5 text-lg font-semibold">
+                                            {{(dashboard | async)?.tasksStats?.toDeliverTodayTasks}}
+                                        </div> -->
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Features -->
+                            <div
+                                class="flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden relative cursor-pointer"
+                                (click)="filter('unassigned_month')">
+                                <div class="overlay loading_overlay" *ngIf="(isDashboardLoading$ | async)">
+                                    <div class="flex flex-col items-center">
+                                        <div class="loader_1 text-indigo-400 mb-8">Loading...</div>
+
+                                    </div>
+                                </div>
+                                <div class="flex items-start justify-between">
+                                    <div class="text-lg font-medium tracking-tight leading-6 truncate">Allocation Status
+                                    </div>
+
+                                </div>
+                                <div class="flex flex-col items-center mt-2">
+                                    <div
+                                        class="text-7xl sm:text-8xl font-bold tracking-tight leading-none text-green-500">
+                                        {{(dashboard | async)?.stats?.unassigned || 0}}</div>
+                                    <div class="text-lg font-medium text-green-600 dark:text-green-500">Unassigned
+                                    </div>
+                                    <div class="flex items-center justify-center w-full mt-5 text-secondary">
+                                        <div class="text-md font-medium truncate">Monthly</div>
+                                        <!--<div class="ml-1.5 text-lg font-semibold">{{(dashboard |
+                                            async)?.tasksStats?.assignedTasks}}
+                                        </div> -->
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Github issues summary -->
+                            <div
+                                class="sm:col-span-2 md:col-span-4 flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden relative">
+                                <div class="overlay loading_overlay" *ngIf="(isDashboardLoading$ | async)">
+                                    <div class="flex flex-col items-center">
+                                        <div class="loader_1 text-indigo-400 mb-15">Loading...</div>
+                                        <h1 class="text-2xl">Loading..</h1>
+                                        <h4>Please, wait while fetching data.</h4>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col sm:flex-row items-start justify-between ">
+                                    <div class="text-lg font-medium tracking-tight leading-6 truncate">Opportunity
+                                        Summary</div>
+                                    <!-- <div class="mt-3 sm:mt-0 sm:ml-2">
+                                        <mat-button-toggle-group value="this-week"
+                                            #githubIssuesWeekSelector="matButtonToggleGroup">
+                                            <mat-button-toggle value="last-week"></mat-button-toggle>
+                                            <mat-button-toggle value="this-week"></mat-button-toggle>
+                                        </mat-button-toggle-group>
+                                    </div> -->
+                                </div>
+                                <div class="grid grid-cols-1 lg:grid-cols-2 grid-flow-row gap-6 w-full mt-8 sm:mt-4">
+                                    <!-- New vs. Closed -->
+                                    <!-- Overview -->
+                                    <div class="flex flex-col">
+                                        <div class="font-medium text-secondary">Category Status</div>
+                                        <div class="flex-auto grid grid-cols-4 gap-4 mt-6">
+                                            <!-- New issues -->
+                                            <div
+                                                class="col-span-2 flex flex-col items-center justify-center py-8 px-1 rounded-2xl bg-indigo-50 text-indigo-800 dark:bg-white dark:bg-opacity-5 dark:text-indigo-400 cursor-pointer"
+                                                (click)="filter('proposal_year')">
+                                                <div
+                                                    class="text-5xl sm:text-7xl font-semibold leading-none tracking-tight">
+                                                    {{(dashboard | async)?.stats?.yearlyProposal}}
+                                                </div>
+                                                <div class="mt-1 text-sm sm:text-lg font-medium">Proposal</div>
+                                            </div>
+                                            <!-- Closed -->
+                                            <div
+                                                class="col-span-2 flex flex-col items-center justify-center py-8 px-1 rounded-2xl bg-indigo-50 text-indigo-800 dark:bg-white dark:bg-opacity-5 dark:text-indigo-400 cursor-pointer"
+                                                (click)="filter('demo_year')">
+                                                <div
+                                                    class="text-5xl sm:text-7xl font-semibold leading-none tracking-tight">
+                                                    {{(dashboard | async)?.stats?.yearlyDemo}}
+                                                </div>
+                                                <div class="mt-1 text-sm sm:text-lg font-medium">Demo</div>
+                                            </div>
+                                            <!-- Fixed -->
+                                            <div
+                                                class="col-span-2 flex flex-col items-center justify-center py-8 px-1 rounded-2xl bg-green-50 text-green-800 dark:bg-white dark:bg-opacity-5 dark:text-green-500 cursor-pointer"
+                                                (click)="filter('rfp_writing_year')">
+                                                <div class="text-5xl font-semibold leading-none tracking-tight">
+                                                    {{(dashboard | async)?.stats?.yearlyRfpWriting}}
+                                                </div>
+                                                <div class="mt-1 text-sm font-medium text-center">RFP Writing</div>
+                                            </div>
+                                            <!-- Won't fix -->
+                                            <div
+                                                class="col-span-2 flex flex-col items-center justify-center py-8 px-1 rounded-2xl bg-green-50 text-green-800 dark:bg-white dark:bg-opacity-5 dark:text-green-500 cursor-pointer"
+                                                (click)="filter('presentation_year')">
+                                                <div class="text-5xl font-semibold leading-none tracking-tight">
+                                                    {{(dashboard | async)?.stats?.yearlyPresentation}}
+                                                </div>
+                                                <div class="mt-1 text-sm font-medium text-center">Presentation</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Overview -->
+                                    <div class="flex flex-col">
+                                        <div class="font-medium text-secondary">Overview</div>
+                                        <div class="flex-auto grid grid-cols-4 gap-4 mt-6">
+                                            <!-- New issues -->
+                                            <div
+                                                class="col-span-2 flex flex-col items-center justify-center py-8 px-1 rounded-2xl bg-indigo-50 text-indigo-800 dark:bg-white dark:bg-opacity-5 dark:text-indigo-400 cursor-pointer" (click)="filter('inprogress_year')">
+                                                <div
+                                                    class="text-5xl sm:text-7xl font-semibold leading-none tracking-tight">
+                                                    {{(dashboard | async)?.stats?.yearlyInprogress}}
+                                                </div>
+                                                <div class="mt-1 text-sm sm:text-lg font-medium">In Progress</div>
+                                            </div>
+                                            <!-- Closed -->
+                                            <div
+                                                class="col-span-2 flex flex-col items-center justify-center py-8 px-1 rounded-2xl bg-green-50 text-green-800 dark:bg-white dark:bg-opacity-5 dark:text-green-500 cursor-pointer" (click)="filter('submitted_year')">
+                                                <div
+                                                    class="text-5xl sm:text-7xl font-semibold leading-none tracking-tight">
+                                                    {{(dashboard | async)?.stats?.yearlySubmitted}}
+                                                </div>
+                                                <div class="mt-1 text-sm sm:text-lg font-medium">Submitted</div>
+                                            </div>
+                                            <!-- Fixed -->
+                                            <div
+                                                class="col-span-2 sm:col-span-1 flex flex-col items-center justify-center py-8 px-1 rounded-2xl bg-gray-100 text-secondary dark:bg-white dark:bg-opacity-5 cursor-pointer" (click)="filter('won_year')">
+                                                <div class="text-5xl font-semibold leading-none tracking-tight">
+                                                    {{(dashboard | async)?.stats?.yearlyWon}}
+                                                </div>
+                                                <div class="mt-1 text-sm font-medium text-center">Won</div>
+                                            </div>
+                                            <!-- Won't fix -->
+                                            <div
+                                                class="col-span-2 sm:col-span-1 flex flex-col items-center justify-center py-8 px-1 rounded-2xl bg-gray-100 text-secondary dark:bg-white dark:bg-opacity-5 cursor-pointer" (click)="filter('lost_year')">
+                                                <div class="text-5xl font-semibold leading-none tracking-tight">
+                                                    {{(dashboard | async)?.stats?.yearlyLost}}
+                                                </div>
+                                                <div class="mt-1 text-sm font-medium text-center">Lost</div>
+                                            </div>
+                                            <!-- Re-opened -->
+                                            <div
+                                                class="col-span-2 sm:col-span-1 flex flex-col items-center justify-center py-8 px-1 rounded-2xl bg-gray-100 text-secondary dark:bg-white dark:bg-opacity-5 cursor-pointer" (click)="filter('pending_year')">
+                                                <div class="text-5xl font-semibold leading-none tracking-tight">
+                                                    {{(dashboard | async)?.stats?.yearlyPending}}
+                                                </div>
+                                                <div class="mt-1 text-sm font-medium text-center">Pending</div>
+                                            </div>
+                                            <!-- Needs triage -->
+                                            <div
+                                                class="col-span-2 sm:col-span-1 flex flex-col items-center justify-center py-8 px-1 rounded-2xl bg-gray-100 text-secondary dark:bg-white dark:bg-opacity-5 cursor-pointer" (click)="filter('cancelled_year')">
+                                                <div class="text-5xl font-semibold leading-none tracking-tight">
+                                                    {{(dashboard | async)?.stats?.yearlyCancelled}}
+                                                </div>
+                                                <div class="mt-1 text-sm font-medium text-center">Cancelled</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Task distribution -->
+                            <div
+                                class="sm:col-span-2 md:col-span-4 lg:col-span-2 flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
+                                <div class="flex flex-col sm:flex-row items-start justify-between min-h-16">
+                                    <div class="text-lg font-medium tracking-tight leading-6 truncate">Tasks
+                                        Distribution</div>
+                                    <div class="mt-3 sm:mt-0 sm:ml-2">
+                                        <mat-form-field class="flex-auto gt-xs:pr-3 w-56">
+                                            <mat-select [placeholder]="'Select with user'" [(ngModel)]="selectedUser">
+                                                <mat-option class="capitalize"
+                                                    *ngFor="let item of (tasksUsers$ | async)" [value]="item.id">
+                                                    {{item.name}}</mat-option>
+                                            </mat-select>
+                                            <mat-icon class="icon-size-5" matPrefix
+                                                [svgIcon]="'heroicons_solid:location-marker'"></mat-icon>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div
+                                    class="divide-y flex flex-col max-h-120 min-h-120 mt-2 overflow-auto relative -mr-6">
+                                    <div class="overlay loading_overlay" *ngIf="(isDashboardLoading$ | async)">
+                                        <div class="flex flex-col items-center">
+                                            <div class="loader_1 text-indigo-400 mb-15">Loading...</div>
+                                            <h1 class="text-2xl">Loading..</h1>
+                                            <h4>Please, wait while fetching data.</h4>
+                                        </div>
+                                    </div>
+
+                                    <ng-container
+                                        *ngIf="(dashboard | async)?.usersTasks[selectedUser]?.tasks as userTasks; else elseUsersTasks">
+                                        <ng-container *ngIf="userTasks.length > 0; else  elseUsersTasks">
+                                            <ng-container *ngFor="let task of userTasks; trackBy: trackByFn">
+                                                <div class="flex flex-row items-center justify-between py-3 px-0.5 cursor-pointer"
+                                                    [routerLink]="['/opportunities', 'view', task.opportunity_id ]">
+                                                    <div class="flex flex-col">
+                                                        <div class="font-medium">
+                                                            {{getCountryByCode(task.br_country_code)}} -
+                                                            {{task.opp_client_name}}
+                                                            - {{task.title}}</div>
+                                                        <div
+                                                            class="flex flex-col sm:flex-row sm:items-center -ml-0.5 mt-2 sm:mt-1 space-y-1 sm:space-y-0 sm:space-x-3">
+                                                            <div class="flex items-center">
+                                                                <mat-icon class="icon-size-5 text-hint"
+                                                                    [svgIcon]="'heroicons_solid:clock'"></mat-icon>
+                                                                <div class="ml-1.5 text-md text-secondary">
+                                                                    <ng-container
+                                                                        *ngIf="task.dueDate; else elseDueDate">
+                                                                        {{task.dueDate | amTimeAgo}}
+
+                                                                    </ng-container>
+                                                                    <ng-template #elseDueDate>
+                                                                        <span class="text-amber-500">No due date</span>
+                                                                    </ng-template>
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="flex items-center">
+                                                                <mat-icon class="icon-size-5 text-hint">task_alt
+                                                                </mat-icon>
+                                                                <div class="ml-1.5 text-md text-secondary tasks_username"
+                                                                    [ngClass]="{'text-green-500': task.completed}">
+                                                                    {{task.completed ? 'Completed' : 'Incompleted' }}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <button mat-icon-button>
+                                                        <mat-icon [svgIcon]="'heroicons_solid:chevron-right'">
+                                                        </mat-icon>
+                                                    </button>
+                                                </div>
+                                            </ng-container>
+                                        </ng-container>
+                                        <ng-template #elseUsersTasks>
+                                            <div class="flex flex-col items-center justify-center h-full">
+                                                <mat-icon class="mb-8 text-10xl text-gray-200">view_list</mat-icon>
+                                                <div>No Tasks Found<span></span></div>
+                                            </div>
+                                        </ng-template>
+                                    </ng-container>
+                                </div>
+                            </div>
+                            <!-- Schedule opportunity delivery -->
+                            <div
+                                class="sm:col-span-2 md:col-span-4 lg:col-span-2 flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
+                                <div class="flex flex-col sm:flex-row items-start justify-between min-h-16">
+                                    <div class="text-lg font-medium tracking-tight leading-6 truncate">Opportunity
+                                        Delivery</div>
+                                    <!-- <div class="mt-3 sm:mt-0 sm:ml-2">
+                                        <mat-button-toggle-group value="this_week"
+                                            (change)="onOppDeliveryToggle($event)">
+                                            <mat-button-toggle value="this_week">This Week</mat-button-toggle>
+                                            <mat-button-toggle value="this_month">This Month</mat-button-toggle>
+                                        </mat-button-toggle-group>
+                                    </div> -->
+                                </div>
+                                <div
+                                    class="flex flex-col mt-2 divide-y relative max-h-120 min-h-120 mt-2 overflow-auto -mr-6">
+                                    <div class="overlay loading_overlay" *ngIf="isToBeDeliveredLoading$ | async">
+                                        <div class="flex flex-col items-center">
+                                            <div class="loader_1 text-indigo-400 mb-15">Loading...</div>
+                                            <!-- <mat-icon class="icon-size-16 text-primary-500 mb-4">check_circle</mat-icon> -->
+                                            <h1 class="text-2xl">Loading..</h1>
+                                            <h4>Please, wait while fetching data.</h4>
+                                        </div>
+                                    </div>
+
+                                    <ng-container *ngIf="(toBeDelivered$ | async) as toBeDelivered">
+                                        <ng-container *ngIf="toBeDelivered.length; else elseToBeDelivered">
+                                            <ng-container *ngFor="let opp of toBeDelivered; trackBy: trackByFn">
+                                                <div class="flex flex-row items-center justify-between py-3 px-0.5 cursor-pointer"
+                                                    [routerLink]="['/opportunities','view',opp.id]">
+                                                    <div class="flex flex-col">
+                                                        <div class="font-medium">{{opp.branch.name}} -
+                                                            {{opp.client.name}}
+                                                        </div>
+                                                        <div
+                                                            class="flex flex-col sm:flex-row sm:items-center -ml-0.5 mt-2 sm:mt-1 space-y-1 sm:space-y-0 sm:space-x-3">
+                                                            <div class="flex items-center">
+                                                                <mat-icon class="icon-size-5 text-hint"
+                                                                    [svgIcon]="'heroicons_solid:clock'"></mat-icon>
+                                                                <div class="ml-1.5 text-md text-secondary">
+                                                                    {{opp.submission_date | amTimeAgo}}</div>
+                                                            </div>
+                                                            <div class="flex items-center">
+                                                                <mat-icon class="icon-size-5 text-hint">task_alt
+                                                                </mat-icon>
+                                                                <div
+                                                                    class="ml-1.5 text-md text-secondary tasks_username">
+                                                                    <ng-container
+                                                                        *ngIf="opp.tasks.length > 0; else noTasks">
+                                                                        <ng-container *ngFor="let task of opp.tasks">
+                                                                            {{task?.assigned_to?.name}} <span
+                                                                                class="split">,
+                                                                            </span>
+                                                                        </ng-container>
+                                                                    </ng-container>
+                                                                    <ng-template #noTasks>
+                                                                        <span class="text-blue-500">Not assigned</span>
+                                                                    </ng-template>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <button mat-icon-button>
+                                                        <mat-icon [svgIcon]="'heroicons_solid:chevron-right'">
+                                                        </mat-icon>
+                                                    </button>
+                                                </div>
+                                            </ng-container>
+                                        </ng-container>
+                                    </ng-container>
+                                    <ng-template #elseToBeDelivered>
+                                        <div class="flex flex-col items-center justify-center h-full">
+                                            <mat-icon class="mb-8 text-10xl text-gray-200">view_list</mat-icon>
+                                            <div>No Opportunities Found<span></span></div>
+                                        </div>
+                                    </ng-template>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                </mat-tab>
+
+            </mat-tab-group>
+
+        </div>
+    </div>
+
+</div>

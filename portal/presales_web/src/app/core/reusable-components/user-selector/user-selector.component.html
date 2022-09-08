@@ -1,0 +1,15 @@
+<mat-form-field class="flex-auto" appearance="fill">
+  <mat-label>Sender</mat-label>
+  <input type="text" placeholder="Client" matInput [formControl]="clientControl" [matAutocomplete]="auto">
+  <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayFn"
+    (optionSelected)="onUserSelected($event)">
+    <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+      {{option.first_name +' '+ option.last_name }}
+      <small class="text-secondary" [hidden]="!option?.branch"> - {{option?.branch?.name}}</small>
+      <small class="text-secondary" *ngIf="option?.role_list"> - {{option?.role_list[0]}}</small>
+    </mat-option>
+  </mat-autocomplete>
+  <!-- <mat-icon class="icon-size-5" matSuffix [svgIcon]="'heroksicons_solid:library'"></mat-icon> -->
+  <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:user-circle'"></mat-icon>
+  <mat-spinner *ngIf="clientsLoading" class="icon-size-5" matPrefix></mat-spinner>
+</mat-form-field>
