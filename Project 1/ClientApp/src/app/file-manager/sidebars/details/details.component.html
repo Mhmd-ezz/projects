@@ -1,0 +1,226 @@
+<ng-container #paneFlow="flow"
+    [flowConfig]="{
+    target: mediaEndpoint + '/files/uploads' ,
+    allowDuplicateUploads :true,
+    chunkSize: 1000000,
+    headers: {
+    'Authorization' : accessToken
+    }
+    }"></ng-container>
+
+<!-- SIDEBAR HEADER -->
+<div class="header accent p-24" fxLayout="column" fxLayoutAlign="space-between">
+
+    <div class="toolbar" fxLayout="row" fxLayoutAlign="end center">
+
+        <div *ngIf="(selected | json) != '{}'">
+
+            <button mat-icon-button class="" aria-label="Upload" matTooltip="Upload"
+                flowButton
+                [flow]="paneFlow.flowJs"
+                [flowAttributes]="{accept: 'image/*'}">
+                <mat-icon>file_upload</mat-icon>
+            </button>
+
+            <button mat-icon-button aria-label="More" matTooltip="More" [matMenuTriggerFor]="detailsToolMenu">
+                <mat-icon>more_vert</mat-icon>
+            </button>
+
+            <mat-menu #detailsToolMenu="matMenu">
+                <button mat-menu-item [hidden]="selectMode" (click)="toggleSelectMode()">
+                    <mat-icon>dialpad</mat-icon>
+                    <span>Select mode</span>
+                </button>
+                <button mat-menu-item [hidden]="!selectMode" (click)="toggleSelectMode()">
+                    <mat-icon>view_carousel</mat-icon>
+                    <span>View mode</span>
+                </button>
+                <!-- <button mat-menu-item [disabled]="selectedRowSet.size === 0" (click)="deselectAll()">
+                <mat-icon>clear</mat-icon>
+                <span>Deselect All</span>
+            </button> -->
+                <button mat-menu-item [disabled]="selectedRowSet.size === 0" (click)="deleteSelected()">
+                    <mat-icon>delete</mat-icon>
+                    <span>Delete</span>
+                </button>
+                <button mat-menu-item [disabled]="selectedRowSet.size === 0" (click)="attachSelected()">
+                    <mat-icon>attach_file</mat-icon>
+                    <span>Attach</span>
+                </button>
+            </mat-menu>
+        </div>
+
+    </div>
+
+    <div>
+        <div *ngIf="(selected | json) != '{}'">
+            <div class="title capitalize-letter">{{selected.patientName}}</div>
+            <div class="subtitle secondary-text">
+                <span>Edited</span>
+                <!-- TODO -->
+                <!-- <span>: {{selected.modified}}</span> -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- / SIDEBAR HEADER -->
+
+<!-- SIDEBAR CONTENT -->
+<div class="content p-24" perfectScrollbar>
+    <div class="text-center" *ngIf="(selected | json) == '{}'"> Select a patient </div>
+    <div class="file-details" [@animate]="{value:'*',params:{delay:'200ms'}}" *ngIf="(selected | json) != '{}'">
+        <!-- IMAGES -->
+        <div class="mb-24">
+            <h5 class="mb-4">Images</h5>
+            <div class="container" [class.select-mode]="selectMode">
+
+                <div class="scroll-box no-selection">
+                    <mat-icon class="mat-18 cursor-pointer"
+                        (click)="!isLeftImagesDisabled && imagesDs.moveLeft()"
+                        [class.scroll-btn-disalbed]="isLeftImagesDisabled">chevron_left</mat-icon>
+                    <drag-scroll #imagesDs
+                        [snap-duration]="200"
+                        (reachesLeftBound)="imagesLeftBound($event)"
+                        (reachesRightBound)="imagesRighttBound($event)"
+                        [drag-scroll-disabled]="false">
+
+                        <div class="holder" *ngFor="let item of typeStartsWith(selected.files,'image')">
+                            <div class="item-box">
+                                <div class="ctnr">
+                                    <div class="img-overlay" *ngIf="selectMode">
+                                        <mat-checkbox
+                                            value="{{item.id}}" color="warn"
+                                            (change)="selectFile($event,item)">
+                                        </mat-checkbox>
+                                    </div>
+                                    <img drag-scroll-item
+                                        src="{{mediaEndpoint}}/photos/{{tenantId}}/{{item.name.toLowerCase()}}?preset=small"
+                                        src-fallback="{{imageFallback}}"
+                                        (click)="previewImages(item)" />
+                                </div>
+                            </div>
+                        </div>
+
+                    </drag-scroll>
+                    <mat-icon class="mat-18 cursor-pointer"
+                        (click)="!isRightImagesDisabled && imagesDs.moveRight()"
+                        [class.scroll-btn-disalbed]="isRightImagesDisabled"
+                        style="justify-content: flex-end;">chevron_right</mat-icon>
+                </div>
+            </div>
+        </div>
+        <!-- / IMAGES -->
+
+
+        <!-- PDF -->
+        <div class="mb-24">
+            <h5 class="mb-4">PDF</h5>
+            <div class="container pdf-ctr" [class.select-mode]="selectMode">
+                <div class="scroll-box no-selection">
+
+                    <mat-icon class="mat-18 cursor-pointer"
+                        (click)="!isLeftPdfDisabled && pdfDs.moveLeft()"
+                        [class.scroll-btn-disalbed]="isLeftPdfDisabled">chevron_left</mat-icon>
+
+                    <drag-scroll #pdfDs
+                        [snap-duration]="200"
+                        (reachesLeftBound)="pdfLeftBound($event)"
+                        (reachesRightBound)="pdfRighttBound($event)"
+                        [drag-scroll-disabled]="false">
+
+                        <div class="holder" *ngFor="let item of typeStartsWith(selected.files,'application/pdf')">
+
+                            <!-- PDF -->
+                            <!-- <div drag-scroll-item class="item-box">
+                                <div class="ctnr">
+                                    <div class="img-overlay" *ngIf="selectMode">
+                                        <mat-checkbox
+                                            value="{{item.id}}" color="warn"
+                                            (change)="selectFile($event,item)">
+                                        </mat-checkbox>
+                                    </div>
+                                    <img
+                                        style="box-shadow: none;"
+                                        (click)="previewPdf(item)"
+                                        src="assets/images/icons/pdf-file-logo-icon.jpg" />
+                                </div>
+                            </div> -->
+                            <!-- PDF -->
+
+                        </div>
+                    </drag-scroll>
+                    <mat-icon class="mat-18 cursor-pointer"
+                        (click)="!isRightPdfDisabled && pdfDs.moveRight()"
+                        [class.scroll-btn-disalbed]="isRightPdfDisabled"
+                        style="justify-content: flex-end;">chevron_right</mat-icon>
+                </div>
+            </div>
+        </div>
+        <!-- / PDF -->
+
+        <!-- POOL -->
+        <div class="mb-24">
+            <h5 class="mb-4">Pool</h5>
+            <div class="container" [class.select-mode]="selectMode">
+                <div class="scroll-box no-selection">
+                    <mat-icon class="mat-18 cursor-pointer"
+                        (click)="!isLeftPoolDisabled && poolDs.moveLeft()"
+                        [class.scroll-btn-disalbed]="isLeftPoolDisabled">chevron_left</mat-icon>
+                    <drag-scroll #poolDs
+                        [snap-duration]="200"
+                        (reachesLeftBound)="poolLeftBound($event)"
+                        (reachesRightBound)="poolRighttBound($event)"
+                        [drag-scroll-disabled]="false">
+
+
+                        <div class="holder" *ngFor="let item of selected.pool">
+                            <div drag-scroll-item class="item-box" *ngIf="item.type.startsWith('image')">
+                                <div class="ctnr">
+                                    <div class="img-overlay" *ngIf="selectMode">
+                                        <mat-checkbox
+                                            value="{{item.id}}" color="warn"
+                                            (change)="selectFile($event,item)">
+                                        </mat-checkbox>
+                                    </div>
+
+                                    <img
+                                        src="{{mediaEndpoint}}/photos/{{tenantId}}/{{item.name.toLowerCase()}}?preset=small"
+                                        src-fallback="{{imageFallback}}"
+                                        (click)="previewPoolImages(item)"
+                                        />
+                                </div>
+
+                            </div>
+                            <div drag-scroll-item class="item-box" *ngIf="item.type.startsWith('application/pdf')">
+                                <div class="ctnr">
+                                    <div class="img-overlay" *ngIf="selectMode">
+                                        <mat-checkbox
+                                            value="{{item.id}}" color="warn"
+                                            (change)="selectFile($event,item)">
+                                        </mat-checkbox>
+                                    </div>
+                                    <img
+                                        style="box-shadow: none;"
+                                        (click)="previewPdf(item)"
+                                        src="assets/images/icons/pdf-file-logo-icon.jpg" />
+                                </div>
+                            </div>
+                        </div>
+                    </drag-scroll>
+                    <mat-icon class="mat-18 cursor-pointer"
+                        (click)="!isRightPoolDisabled && poolDs.moveRight()"
+                        [class.scroll-btn-disalbed]="isRightPoolDisabled"
+                        style="justify-content: flex-end;">chevron_right</mat-icon>
+                </div>
+            </div>
+
+        </div>
+        <!-- / POOL -->
+
+    </div>
+
+    <upload-side-popup *ngIf="isUploadPopupOpened" [flow]="paneFlow" [isOpened]="isUploadPopupOpened"
+        (onClose)="isUploadPopupOpened= false"></upload-side-popup>
+
+</div>
+<!-- / SIDEBAR CONTENT -->

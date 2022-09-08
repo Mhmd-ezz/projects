@@ -1,0 +1,168 @@
+<div class="content p-4 mdc-table-container">
+    <div>
+        <mat-form-field appearance="outline" fxFlex.xs="100" fxFlex="300px">
+            <mat-label>Search patient</mat-label>
+            <input matInput placeholder="Search patient" #input [formControl]="search">
+            <mat-icon matSuffix class="secondary-text">search</mat-icon>
+        </mat-form-field>
+    </div>
+
+    <div class="stats blue-grey-700-fg" fxLayout="row" fxLayoutAlign="start center"
+        matTooltip="Over all patients count">
+        <mat-icon class="s-20 mr-4">person</mat-icon>
+        {{ total$ | async }}
+        <mdc-data-status></mdc-data-status>
+    </div>
+
+    <div class="mat-elevation-z2 responsive-table">
+
+        <!-- <div class="table-layout" *ngIf="_patientsDataSource.loading$ | async">
+            <div class="spinner-container">
+                <mat-spinner></mat-spinner>
+            </div>
+        </div> -->
+        <mat-progress-bar *ngIf="!(loading$ | async)" mode="indeterminate" [color]="'accent'"></mat-progress-bar>
+        <mat-table class="lessons-table text-capitalize" [dataSource]="dataSource" matSort matSortActive="name"
+            matSortDirection="asc" matSortDisableClear>
+
+            <ng-container matColumnDef="name" sticky>
+
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+
+                <mat-cell class="name-cell" ngStyle.xs="font-size: 12px;" *matCellDef="let patient"
+                    [routerLink]="patient.id == undefined ? ['/patients', patient._item.id,tenantSpeciality] : ['/patients', patient.id,tenantSpeciality]">
+                    {{patient.name}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="lastSeen">
+
+                <mat-header-cell *matHeaderCellDef mat-sort-header='patientInfo.lastSeen'>Last visit</mat-header-cell>
+
+                <mat-cell class="" *matCellDef="let patient">
+                    {{patient?.patientInfo?.lastSeen | mdHumanizeToday}} {{patient?._item?.patientInfo?.lastSeen |
+                    mdHumanizeToday}}
+                </mat-cell>
+
+            </ng-container>
+
+            <ng-container matColumnDef="referral">
+
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Referral</mat-header-cell>
+
+                <mat-cell class="" *matCellDef="let patient">
+                    <span class="list-splitter">
+                        <span *ngFor="let referral of patient?.patientInfo?.referral"> {{referral}} </span>
+                        <span *ngFor="let referral of patient?._item?.patientInfo?.referral"> {{referral}} </span>
+                    </span>
+                </mat-cell>
+
+            </ng-container>
+
+            <ng-container matColumnDef="grantor">
+
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Grantors</mat-header-cell>
+
+                <mat-cell class="" *matCellDef="let patient">
+                    <span class="list-splitter">
+                        <span *ngFor="let grantor of patient?.patientInfo?.grantors"> {{grantor.name}} </span>
+                        <span *ngFor="let grantor of patient?._item?.patientInfo?.grantors"> {{grantor.name}} </span>
+                    </span>
+                </mat-cell>
+
+            </ng-container>
+
+            <ng-container matColumnDef="telephone">
+
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Contact</mat-header-cell>
+
+                <mat-cell class="" *matCellDef="let patient">
+                    <span *ngIf="currentScreenWidth === 'xs'; else contactTemplate">
+                        <a href="tel:{{patient.telephone}}">
+                            {{patient.telephone}}
+                        </a>
+                    </span>
+                    <ng-template #contactTemplate>
+                        {{patient.telephone}}
+                    </ng-template>
+
+                </mat-cell>
+
+            </ng-container>
+
+            <ng-container matColumnDef="entryDate">
+
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Entry date</mat-header-cell>
+
+                <mat-cell *matCellDef="let patient">
+                    {{patient?.patientInfo?.entryDate | date: 'yyyy-MM-dd'}}
+                    {{patient?._item?.patientInfo?.entryDate | date: 'yyyy-MM-dd'}}
+                </mat-cell>
+
+            </ng-container>
+
+            <ng-container matColumnDef="createdOn">
+
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Created on</mat-header-cell>
+
+                <mat-cell class="" *matCellDef="let patient">
+                    {{patient?.createdOn | mdHumanizeToday}}
+                    {{patient?._item?.createdOn | mdHumanizeToday}}
+                </mat-cell>
+
+            </ng-container>
+
+            <ng-container matColumnDef="modified">
+
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Modified</mat-header-cell>
+
+                <mat-cell class="" *matCellDef="let patient">
+                    {{patient?.modified | mdHumanizeToday}}
+                    {{patient?._item?.modified | mdHumanizeToday}}
+                </mat-cell>
+
+            </ng-container>
+
+            <ng-container matColumnDef="isDuplicate">
+
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Is duplicate</mat-header-cell>
+
+                <mat-cell class="" *matCellDef="let patient">
+                    <span class="warn-400-fg">
+                        {{patient?.isDuplicate ? 'Duplicate' : ''}}
+                        {{patient?._item?.isDuplicate ? 'Duplicate' : ''}}
+                    </span>
+                </mat-cell>
+
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
+            <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+
+        </mat-table>
+
+        <!-- *ngIf="noData | async" -->
+        <div *ngIf="noRecords$ | async" class="no-records">
+            No records found
+            <!-- No <span *ngIf="_patientsDataSource.noMoreRecords$ | async">&nbsp; more &nbsp;</span> records found -->
+        </div>
+
+
+        <div class="footer">
+            <mat-spinner *ngIf="!(loading$ | async)" [color]="'accent'" [strokeWidth]="2" [diameter]="24">
+            </mat-spinner>
+
+            <mat-paginator #paginator [length]="total$ | async" [pageSize]="pageSizeOptions[0]"
+                [showFirstLastButtons]='true' [pageSizeOptions]="pageSizeOptions"> [showFirstLastButtons]="true">
+            </mat-paginator>
+        </div>
+
+        <mat-progress-bar *ngIf="!(loading$ | async)" mode="indeterminate" [color]="'accent'"></mat-progress-bar>
+
+        <!-- <mat-paginator [length]="_patientsDataSource.total$ | async" [pageSize]="pageSizeOptions[0]"
+            [pageSizeOptions]="pageSizeOptions" [showFirstLastButtons]="true">
+        </mat-paginator> -->
+
+    </div>
+
+</div>

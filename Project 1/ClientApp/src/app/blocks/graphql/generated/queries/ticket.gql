@@ -1,0 +1,19 @@
+query ticket($id: String!){
+    ticket(id: $id){
+        id
+        ticketNumber
+        tenantName
+        subject
+        details
+        status
+        attachFile
+        isReadByAdmin
+        isReadByClient
+        ticketDate
+        messages{
+            message
+            requestBy
+            messageDate
+        }
+    }
+}

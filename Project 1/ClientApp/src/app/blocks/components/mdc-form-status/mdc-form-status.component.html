@@ -1,0 +1,33 @@
+<span class="flex-center" *ngIf="( (status$ | async ) ||  formStatus) === formStatusEnum.saved">
+    <mat-icon class="mr-8 s-22" (click)="$event.stopPropagation()" matSuffix>check_circle</mat-icon>
+    AutoSaved
+</span>
+<span class="flex-center" *ngIf="( (status$ | async ) ||  formStatus)  === formStatusEnum.savedLocally">
+    <mat-icon class="mr-8 s-22" (click)="$event.stopPropagation()" matSuffix>check_circle</mat-icon>
+    No internet access, Saved locally.
+</span>
+<span class="flex-center" *ngIf="( (status$ | async ) ||  formStatus) === formStatusEnum.pending">
+    <mat-icon class="mr-8 s-22" (click)="$event.stopPropagation()" matSuffix>keyboard</mat-icon>
+    Pending...
+</span>
+<span class="flex-center deep-orange-100-fg" *ngIf="( (status$ | async ) ||  formStatus) === formStatusEnum.invalid">
+    <mat-icon class="mr-8 s-22" (click)="$event.stopPropagation()" matSuffix>error_outline</mat-icon>
+    Missing Required Fields.
+</span>
+<span class="flex-center deep-orange-100-fg" *ngIf="( (status$ | async ) ||  formStatus) === formStatusEnum.validationError">
+    <mat-icon class="mr-8 s-22" (click)="$event.stopPropagation()" matSuffix>error_outline</mat-icon>
+    Unable to save changes. Please, check input fields.
+</span>
+<span class="flex-center deep-orange-100-fg" *ngIf="( (status$ | async ) ||  formStatus) === formStatusEnum.error">
+    <mat-icon class="mr-8 s-22" (click)="$event.stopPropagation()" matSuffix>error_outline</mat-icon>
+    An error has occurred, couldn't save changes. Please contact support.
+</span>
+<span class="flex-center deep-orange-100-fg" *ngIf="( (status$ | async ) ||  formStatus) === formStatusEnum.duplicates">
+    <mat-icon class="mr-8 s-22" (click)="$event.stopPropagation()" matSuffix>error_outline</mat-icon>
+    <!-- A duplicate entry already exists ! Please try a different value -->
+    This item already exists.
+</span>
+<span class="flex-center" *ngIf="( (status$ | async ) ||  formStatus) === formStatusEnum.saving">
+    <div class="mr-8 loader-dual-ring--22"></div>
+    Saving...
+</span>

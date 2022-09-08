@@ -1,0 +1,305 @@
+<div class="page-layout blank">
+
+    <!-- HEADER -->
+    <div style="position: relative;">
+        <div class="header accent p-8" fxLayout="row" fxLayoutAlign="start center">
+            <div fxLayout="column" fxLayoutAlign="center start">
+                <div class="black-fg" fxLayout="row" fxLayoutAlign="start start">
+                    <!-- <mat-icon class="secondary-text s-18">home</mat-icon>
+                  <span class="secondary-text">Patients</span> -->
+                    <mat-icon class="secondary-text s-18 mr-4">home</mat-icon>
+                    <breadcrumb #parent>
+                        <span class="breadcrumb text-capitalize"
+                            *ngFor="let route of parent.breadcrumbs; let isLast= last">
+                            <a class="breadcrumb-item secondary-text" *ngIf="!route.terminal || (route.terminal &&
+                                route.route.loadChildren)" href="" [routerLink]="[route.url]">{{
+                                route.displayName }}</a>
+                            <a mat-button class="breadcrumb-item" *ngIf="route.terminal && !route.route.loadChildren">{{
+                                route.displayName }}</a>
+                            <span [hidden]="isLast" class="secondary-text"> / </span>
+                        </span>
+                    </breadcrumb>
+                </div>
+            </div>
+        </div>
+        <mat-progress-bar [hidden]="!isAppointmentsLoading || !isSettingsLoading" mode="indeterminate"
+            [color]="'accent'"></mat-progress-bar>
+    </div>
+    <!-- / HEADER -->
+
+    <div fxLayout="row">
+
+        <!-- SIDEBAR -->
+        <fuse-sidebar class="sidebar" name="schedule-filter-sidebar" position="left" lockedOpen="gt-md">
+            <app-filter (change)="onFilterChange($event)"> </app-filter>
+        </fuse-sidebar>
+        <!-- / SIDEBAR -->
+
+        <!-- SCHEDULE -->
+        <ejs-schedule #scheduleObj width='100%' [eventSettings]='eventSettings' (popupOpen)="onPopupOpen($event)"
+            (actionBegin)="onActionBegin($event)" [currentView]="currentView" (eventRendered)="oneventRendered($event)"
+            (dragStop)="onDragStop($event)" (actionComplete)="actionComplete($event)" (created)="created()"
+            (resizeStop)="onResizeStop($event)" (renderCell)="renderCell($event)" [startHour]="startHour"
+            [endHour]="endHour" [workHours]="workHours" [timeScale]="timeScaleOptions" [showQuickInfo]="true">
+
+            <!-- QUICKPOPUP -->
+            <!-- <ng-template #quickInfoTemplatesContent let-data>
+            <ng-container [ngTemplateOutlet]="data.elementType == 'cell' ? quickInfoTemplatesContentCell : eventContent"
+                [ngTemplateOutletContext]="{data:data}"></ng-container>
+        </ng-template> -->
+            <ng-template #quickInfoTemplatesContent let-data>
+                <div>
+                    <div [fxShow]="data.elementType == 'cell'">
+                        <div class="e-quick-popup-wrapper e-lib e-popup e-control e-popup-open">
+                            <div class="e-cell-popup">
+                                <div class="e-popup-content">
+                                    <table class="e-popup-table">
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <form class="e-schedule-form e-lib e-formvalidator"
+                                                        onsubmit="return false;" novalidate="">
+                                                        <span class="e-input-group e-control-wrapper">
+                                                            <input class="e-subject e-field e-input" type="text"
+                                                                name="subject" placeholder="Add title"
+                                                                aria-placeholder="Add title">
+                                                        </span>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div [fxShow]="data.elementType == 'event'">
+                        <ng-container [ngTemplateOutlet]="eventContent" [ngTemplateOutletContext]="{data:data}">
+                        </ng-container>
+                    </div>
+                </div>
+
+            </ng-template>
+            <!-- / QUICKPOPUP -->
+
+            <!-- CELLCONTENT -->
+            <!-- DISABLED BY JAVASCRIPT -->
+            <ng-template #cellContent let-data="data">
+                <div *ngIf="(data.elementType === 'event')">
+                    <div class="e-cell-content">
+                        <form class="e-schedule-form">
+                            <div style="padding:10px">
+                                <input class="subject e-field" type="text" name="Subject" placeholder="Title"
+                                    style="width:100%">
+                            </div>
+                            <div style="padding:10px">
+                                <input class="location e-field" type="text" name="Location" placeholder="Location"
+                                    style="width:100%">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </ng-template>
+            <!-- / CELLCONTENT -->
+
+            <!-- EVENTCONTENT -->
+            <ng-template #eventContent let-data="data">
+                <div *ngIf="(data.elementType === 'event')">
+                    <div class="custom-event-content">
+                        <!-- CONTACT -->
+                        <div *ngIf="data.contact">
+
+                            <div class="box">
+                                <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto"
+                                    fxLayoutGap="15px">
+                                    <mat-icon class="grey-600-fg s-20">person_outline</mat-icon>
+                                    <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+                                        <ng-container *ngIf="data.contact.contactType == 'Patient'; else elseTemplate">
+                                            <a [routerLink]="['/patients', data.contact?.id, 'general']"> {{
+                                                data.contact?.name}}</a>
+                                            <a [routerLink]="['/patients', data.contact?.id, 'general']" target="_blank"
+                                                matTooltip="Open in new tab.">
+                                                <mat-icon class="s-18 ml-8">open_in_new</mat-icon>
+                                            </a>
+                                        </ng-container>
+                                        <ng-template #elseTemplate>
+                                            <span> {{ data.contact?.name}}</span>
+                                        </ng-template>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="box" [hidden]="!data?.contact?.telephone">
+                                <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto"
+                                    fxLayoutGap="15px">
+                                    <mat-icon class="grey-600-fg s-20">call</mat-icon>
+                                    <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+                                        <a href="tel:{{data?.contact?.telephone}}">
+                                            {{data.contact?.telephone}}
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- / CONTACT -->
+
+                        <!-- REASON -->
+                        <div class="box" [hidden]="!data?.reason">
+                            <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto" fxLayoutGap="15px">
+                                <mat-icon class="grey-600-fg s-20 ">text_fields</mat-icon>
+                                <div fxFlex="1 0 auto">{{ data?.reason}}</div>
+                            </div>
+                        </div>
+                        <!-- / REASON -->
+
+                        <!-- TYPE -->
+                        <div class="box" [hidden]="!data?.type">
+                            <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto" fxLayoutGap="15px">
+                                <mat-icon class="grey-600-fg s-20 material-icons-outlined">label</mat-icon>
+                                <div fxFlex="1 0 auto">{{ data?.type}}</div>
+                            </div>
+                        </div>
+                        <!-- / TYPE -->
+
+                        <!-- TIME -->
+                        <div class="box" *ngIf="data.startTime && data.endTime">
+                            <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto" fxLayoutGap="15px">
+                                <mat-icon class="grey-600-fg s-20">access_time</mat-icon>
+                                <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+                                    {{ data.startTime | date: 'dd/M/yyyy hh:mm a'}}
+
+                                    <mat-icon class="grey-600-fg s-20 mr-4 ml-4">arrow_right_alt</mat-icon>
+
+                                    <ng-container *ngIf="isSameDate(data.startTime, data.endTime); else elseTemplate">
+                                        {{ data.endTime | date: 'hh:mm a'}}
+                                    </ng-container>
+
+                                    <ng-template #elseTemplate>
+                                        {{ data.endTime | date: 'dd/M/yyyy hh:mm a'}}
+                                    </ng-template>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- / TIME -->
+
+                        <!-- LOCATION -->
+                        <div class="box" [hidden]="!data?.location?.name">
+                            <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto" fxLayoutGap="15px">
+                                <mat-icon class="grey-600-fg s-20">location_on</mat-icon>
+                                <div fxFlex="1 0 auto">{{ data?.location?.name}}</div>
+                            </div>
+                        </div>
+                        <!-- / LOCATION -->
+
+                        <!-- CONDITION -->
+                        <div class="box"
+                            *ngIf="!data?.conditionId && !data?.speciality && data?.contact?.id && data?.event?.type === EventTypesEnum.operation">
+                            <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto" fxLayoutGap="15px">
+                                <mat-icon class="grey-600-fg s-20">work_outline</mat-icon>
+                                <div fxFlex="1 0 auto">
+                                    <a [routerLink]="['/patients', data?.contact?.id, data?.speciality, 'new-operation']"
+                                        [queryParams]="{conditionId:data?.conditionId}">Create Operation</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- / CONDITION -->
+
+                        <!-- NOTE -->
+                        <div class="box" [hidden]="!data?.note">
+                            <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto" fxLayoutGap="15px">
+                                <mat-icon class="grey-600-fg s-20 ">speaker_notes</mat-icon>
+                                <div fxFlex="1 0 auto">{{ data?.note}}</div>
+                            </div>
+                        </div>
+                        <!-- / NOTE -->
+
+
+                        <!-- CONVERT TO PATIENT -->
+                        <div class="" *ngIf="data?.contact && data?.contact?.contactType != 'Patient'">
+                            <div fxLayout="row wrap" fxLayoutAlign="end end" fxFlex="1 0 auto" fxLayoutGap="15px">
+                                <button mat-raised-button (click)="navigateToCreatepatient(data.contact.id)"
+                                    color="primary">
+                                    <mat-icon class="grey-600-fg s-20 ">folder</mat-icon>
+                                    Create Patient File
+                                </button>
+                            </div>
+                        </div>
+                        <!-- CONVERT TO PATIENT -->
+
+                        <!-- STATUS -->
+                        <div class="box appointment_status" *ngIf="data?.type == 'Visit'">
+                            <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto" fxLayoutGap="15px">
+                                <mat-icon class="grey-600-fg s-20 ">account_box</mat-icon>
+                                <div fxFlex="1 0 auto">
+                                    <mat-form-field appearance="outline" fxFlex="1 0 auto">
+                                        <mat-label>Status</mat-label>
+                                        <mat-select (selectionChange)="onStatusChange($event,data.id)"
+                                            [ngModel]="data?.status">
+
+                                            <mat-select-trigger>
+                                                <mat-icon class="accent-200-fg mr-8 s-16" [class]="{
+                                                    'accent-200-fg': data.status == 'checked in',
+                                                    'green-400-fg': data.status == 'admitted',
+                                                    'grey-300-fg': data.status == 'checked out',
+                                                    'orange-300-fg': data.status == 'delayed',
+                                                    'red-200-fg': ['canceled','interrupted','paused','no show'].includes(data.status)
+                                                }">circle</mat-icon>
+                                                {{data.status}}
+                                            </mat-select-trigger>
+
+                                            <mat-option value="checked in">
+                                                <mat-icon class="accent-200-fg mr-8 s-16">circle</mat-icon>Checked in
+                                            </mat-option>
+                                            <mat-option value="admitted">
+                                                <mat-icon class="green-400-fg mr-8 s-16">circle</mat-icon>Admitted
+                                            </mat-option>
+                                            <mat-option value="checked out">
+                                                <mat-icon class="grey-300-fg mr-8 s-16">circle</mat-icon>Checked out
+                                            </mat-option>
+                                            <mat-option value="delayed">
+                                                <mat-icon class="orange-200-fg mr-8 s-16">circle</mat-icon>Delayed
+                                            </mat-option>
+                                            <mat-option value="canceled">
+                                                <mat-icon class="red-200-fg mr-8 s-16">circle</mat-icon>Canceled
+                                            </mat-option>
+                                            <mat-option value="interrupted">
+                                                <mat-icon class="red-200-fg mr-8 s-16">circle</mat-icon>Interrupted
+                                            </mat-option>
+                                            <mat-option value="paused">
+                                                <mat-icon class="red-200-fg mr-8 s-16">circle</mat-icon>Paused
+                                            </mat-option>
+                                            <mat-option value="no show">
+                                                <mat-icon class="red-200-fg mr-8 s-16">circle</mat-icon>No show
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- STATUS -->
+
+
+                        <!-- <div class="box">
+                        <mat-form-field fxFlex="48" fxFlex.xs="100">
+                            <mat-label>Choose a status</mat-label>
+                            <mat-select [(ngModel)]="data.status" (selectionChange)="onChangeStatus($event,data)" name="status">
+                                <mat-option *ngFor="let status of eventStatuses" [value]="status">
+                                    {{status}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div> -->
+                    </div>
+                </div>
+            </ng-template>
+            <!-- / EVENTCONTENT -->
+
+        </ejs-schedule>
+        <!-- / SCHEDULE -->
+
+    </div>
+
+
+
+</div>

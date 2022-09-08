@@ -1,0 +1,2316 @@
+<div id="tabs">
+
+    <!-- TABS -->
+    <mat-tab-group [backgroundColor]="'accent'" [(selectedIndex)]="TabIndex">
+
+        <!-- CONDITIONS TAB -->
+        <mat-tab>
+
+            <!-- TAB LABEL -->
+            <ng-template mat-tab-label>
+                <div fxLayout="row" fxLayoutAlign="space-around center">
+                    <div class="mr-12">Conditions</div>
+
+                    <!-- FILTER -->
+                    <div class="filter-tab" fxLayout="row" fxLayoutAlign="end"
+                        [matMenuTriggerFor]="filterConditionsMenu" (click)="$event.stopPropagation()">
+                        <mat-icon class="s-18">filter_list</mat-icon>
+                    </div>
+                    <mat-menu #filterConditionsMenu="matMenu">
+                        <div mat-menu-item (click)="$event.stopPropagation()">
+                            <mat-checkbox [(ngModel)]="conditionsFilter.conditions">Conditions</mat-checkbox>
+                        </div>
+                        <div mat-menu-item (click)="$event.stopPropagation()">
+                            <mat-checkbox [(ngModel)]="conditionsFilter.followups">Followups</mat-checkbox>
+                        </div>
+                        <div mat-menu-item (click)="$event.stopPropagation()">
+                            <mat-checkbox [(ngModel)]="conditionsFilter.operations">Operations</mat-checkbox>
+                        </div>
+                        <div mat-menu-item (click)="$event.stopPropagation()">
+                            <mat-checkbox [(ngModel)]="conditionsFilter.activityDetails">Activity Details</mat-checkbox>
+                        </div>
+                        <div mat-menu-item (click)="$event.stopPropagation()"
+                            [matMenuTriggerFor]="mediaConditionsFilterMenu">
+                            Media
+                        </div>
+                        <div mat-menu-item (click)="$event.stopPropagation()"
+                            [matMenuTriggerFor]="statusConditionsFilterMenu">
+                            Status
+                        </div>
+                    </mat-menu>
+                    <mat-menu #mediaConditionsFilterMenu="matMenu">
+                        <div mat-menu-item (click)="$event.stopPropagation()">
+                            <mat-checkbox [(ngModel)]="conditionsFilter.media.physicalExam">Physical Exam</mat-checkbox>
+                        </div>
+                        <div mat-menu-item (click)="$event.stopPropagation()">
+                            <mat-checkbox [(ngModel)]="conditionsFilter.media.radio">Radio</mat-checkbox>
+                        </div>
+                        <div mat-menu-item (click)="$event.stopPropagation()">
+                            <mat-checkbox [(ngModel)]="conditionsFilter.media.laboratory">Laboratory</mat-checkbox>
+                        </div>
+                        <div mat-menu-item (click)="$event.stopPropagation()">
+                            <mat-checkbox [(ngModel)]="conditionsFilter.media.other">Other</mat-checkbox>
+                        </div>
+                    </mat-menu>
+                    <mat-menu #statusConditionsFilterMenu="matMenu">
+                        <div mat-menu-item (click)="$event.stopPropagation()">
+                            <mat-checkbox [(ngModel)]="conditionsFilter.status.active">Active</mat-checkbox>
+                        </div>
+                        <div mat-menu-item (click)="$event.stopPropagation()">
+                            <mat-checkbox [(ngModel)]="conditionsFilter.status.inActive">Inactive</mat-checkbox>
+                        </div>
+                    </mat-menu>
+                    <!-- / FILTER -->
+
+                </div>
+            </ng-template>
+            <!-- / TAB LABEL -->
+
+            <!-- BUTTONS CONTROLLER -->
+            <div class="pt-12 text-center">
+                <!-- <button class="m-4" mat-stroked-button color="accent" [routerLink]="['./new-condition']">New Condition</button> -->
+                <!-- <button class="m-4" mat-stroked-button color="accent" [routerLink]="['./new-followup']">New Followup</button> -->
+                <!-- <button class="m-4" mat-stroked-button color="accent" [routerLink]="['./new-operation']">New Operation</button> -->
+            </div>
+            <!-- / BUTTONS CONTROLLER -->
+
+            <!-- BODY -->
+            <div class="pt-12 pb-12 mb-100 conditions-body">
+                <mat-accordion multi="true">
+
+                    <div class="w-per-100 text-center mt-40 flex-center" *ngIf="!conditions?.length">
+                        <mat-icon class="mat-18 mr-12">work</mat-icon>
+                        No conditions found.
+                    </div>
+
+                    <!-- CONDITIONS NAME LOOPER -->
+                    <ng-container *ngFor="let condition of conditions; trackBy: trackId; let index= index; first as isFirst; last
+                        as
+                        isLast">
+                        <mat-expansion-panel
+                            [expanded]="((isFirst === true) && (showPanel === false)) || (panelOpenState[condition.id] === true)"
+                            *ngIf="(!condition.isHidden || ShowAllHidden) && ((condition.status === 'active' && conditionsFilter.status.active === true) ||
+                            (condition.status === 'inActive' && conditionsFilter.status.inActive === true))">
+                            <mat-expansion-panel-header [collapsedHeight]="'80px'" [expandedHeight]="'100px'">
+                                <mat-panel-title class="condition-panel-title">
+                                    <div class="condition-name">{{ condition.name}}
+                                        <span class="secondary-text" *ngIf="condition.diagnosis?.text?.length">
+                                            /
+                                            <span class="teal-400-fg font-size-16 text-capitalize">
+                                                {{ condition | conditionDiagnosis}}
+                                                <!-- {{ condition?.diagnosis?.text[0].text}} -->
+                                            </span>
+                                        </span>
+                                    </div>
+                                    <div class="condition-sum secondary-text">
+                                        <span *ngIf="condition.summary.followup">
+                                            {{ condition.summary.followup }} Followup
+                                        </span>
+                                        <span *ngIf="condition.summary.operation">
+                                            {{ condition.summary.operation }} Operation
+                                        </span>
+                                        <!-- <span *ngIf="condition.summary.condition">
+                                            {{ condition.summary.condition }} Condition
+                                        </span> -->
+                                        <span *ngIf="condition.conditionsList.length">
+                                            <span class="last-visit-label"> Last Visit:</span>
+                                            &nbsp;{{ condition.conditionsList[0].opened | date : 'd MMM y' }}
+                                        </span>
+                                    </div>
+                                    <div class="condition-sum-xs" fxHide fxShow.xs fxLayout="row"
+                                        fxLayoutAlign="start center">
+                                        <div class="condition-range secondary-text">
+                                            <span class="">{{ condition.opened | date : 'd MMM y' }}</span>
+                                            <mat-icon class="">arrow_right_alt</mat-icon>
+                                            <span>
+                                                <span *ngIf="condition.closed;else openedCond">
+                                                    {{ condition.opened | date : 'd MMM y' }}
+                                                </span>
+                                                <ng-template #openedCond>Opened</ng-template>
+                                            </span>
+                                        </div>
+                                        <div class="mr-8 ml-8">|</div>
+                                        <div class="condition-status">
+                                            <span class="text-uppercase"
+                                                [class.deep-orange-600-fg]="condition.status == 'active'"
+                                                [class.brown-700-fg]="condition.status == 'inActive'">
+                                                {{condition.status}}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </mat-panel-title>
+                                <mat-panel-description fxLayout="row" fxLayoutAlign="end center">
+                                    <div class="condition-panel-description" fxHide.xs>
+                                        <div class="condition-range">
+                                            <span class="">{{ condition.opened | date : 'd MMM y' }}</span>
+                                            <mat-icon class="">arrow_right_alt</mat-icon>
+                                            <span>
+                                                <span *ngIf="condition.closed;else openedCondition">
+                                                    {{ condition.opened | date : 'd MMM y' }}
+                                                </span>
+                                                <ng-template #openedCondition>Opened</ng-template>
+                                            </span>
+                                        </div>
+                                        <div class="condition-status text-right">
+                                            <span class="text-uppercase"
+                                                [class.deep-orange-600-fg]="condition.status == 'active'"
+                                                [class.brown-700-fg]="condition.status == 'inActive'">
+                                                {{condition.status}}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                </mat-panel-description>
+                            </mat-expansion-panel-header>
+
+                            <!-- BODY -->
+                            <div>
+                                <!-- BUTTONS CONTROLLER -->
+                                <div class="pt-12 text-center control-buttons flex-spacebetween">
+                                    <div class="flex-start">
+                                        <button class="m-4" mat-stroked-button color="accent"
+                                            [routerLink]="['./new-followup']"
+                                            [queryParams]="{conditionId:condition.id}">+ Followup</button>
+                                        <button class="m-4" mat-stroked-button color="accent"
+                                            [routerLink]="['./new-operation']"
+                                            [queryParams]="{conditionId:condition.id}">+ Operation</button>
+                                    </div>
+                                    <div class="flex-end">
+                                        <button class="m-4" mat-stroked-button color="accent"
+                                            (click)="collapseAllConditions(condition.id)" matTooltip="Collapse all">
+                                            <mat-icon class="">vertical_align_center</mat-icon>
+                                        </button>
+                                        <button class="m-4" mat-stroked-button color="accent"
+                                            (click)="expandAllConditions(condition.id)" matTooltip="Expand all">
+                                            <mat-icon class="">vertical_align_bottom</mat-icon>
+                                        </button>
+                                    </div>
+
+                                </div>
+                                <!-- / BUTTONS CONTROLLER -->
+
+                                <!-- VISIT LOOPER -->
+                                <ng-container *ngFor="let visit of condition.conditionsList; trackBy: trackId; let index= index;
+                                    first
+                                    as isFirst; last as isLast">
+
+                                    <!-- TIMELINE CONDITION BLOCK -->
+                                    <div class="timeline"
+                                        *ngIf="visit.type === 'Condition' && (!visit.isHidden || ShowAllHidden) && conditionsFilter.conditions">
+                                        <div class="timeline-img is-narrow">
+                                            <div class="index-num"
+                                                (click)="toggleThisCondition(visit.id,visit.type,visit)">
+                                                <div class="num"> {{ condition.conditionsList.length - index }} </div>
+                                            </div>
+                                        </div>
+                                        <div class="timeline-date is-narrow secondary-text"
+                                            (click)="toggleThisCondition(visit.id,visit.type,visit)">
+                                            <span class="placeholder-narrow">Condition </span>
+                                            <span> {{ visit.opened | date:'d MMM y'}} </span>
+                                            <span>
+                                                <span class="from-now h5">
+                                                    <mat-icon class="s-14">arrow_upward</mat-icon>
+                                                    <span style="width:unset;"
+                                                        matTooltip="Time between this visit and today">
+                                                        {{ visit.opened | mdFromToday }}
+                                                    </span>
+                                                </span>
+                                            </span>
+                                        </div>
+
+                                        <div class="timeline-content">
+                                            <div class="title blue-grey-400"
+                                                (click)="toggleThisCondition(visit.id,visit.type)">
+                                                <mat-icon class="s-22 mr-4" mat-icon-button [matMenuTriggerFor]="cmenu"
+                                                    (click)="$event.stopPropagation()"> more_vert</mat-icon>
+                                                <mat-menu #cmenu="matMenu">
+                                                    <button mat-menu-item
+                                                        (click)="openDuplicateDialog(visit.isDuplicate, patient.id,'general','condition',condition.id,'')">
+                                                        <mat-icon>compare_arrows</mat-icon>
+                                                        <span>Duplicate</span>
+                                                    </button>
+                                                    <button mat-menu-item
+                                                        [routerLink]="['./edit-condition', condition.id]">
+                                                        <mat-icon>edit</mat-icon>
+                                                        <span>Edit</span>
+                                                    </button>
+                                                </mat-menu>
+                                                <span class="placeholder">Condition : </span>
+                                                <span class="name">{{ visit.name }}</span>
+                                                <span class="secondary-text">- {{ visit.location?.name }} </span>
+                                                <span fxFlex></span>
+
+                                                <span class="flex-center duplicate-label" *ngIf="visit.isDuplicate">
+                                                    <span>DUPLICATE</span>
+                                                </span>
+
+                                                <span class="mr-8"
+                                                    (click)="$event.stopPropagation();confirmDelete(patient.id,'general','', condition.id)"
+                                                    *ngIf="visit.isDuplicate">
+                                                    <mat-icon class="s-20 fuse-white-fg">delete</mat-icon>
+                                                </span>
+
+                                                <a [routerLink]="['./edit-condition', condition.id]">
+                                                    <mat-icon class="s-20 fuse-white-fg">edit</mat-icon>
+                                                </a>
+                                                <div mat-button class="pl-20" *ngIf="!visit.isHidden" matTooltip="Hide"
+                                                    (click)="ShowOrHideThisCondition(visit.id,true)">
+                                                    <mat-icon class="s-20">hide_source</mat-icon>
+                                                    <!-- <span>Hide</span> -->
+                                                </div>
+                                                <div mat-button class="pl-20" *ngIf="visit.isHidden" matTooltip="Show"
+                                                    (click)="ShowOrHideThisCondition(visit.id,false)">
+                                                    <mat-icon class="s-20">preview</mat-icon>
+                                                    <!-- <span>Show</span> -->
+                                                </div>
+                                            </div>
+                                            <div class="body" fxLayout.xs="column wrap"
+                                                *ngIf="conditionsStates[visit.id]">
+
+                                                <!-- CHEIF COMPLAINT BLOCK -->
+                                                <div class="presentation-block" *ngIf="visit.cheifComplaint?.text?.length &&
+                                                    conditionsFilter.activityDetails">
+                                                    <div class="label">
+                                                        <div class="label-border">
+                                                            <span class="presentation" style="font-size: 0.9em;">Chief
+                                                                Complaint</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="present-text" *ngIf="conditionsFilter.activityDetails">
+                                                        <ul class="m-0">
+                                                            <li *ngFor="let item of visit.cheifComplaint.text; trackBy:
+                                                                trackText;">
+                                                                {{ item.text }}
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <!-- / CHEIF COMPLAINT BLOCK-->
+
+                                                <!-- PRESENT HISTORY BLOCK -->
+                                                <div class="presentation-block" *ngIf="visit.presentHistory?.text?.length &&
+                                                    conditionsFilter.activityDetails">
+                                                    <div class="label">
+                                                        <div class="label-border">
+                                                            <span class="presentation">Present History</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="present-text" *ngIf="conditionsFilter.activityDetails">
+                                                        <ul class="m-0">
+                                                            <li *ngFor="let item of visit.presentHistory.text; trackBy:
+                                                                trackText;">
+                                                                {{ item.text }}
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <!-- / PRESENT HISTORY BLOCK-->
+
+
+                                                <!-- PHYSICAL EXAM BLOCK -->
+                                                <div class="presentation-block"
+                                                    *ngIf="( conditionsFilter.media.physicalExam &&
+                                                    groupedFiles && groupedFiles[visit.id] && groupedFiles && groupedFiles[visit.id]?.physicalExam.length ) ||
+                                                    ( visit.physicalExam?.text?.length && conditionsFilter.activityDetails )">
+                                                    <div class="label" *ngIf="conditionsFilter.media.physicalExam ||
+                                                        conditionsFilter.activityDetails">
+                                                        <div class="label-border">
+                                                            <span class="presentation">Physical Exam</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="present-text">
+                                                        <ul class="m-0" *ngIf="conditionsFilter.activityDetails">
+                                                            <li
+                                                                *ngFor="let item of visit.physicalExam.text; trackBy: trackText;">
+                                                                {{ item.text }}
+                                                            </li>
+                                                        </ul>
+                                                        <div class="imgs-holder"
+                                                            *ngIf="conditionsFilter.media.physicalExam &&
+                                                            groupedFiles && groupedFiles[visit.id] && groupedFiles && groupedFiles[visit.id]?.physicalExam.length">
+                                                            <media-file-view-list
+                                                                [files]="groupedFiles && groupedFiles[visit.id]?.physicalExam">
+                                                            </media-file-view-list>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- / PHYSICAL EXAM BLOCK -->
+
+                                                <!-- DIFFERENTIAL DIAGNOSIS BLOCK -->
+                                                <div class="presentation-block" *ngIf="visit.differentialDiagnosis?.text?.length &&
+                                                    conditionsFilter.activityDetails">
+                                                    <div class="label">
+                                                        <div class="label-border">
+                                                            <span class="presentation">Diff. Diagnosis</span>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="present-text" *ngIf="conditionsFilter.activityDetails">
+                                                        <ul class="m-0">
+                                                            <li *ngFor="let item of visit.differentialDiagnosis.text; trackBy:
+                                                                trackText;">
+                                                                {{ item.text }}
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <!-- / DIFFERENTIAL DIAGNOSIS BLOCK-->
+
+
+                                                <!-- LABORATORY BLOCK -->
+                                                <div class="presentation-block"
+                                                    *ngIf="( conditionsFilter.media.laboratory &&
+                                                    groupedFiles && groupedFiles[visit.id] && groupedFiles && groupedFiles[visit.id]?.laboratory.length ) ||
+                                                    ( visit.laboratory?.text?.length && conditionsFilter.activityDetails )">
+                                                    <div class="label">
+                                                        <div class="label-border">
+                                                            <span class="presentation">Laboratory</span>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="present-text">
+                                                        <ul class="m-0" *ngIf="conditionsFilter.activityDetails">
+                                                            <li
+                                                                *ngFor="let item of visit.laboratory.text; trackBy: trackText;">
+                                                                {{ item.text }}
+                                                            </li>
+                                                        </ul>
+                                                        <div class="imgs-holder"
+                                                            *ngIf="conditionsFilter.media.laboratory &&
+                                                            groupedFiles && groupedFiles[visit.id] && groupedFiles && groupedFiles[visit.id]?.laboratory.length">
+                                                            <media-file-view-list
+                                                                [files]="groupedFiles && groupedFiles[visit.id]?.laboratory">
+                                                            </media-file-view-list>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- / LABORATORY BLOCK -->
+
+                                                <!-- RADIO BLOCK -->
+                                                <div class="presentation-block" *ngIf="( conditionsFilter.media.radio &&
+                                                    groupedFiles && groupedFiles[visit.id] && groupedFiles && groupedFiles[visit.id]?.radio.length ) ||
+                                                    ( visit.radio?.text?.length && conditionsFilter.activityDetails )">
+                                                    <div class="label">
+                                                        <div class="label-border">
+                                                            <span class="presentation">Radio</span>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="present-text">
+                                                        <ul class="m-0" *ngIf="conditionsFilter.activityDetails">
+                                                            <li
+                                                                *ngFor="let item of visit.radio.text; trackBy: trackText;">
+                                                                {{ item.text }}
+                                                            </li>
+                                                        </ul>
+                                                        <div class="imgs-holder"
+                                                            *ngIf="conditionsFilter.media.radio &&
+                                                            groupedFiles && groupedFiles[visit.id] && groupedFiles && groupedFiles[visit.id]?.radio.length">
+                                                            <media-file-view-list
+                                                                [files]="groupedFiles && groupedFiles[visit.id]?.radio">
+                                                            </media-file-view-list>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- / RADIO BLOCK -->
+
+                                                <!-- CONSULTATION BLOCK -->
+                                                <div class="presentation-block" *ngIf="visit.consultation?.text?.length &&
+                                                    conditionsFilter.activityDetails">
+                                                    <div class="label">
+                                                        <div class="label-border">
+                                                            <span class="presentation">Consultation</span>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="present-text" *ngIf="conditionsFilter.activityDetails">
+                                                        <ul class="m-0">
+                                                            <li
+                                                                *ngFor="let item of visit.consultation.text; trackBy: trackText;">
+                                                                {{ item.text }}
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <!-- / CONSULTATION BLOCK-->
+
+                                                <!-- DIAGNOSIS BLOCK -->
+                                                <div class="presentation-block" *ngIf="visit.diagnosis?.text?.length &&
+                                                    conditionsFilter.activityDetails">
+                                                    <div class="label">
+                                                        <div class="label-border">
+                                                            <span class="presentation">Diagnosis</span>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="present-text" *ngIf="conditionsFilter.activityDetails">
+                                                        <ul class="m-0">
+                                                            <li
+                                                                *ngFor="let item of visit.diagnosis.text; trackBy: trackText;">
+                                                                {{ item.text }}
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <!-- / DIAGNOSIS BLOCK-->
+
+                                                <!-- MEDICATIONS BLOCK -->
+                                                <div class="presentation-block" *ngIf="visit.medications.length &&
+                                                    conditionsFilter.activityDetails">
+                                                    <div class="label">
+                                                        <div class="label-border">
+                                                            <span class="presentation">Medications-Treatment</span>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="present-text" *ngIf="conditionsFilter.activityDetails">
+                                                        <ul class="m-0">
+                                                            <li *ngFor="let item of visit.medications">
+                                                                {{ item.drug?.name }} {{ item.drug?.dosage }} {{
+                                                                item.drug?.route }}
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <!-- / MEDICATIONS BLOCK-->
+                                                <!-- MEDICATIONS BLOCK -->
+                                                <div class="presentation-block" *ngIf="medications.length &&
+                                                  conditionsFilter.activityDetails">
+                                                    <div class="label">
+                                                        <div class="label-border">
+                                                            <span class="presentation">Medications</span>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="present-text" *ngIf="conditionsFilter.activityDetails">
+                                                        <ul class="m-0">
+                                                            <!-- <li *ngFor="let item of activeMedications"> {{ item.name }} {{ item.dosage }} </li>      -->
+                                                            <ng-container *ngFor="let item of medications">
+                                                                <ng-container *ngIf="item.conditionId===visit.id">
+                                                                    <li>
+                                                                        {{ item.drug?.name }} {{ item.drug?.dosage }}
+                                                                        {{ item.drug?.route }}
+                                                                        <span *ngIf="item.isActive">(Active)</span>
+                                                                        <span *ngIf="!item.isActive">(InActive)</span>
+                                                                    </li>
+                                                                </ng-container>
+                                                            </ng-container>
+
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <!-- / MEDICATIONS BLOCK-->
+
+                                                <!-- OTHER TREATMENTS BLOCK -->
+                                                <div class="presentation-block" *ngIf="visit.otherTreatments?.text?.length &&
+                                                    conditionsFilter.activityDetails">
+                                                    <div class="label">
+                                                        <div class="label-border">
+                                                            <span class="presentation">Treatments</span>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="present-text" *ngIf="conditionsFilter.activityDetails">
+                                                        <ul class="m-0">
+                                                            <li *ngFor="let item of visit.otherTreatments.text; trackBy:
+                                                                trackText;">
+                                                                {{ item.text }}
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <!-- / OTHER TREATMENTS BLOCK-->
+
+                                                <!-- NOTE BLOCK -->
+                                                <div class="presentation-block" *ngIf="visit.note?.text?.length &&
+                                                    conditionsFilter.activityDetails">
+                                                    <div class="label">
+                                                        <div class="label-border">
+                                                            <span class="presentation">Note</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="present-text" *ngIf="conditionsFilter.activityDetails">
+                                                        <ul class="m-0">
+                                                            <li
+                                                                *ngFor="let item of visit.note.text; trackBy: trackText;">
+                                                                {{ item.text }}
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <!-- / NOTE BLOCK-->
+
+                                                <!-- OTHER MEDIA -->
+                                                <div class="presentation-block" *ngIf="( groupedFiles && groupedFiles[visit.id] && groupedFiles && groupedFiles[visit.id]?.other.length ) &&
+                                                    ( conditionsFilter.media.other )">
+                                                    <div class="label">
+                                                        <div class="label-border">
+                                                            <span class="presentation">Other Media</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="present-text">
+                                                        <div class="imgs-holder"
+                                                            *ngIf="conditionsFilter.media.other &&
+                                                            groupedFiles && groupedFiles[visit.id] && groupedFiles && groupedFiles[visit.id]?.other.length">
+                                                            <media-file-view-list
+                                                                [files]="groupedFiles && groupedFiles[visit.id]?.other">
+                                                            </media-file-view-list>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- / OTHER MEDIA  -->
+
+                                            </div>
+
+                                            <!-- TIME BETWEEN -->
+                                            <div *ngIf="!isLast" class="in-between h5 in-between secondary-text">
+                                                <mat-icon class="s-18">import_export</mat-icon>
+                                                <span class="" matTooltip="Time between this visit and previous visit">
+                                                    {{ condition.conditionsList[index+1].opened | mdFromDate:
+                                                    visit.opened
+                                                    }}
+                                                </span>
+                                            </div>
+                                            <!-- / TIME BETWEEN -->
+
+                                        </div>
+
+                                    </div>
+                                    <!-- / TIMELINE CONDITION BLOCK -->
+
+                                    <!-- TIMELINE FOLLOWUP BLOCK -->
+                                    <div class="timeline"
+                                        *ngIf="visit.type === 'Followup' && (!visit.isHidden || ShowAllHidden) && conditionsFilter.followups">
+                                        <div class="timeline-img is-narrow">
+                                            <div class="index-num" (click)="toggleThisCondition(visit.id,visit.type)">
+                                                <div class="num"> {{ condition.conditionsList.length - index }} </div>
+                                            </div>
+                                        </div>
+                                        <div class="timeline-date is-narrow secondary-text"
+                                            (click)="toggleThisCondition(visit.id,visit.type)">
+                                            <span class="placeholder-narrow">Followup </span>
+                                            <span> {{ visit.opened | date:'d MMM y'}} </span>
+                                            <span>
+                                                <span class="from-now h5">
+                                                    <mat-icon class="s-14">arrow_upward</mat-icon>
+                                                    <span style="width:unset;"
+                                                        matTooltip="Time between this visit and todayss">
+                                                        {{ visit.opened | mdFromToday }} </span>
+                                                </span>
+                                            </span>
+                                        </div>
+
+                                        <div class="timeline-content">
+                                            <strong class="title blue-grey-400"
+                                                (click)="toggleThisCondition(visit.id,visit.type)">
+                                                <mat-icon class="s-22 mr-4" mat-icon-button
+                                                    [matMenuTriggerFor]="fEditMenu" (click)="$event.stopPropagation()">
+                                                    more_vert</mat-icon>
+                                                <mat-menu #fEditMenu="matMenu">
+                                                    <button mat-menu-item
+                                                        (click)="openDuplicateDialog( visit.isDuplicate, patient.id,'general','followup',condition.id, visit.id || '')">
+                                                        <mat-icon>compare_arrows</mat-icon>
+                                                        <span>Duplicate</span>
+                                                    </button>
+                                                    <button mat-menu-item [routerLink]="['./edit-followup', visit.id]"
+                                                        [queryParams]="{ conditionId: condition.id, patientId: patient.id }"
+                                                        queryParamsHandling="merge">
+                                                        <mat-icon>edit</mat-icon>
+                                                        <span>Edit</span>
+                                                    </button>
+                                                </mat-menu>
+                                                <span class="placeholder">Followup : </span>
+                                                <span class="name">{{ visit.name }}</span>
+                                                <span class="secondary-text"> - {{ visit.location?.name }} </span>
+                                                <span fxFlex></span>
+
+                                                <span class="flex-center duplicate-label" *ngIf="visit.isDuplicate">
+                                                    <span>DUPLICATE</span>
+                                                </span>
+
+                                                <span class="mr-8"
+                                                    (click)="$event.stopPropagation();confirmDelete(patient.id,'general','followup', condition.id, visit.id || '')"
+                                                    *ngIf="visit.isDuplicate">
+                                                    <mat-icon class="s-20 fuse-white-fg">delete</mat-icon>
+                                                </span>
+
+                                                <a [routerLink]="['./edit-followup', visit.id]"
+                                                    [queryParams]="{ conditionId: condition.id, patientId: patient.id }"
+                                                    queryParamsHandling="merge">
+                                                    <mat-icon class="s-20 fuse-white-fg">edit</mat-icon>
+                                                </a>
+                                                <div mat-button class="pl-20" *ngIf="!visit.isHidden" matTooltip="Hide"
+                                                    (click)="ShowOrHideThisVisit(visit.conditionId,true,visit.id)">
+                                                    <mat-icon class="s-20">hide_source</mat-icon>
+                                                    <!-- <span>Hide</span> -->
+                                                </div>
+                                                <div mat-button class="pl-20" *ngIf="visit.isHidden" matTooltip="Show"
+                                                    (click)="ShowOrHideThisVisit(visit.conditionId,false,visit.id)">
+                                                    <mat-icon class="s-20">preview</mat-icon>
+                                                    <!-- <span>Show</span> -->
+                                                </div>
+                                            </strong>
+                                            <div class="body" fxLayout.xs="column wrap"
+                                                *ngIf="conditionsStates[visit.id]">
+
+
+                                                <!-- SUBJECTIVE BLOCK -->
+                                                <div class="presentation-block" *ngIf="visit.subjective?.text?.length &&
+                                                    conditionsFilter.activityDetails">
+                                                    <div class="label">
+                                                        <div class="label-border">
+                                                            <span class="presentation">Subjective</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="present-text">
+                                                        <ul class="m-0">
+                                                            <li
+                                                                *ngFor="let item of visit.subjective.text; trackBy: trackText;">
+                                                                {{ item.text }}
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <!-- / SUBJECTIVE BLOCK-->
+
+                                                <!-- PYSICAL EXAM BLOCK -->
+                                                <div class="presentation-block"
+                                                    *ngIf="( conditionsFilter.media.physicalExam &&
+                                                    groupedFiles && groupedFiles[visit.id] && groupedFiles && groupedFiles[visit.id]?.physicalExam.length) ||
+                                                    ( visit.physicalExam?.text?.length && conditionsFilter.activityDetails )">
+                                                    <div class="label">
+                                                        <div class="label-border">
+                                                            <span class="presentation">Physical Exam</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="present-text">
+                                                        <ul class="m-0" *ngIf="conditionsFilter.activityDetails">
+                                                            <li
+                                                                *ngFor="let item of visit.physicalExam.text; trackBy: trackText;">
+                                                                {{ item.text }}
+                                                            </li>
+                                                        </ul>
+                                                        <div class="imgs-holder"
+                                                            *ngIf="conditionsFilter.media.physicalExam &&
+                                                            groupedFiles && groupedFiles[visit.id] && groupedFiles && groupedFiles[visit.id]?.physicalExam.length">
+                                                            <media-file-view-list
+                                                                [files]="groupedFiles && groupedFiles[visit.id]?.physicalExam">
+                                                            </media-file-view-list>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- / PYSICAL EXAM BLOCK -->
+
+                                                <!-- LABORATORY BLOCK -->
+                                                <div class="presentation-block"
+                                                    *ngIf="( conditionsFilter.media.laboratory &&
+                                                    groupedFiles && groupedFiles[visit.id] && groupedFiles && groupedFiles[visit.id]?.laboratory.length ) ||
+                                                    ( visit.laboratory?.text?.length && conditionsFilter.activityDetails )">
+                                                    <div class="label">
+                                                        <div class="label-border">
+                                                            <span class="presentation">Laboratory</span>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="present-text">
+                                                        <ul class="m-0" *ngIf="conditionsFilter.activityDetails">
+                                                            <li
+                                                                *ngFor="let item of visit.laboratory.text; trackBy: trackText;">
+                                                                {{ item.text }}
+                                                            </li>
+                                                        </ul>
+                                                        <div class="imgs-holder"
+                                                            *ngIf="conditionsFilter.media.laboratory &&
+                                                            groupedFiles && groupedFiles[visit.id] && groupedFiles && groupedFiles[visit.id]?.laboratory.length">
+                                                            <media-file-view-list
+                                                                [files]="groupedFiles && groupedFiles[visit.id]?.laboratory">
+                                                            </media-file-view-list>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- / LABORATORY BLOCK -->
+
+                                                <!-- RADIO BLOCK -->
+                                                <div class="presentation-block" *ngIf="( conditionsFilter.media.radio &&
+                                                    groupedFiles && groupedFiles[visit.id] && groupedFiles && groupedFiles[visit.id]?.radio.length ) ||
+                                                    ( visit.radio?.text?.length && conditionsFilter.activityDetails )">
+                                                    <div class="label">
+                                                        <div class="label-border">
+                                                            <span class="presentation">Radio</span>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="present-text">
+                                                        <ul class="m-0" *ngIf="conditionsFilter.activityDetails">
+                                                            <li
+                                                                *ngFor="let item of visit.radio.text; trackBy: trackText;">
+                                                                {{ item.text }}
+                                                            </li>
+                                                        </ul>
+                                                        <div class="imgs-holder"
+                                                            *ngIf="conditionsFilter.media.radio &&
+                                                            groupedFiles && groupedFiles[visit.id] && groupedFiles && groupedFiles[visit.id]?.radio.length">
+                                                            <media-file-view-list
+                                                                [files]="groupedFiles && groupedFiles[visit.id]?.radio">
+                                                            </media-file-view-list>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- / RADIO BLOCK -->
+
+                                                <!-- CONSULTATION BLOCK -->
+                                                <div class="presentation-block" *ngIf="visit.consultation?.text?.length &&
+                                                    conditionsFilter.activityDetails">
+                                                    <div class="label">
+                                                        <div class="label-border">
+                                                            <span class="presentation">Consultation</span>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="present-text" *ngIf="conditionsFilter.activityDetails">
+                                                        <ul class="m-0">
+                                                            <li
+                                                                *ngFor="let item of visit.consultation.text; trackBy: trackText;">
+                                                                {{ item.text }}
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <!-- / CONSULTATION BLOCK-->
+
+                                                <!-- ASSESSMENT BLOCK -->
+                                                <div class="presentation-block" *ngIf="visit.assessment?.text?.length &&
+                                                    conditionsFilter.activityDetails">
+                                                    <div class="label">
+                                                        <div class="label-border">
+                                                            <span class="presentation">Assessment</span>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="present-text" *ngIf="conditionsFilter.activityDetails">
+                                                        <ul class="m-0">
+                                                            <li
+                                                                *ngFor="let item of visit.assessment.text; trackBy: trackText;">
+                                                                {{ item.text }}
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <!-- / ASSESSMENT BLOCK-->
+
+                                                <!-- DIAGNOSIS BLOCK -->
+                                                <div class="presentation-block" *ngIf="visit.diagnosis?.text?.length &&
+                                                    conditionsFilter.activityDetails">
+                                                    <div class="label">
+                                                        <div class="label-border">
+                                                            <span class="presentation">Diagnosis</span>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="present-text" *ngIf="conditionsFilter.activityDetails">
+                                                        <ul class="m-0">
+                                                            <li
+                                                                *ngFor="let item of visit.diagnosis.text; trackBy: trackText;">
+                                                                {{ item.text }}
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <!-- / DIAGNOSIS BLOCK-->
+
+                                                <!--  MEDICATIONS BLOCK -->
+                                                <div class="presentation-block" *ngIf="visit.medications.length &&
+                                                    conditionsFilter.activityDetails">
+                                                    <div class="label">
+                                                        <div class="label-border">
+                                                            <span class="presentation">Medications-Treatment</span>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="present-text" *ngIf="conditionsFilter.activityDetails">
+                                                        <ul class="m-0">
+                                                            <li *ngFor="let item of visit.medications">
+                                                                {{ item.drug?.name }} {{ item.drug?.dosage }} {{
+                                                                item.drug?.route }}
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <!-- /  MEDICATIONS BLOCK-->
+
+                                                <!-- MEDICATIONS BLOCK -->
+                                                <div class="presentation-block" *ngIf="medicationsByFollowup.length &&
+                                                 conditionsFilter.activityDetails">
+                                                    <div class="label">
+                                                        <div class="label-border">
+                                                            <span class="presentation">Medications</span>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="present-text" *ngIf="conditionsFilter.activityDetails">
+                                                        <ul class="m-0">
+                                                            <!-- <li *ngFor="let item of activeMedications"> {{ item.name }} {{ item.dosage }} </li>      -->
+                                                            <!-- <li *ngFor="let item of medications">                                                              
+                                                             {{ item.drug?.name }} {{ item.drug?.dosage }}
+                                                             {{ item.drug?.route }} 
+                                                         </li> -->
+                                                            <ng-container *ngFor="let item of medicationsByFollowup">
+                                                                <ng-container *ngIf="item.followupId===visit.id">
+                                                                    <li>
+                                                                        {{ item.drug?.name }} {{ item.drug?.dosage }}
+                                                                        {{ item.drug?.route }}
+                                                                        <span *ngIf="item.isActive">(Active)</span>
+                                                                        <span *ngIf="!item.isActive">(InActive)</span>
+                                                                    </li>
+                                                                </ng-container>
+                                                            </ng-container>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <!-- / MEDICATIONS BLOCK-->
+                                                <!-- OTHER TREATMENTS BLOCK -->
+                                                <div class="presentation-block" *ngIf="visit.otherTreatments?.text?.length &&
+                                                    conditionsFilter.activityDetails">
+                                                    <div class="label">
+                                                        <div class="label-border">
+                                                            <span class="presentation">Treatments</span>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="present-text" *ngIf="conditionsFilter.activityDetails">
+                                                        <ul class="m-0">
+                                                            <li *ngFor="let item of visit.otherTreatments.text; trackBy:
+                                                                trackText;">
+                                                                {{ item.text }}
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <!-- / OTHER TREATMENTS BLOCK-->
+
+                                                <!-- NOTE BLOCK -->
+                                                <div class="presentation-block" *ngIf="visit.note?.text?.length &&
+                                                    conditionsFilter.activityDetails">
+                                                    <div class="label">
+                                                        <div class="label-border">
+                                                            <span class="presentation">Notes</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="present-text" *ngIf="conditionsFilter.activityDetails">
+                                                        <ul class="m-0">
+                                                            <li
+                                                                *ngFor="let item of visit.note.text; trackBy: trackText;">
+                                                                {{ item.text }}
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <!-- / NOTE BLOCK-->
+
+                                                <!-- OTHER MEDIA -->
+                                                <div class="presentation-block" *ngIf="( groupedFiles && groupedFiles[visit.id] && groupedFiles && groupedFiles[visit.id]?.other.length ) &&
+                                                    ( conditionsFilter.media.other )">
+                                                    <div class="label">
+                                                        <div class="label-border">
+                                                            <span class="presentation">Other Media</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="present-text">
+                                                        <div class="imgs-holder"
+                                                            *ngIf="conditionsFilter.media.other &&
+                                                            groupedFiles && groupedFiles[visit.id] && groupedFiles && groupedFiles[visit.id]?.other.length">
+                                                            <media-file-view-list
+                                                                [files]="groupedFiles && groupedFiles[visit.id]?.other">
+                                                            </media-file-view-list>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- / OTHER MEDIA  -->
+
+                                            </div>
+
+                                            <!-- TIME BETWEEN -->
+                                            <div *ngIf="!isLast" class="in-between h5 in-between secondary-text">
+                                                <mat-icon class="s-18">import_export</mat-icon>
+                                                <span class="" matTooltip="Time between this visit and previous visit">
+                                                    {{ condition.conditionsList[index+1].opened | mdFromDate:
+                                                    visit.opened
+                                                    }}
+                                                </span>
+                                            </div>
+                                            <!-- / TIME BETWEEN -->
+
+                                        </div>
+
+                                    </div>
+                                    <!-- / TIMELINE FOLLOWUP BLOCK -->
+
+                                    <!-- TIMELINE OPERATION BLOCK -->
+                                    <div class="timeline"
+                                        *ngIf="visit.type === 'Operation' && conditionsFilter.operations">
+                                        <div class="timeline-img is-narrow">
+                                            <div class="index-num" (click)="toggleThisCondition(visit.id,visit.type)">
+                                                <div class="num"> {{ condition.conditionsList.length - index }} </div>
+                                            </div>
+                                        </div>
+                                        <div class="timeline-date is-narrow secondary-text"
+                                            (click)="toggleThisCondition(visit.id,visit.type)">
+                                            <span class="placeholder-narrow">Operation </span>
+                                            <span> {{ visit.opened | date:'d MMM y'}} </span>
+                                            <span>
+                                                <span class="from-now h5">
+                                                    <mat-icon class="s-14">arrow_upward</mat-icon>
+                                                    <span style="width:unset;"
+                                                        matTooltip="Time between this visit and today">
+                                                        {{ visit.opened | mdFromToday }}
+                                                    </span>
+                                                </span>
+                                            </span>
+                                        </div>
+
+                                        <div class="timeline-content">
+                                            <strong class="title blue-grey-400"
+                                                (click)="toggleThisCondition(visit.id,visit.type)">
+                                                <mat-icon class="s-22 mr-4" mat-icon-button
+                                                    [matMenuTriggerFor]="opEditMenu" (click)="$event.stopPropagation()">
+                                                    more_vert</mat-icon>
+                                                <mat-menu #opEditMenu="matMenu">
+                                                    <button mat-menu-item
+                                                        (click)="openDuplicateDialog( visit.isDuplicate, patient.id,'general','operation', condition.id, visit.id || '')">
+                                                        <mat-icon>compare_arrows</mat-icon>
+                                                        <span>Duplicate</span>
+                                                    </button>
+                                                    <button mat-menu-item [routerLink]="['./edit-operation', visit.id]"
+                                                        [queryParams]="{ conditionId: condition.id, patientId: patient.id }"
+                                                        queryParamsHandling="merge">
+                                                        <mat-icon>edit</mat-icon>
+                                                        <span>Edit</span>
+                                                    </button>
+                                                </mat-menu>
+                                                <span class="placeholder">Operation : </span>
+                                                <span class="name">{{ visit.name }}</span>
+                                                <span class="secondary-text">- {{ visit.location?.name }} </span>
+                                                <span fxFlex></span>
+
+                                                <span class="flex-center duplicate-label" *ngIf="visit.isDuplicate">
+                                                    <span>DUPLICATE</span>
+                                                </span>
+
+                                                <span class="mr-8"
+                                                    (click)="$event.stopPropagation();confirmDelete(patient.id,'general','operation', condition.id, visit.id || '')"
+                                                    *ngIf="visit.isDuplicate">
+                                                    <mat-icon class="s-20 fuse-white-fg">delete</mat-icon>
+                                                </span>
+
+                                                <a [routerLink]="['./edit-operation', visit.id]"
+                                                    [queryParams]="{ conditionId: condition.id, patientId: patient.id }"
+                                                    queryParamsHandling="merge">
+                                                    <mat-icon class="s-20 fuse-white-fg">edit</mat-icon>
+                                                </a>
+                                            </strong>
+                                            <div class="body" fxLayout.xs="column wrap"
+                                                *ngIf="conditionsStates[visit.id]">
+
+                                                <!-- ANESTHESIA BLOCK -->
+                                                <div class="presentation-block" *ngIf="visit.anesthesia?.text?.length &&
+                                                    conditionsFilter.activityDetails">
+                                                    <div class="label">
+                                                        <div class="label-border">
+                                                            <span class="presentation">Anesthesia</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="present-text" *ngIf="conditionsFilter.activityDetails">
+                                                        <ul class="m-0">
+                                                            <li
+                                                                *ngFor="let item of visit.anesthesia.text; trackBy: trackText;">
+                                                                {{ item.text }}
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <!-- / ANESTHESIA BLOCK-->
+
+                                                <!-- CODE BLOCK -->
+                                                <div class="presentation-block" *ngIf="visit.code.length &&
+                                                    conditionsFilter.activityDetails">
+                                                    <div class="label">
+                                                        <div class="label-border">
+                                                            <span class="presentation">Code</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="present-text" *ngIf="conditionsFilter.activityDetails">
+                                                        <ul class="m-0">
+                                                            <li *ngFor="let item of visit.code">
+                                                                {{ item }}
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <!-- / CODE BLOCK-->
+
+                                                <!-- DEPARTMENT BLOCK -->
+                                                <div class="presentation-block" *ngIf="visit.department &&
+                                                    conditionsFilter.activityDetails">
+                                                    <div class="label">
+                                                        <div class="label-border">
+                                                            <span class="presentation">Department</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="present-text" *ngIf="conditionsFilter.activityDetails">
+                                                        <ul class="m-0">
+                                                            <li>
+                                                                {{ visit.department }}
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <!-- / DEPARTMENT BLOCK-->
+
+                                                <!-- OPERATION DIAGNOSIS BLOCK -->
+                                                <div class="presentation-block" *ngIf="visit.operationDiagnosis?.text?.length &&
+                                                    conditionsFilter.activityDetails">
+                                                    <div class="label">
+                                                        <div class="label-border">
+                                                            <span class="presentation">Op. Diagnosis</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="present-text" *ngIf="conditionsFilter.activityDetails">
+                                                        <ul class="m-0">
+                                                            <li *ngFor="let item of visit.operationDiagnosis.text; trackBy:
+                                                                trackText;">
+                                                                {{ item.text }}
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <!-- / OPERATION DIAGNOSIS BLOCK-->
+
+                                                <!-- OPERATION PERFORMED BLOCK -->
+                                                <div class="presentation-block" *ngIf="visit.operationPerformed?.text?.length &&
+                                                    conditionsFilter.activityDetails">
+                                                    <div class="label">
+                                                        <div class="label-border">
+                                                            <span class="presentation">Op. Performed</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="present-text" *ngIf="conditionsFilter.activityDetails">
+                                                        <ul class="m-0">
+                                                            <li *ngFor="let item of visit.operationPerformed.text; trackBy:
+                                                                trackText;">
+                                                                {{ item.text }}
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <!-- / OPERATION PERFORMED BLOCK-->
+
+                                                <!-- OPERATION  POST DIAGNOSIS BLOCK -->
+                                                <div class="presentation-block" *ngIf="visit.operationPostDiagnosis?.text?.length &&
+                                                    conditionsFilter.activityDetails">
+                                                    <div class="label">
+                                                        <div class="label-border">
+                                                            <span class="presentation">Post Diag.</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="present-text" *ngIf="conditionsFilter.activityDetails">
+                                                        <ul class="m-0">
+                                                            <li *ngFor="let item of visit.operationPostDiagnosis.text; trackBy:
+                                                                trackText;">
+                                                                {{ item.text }}
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <!-- / OPERATION POST DIAGNOSIS BLOCK-->
+
+                                                <!-- OPERATION PRE FINDINGS BLOCK -->
+                                                <div class="presentation-block" *ngIf="visit.operationPreFindings?.text?.length &&
+                                                    conditionsFilter.activityDetails">
+                                                    <div class="label">
+                                                        <div class="label-border">
+                                                            <span class="presentation">Pre Findings</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="present-text" *ngIf="conditionsFilter.activityDetails">
+                                                        <ul class="m-0">
+                                                            <li *ngFor="let item of visit.operationPreFindings.text; trackBy:
+                                                                trackText;">
+                                                                {{ item.text }}
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <!-- / OPERATION PRE FINDINGS BLOCK-->
+
+                                                <!-- OPERATION TYPE BLOCK -->
+                                                <div class="presentation-block" *ngIf="visit.operationType?.text?.length &&
+                                                    conditionsFilter.activityDetails">
+                                                    <div class="label">
+                                                        <div class="label-border">
+                                                            <span class="presentation">Type</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="present-text" *ngIf="conditionsFilter.activityDetails">
+                                                        <ul class="m-0">
+                                                            <li *ngFor="let item of visit.operationType.text; trackBy:
+                                                                trackText;">
+                                                                {{ item.text }}
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <!-- / OPERATION TYPE BLOCK-->
+
+                                                <!-- PHYSICAL EXAM BLOCK -->
+                                                <div class="presentation-block"
+                                                    *ngIf="( conditionsFilter.media.physicalExam &&
+                                                    groupedFiles && groupedFiles[visit.id] && groupedFiles && groupedFiles[visit.id]?.physicalExam.length ) ||
+                                                    ( visit.physicalExam?.text?.length && conditionsFilter.activityDetails )">
+                                                    <div class="label" *ngIf="conditionsFilter.media.physicalExam ||
+                                                        conditionsFilter.activityDetails">
+                                                        <div class="label-border">
+                                                            <span class="presentation">Physical Exam</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="present-text">
+                                                        <ul class="m-0" *ngIf="conditionsFilter.activityDetails">
+                                                            <li
+                                                                *ngFor="let item of visit.physicalExam.text; trackBy: trackText;">
+                                                                {{ item.text }}
+                                                            </li>
+                                                        </ul>
+                                                        <div class="imgs-holder"
+                                                            *ngIf="conditionsFilter.media.physicalExam &&
+                                                            groupedFiles && groupedFiles[visit.id] && groupedFiles && groupedFiles[visit.id]?.physicalExam.length">
+                                                            <media-file-view-list
+                                                                [files]="groupedFiles && groupedFiles[visit.id]?.physicalExam">
+                                                            </media-file-view-list>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- / PHYSICAL EXAM BLOCK -->
+
+                                                <!-- DETAILS BLOCK -->
+                                                <div class="presentation-block" *ngIf="visit.details &&
+                                                    conditionsFilter.activityDetails">
+                                                    <div class="label">
+                                                        <div class="label-border">
+                                                            <span class="presentation">Details</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="present-text" *ngIf="conditionsFilter.activityDetails">
+                                                        <ul class="m-0">
+                                                            <li>
+                                                                {{ visit.details }}
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <!-- / DETAILS BLOCK-->
+
+                                                <!-- OTHER MEDIA -->
+                                                <div class="presentation-block" *ngIf="( groupedFiles && groupedFiles[visit.id] && groupedFiles && groupedFiles[visit.id]?.other.length ) &&
+                                                    ( conditionsFilter.media.other )">
+                                                    <div class="label">
+                                                        <div class="label-border">
+                                                            <span class="presentation">Other Media</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="present-text">
+                                                        <div class="imgs-holder"
+                                                            *ngIf="conditionsFilter.media.other &&
+                                                            groupedFiles && groupedFiles[visit.id] && groupedFiles && groupedFiles[visit.id]?.other.length">
+                                                            <media-file-view-list
+                                                                [files]="groupedFiles && groupedFiles[visit.id]?.other">
+                                                            </media-file-view-list>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- / OTHER MEDIA  -->
+
+                                            </div>
+
+                                            <!-- TIME BETWEEN -->
+                                            <div *ngIf="!isLast" class="in-between h5 in-between secondary-text">
+                                                <mat-icon class="s-18">import_export</mat-icon>
+                                                <span class="" matTooltip="Time between this visit and previous visit">
+                                                    {{ condition.conditionsList[index+1].opened | mdFromDate:
+                                                    visit.opened
+                                                    }}</span>
+                                            </div>
+                                            <!-- / TIME BETWEEN -->
+
+                                        </div>
+
+                                    </div>
+                                    <!-- / TIMELINE OPERATION BLOCK -->
+
+                                </ng-container>
+                                <!-- / VISIT LOOPER -->
+
+                            </div>
+                            <!-- /BODY -->
+
+                        </mat-expansion-panel>
+
+                    </ng-container>
+
+                    <!-- / CONDITIONS NAME LOOPER -->
+
+                </mat-accordion>
+            </div>
+            <!-- / BODY -->
+
+        </mat-tab>
+        <!-- / CONDITIONS TAB -->
+
+        <!-- VISITS TAB -->
+        <mat-tab>
+
+            <!-- TAB LABEL -->
+            <ng-template mat-tab-label>
+                <div fxLayout="row" fxLayoutAlign="space-around center">
+                    <div class="mr-12">Visits</div>
+
+                    <!-- FILTER -->
+                    <div class="filter-tab" fxLayout="row" fxLayoutAlign="end" [matMenuTriggerFor]="filterMenu"
+                        (click)="$event.stopPropagation()">
+                        <mat-icon class="s-18">filter_list</mat-icon>
+                    </div>
+                    <mat-menu #filterMenu="matMenu">
+                        <div mat-menu-item (click)="$event.stopPropagation()">
+                            <mat-checkbox [(ngModel)]="visitsFilter.conditions">Conditions</mat-checkbox>
+                        </div>
+                        <div mat-menu-item (click)="$event.stopPropagation()">
+                            <mat-checkbox [(ngModel)]="visitsFilter.followups">Followups</mat-checkbox>
+                        </div>
+                        <div mat-menu-item (click)="$event.stopPropagation()">
+                            <mat-checkbox [(ngModel)]="visitsFilter.operations">Operations</mat-checkbox>
+                        </div>
+                        <div mat-menu-item (click)="$event.stopPropagation()">
+                            <mat-checkbox [(ngModel)]="visitsFilter.activityDetails">Activity Details</mat-checkbox>
+                        </div>
+                        <div mat-menu-item (click)="$event.stopPropagation()"
+                            [matMenuTriggerFor]="mediavisitsFilterMenu">
+                            Media
+                        </div>
+                    </mat-menu>
+                    <mat-menu #mediavisitsFilterMenu="matMenu">
+                        <div mat-menu-item (click)="$event.stopPropagation()">
+                            <mat-checkbox [(ngModel)]="visitsFilter.media.physicalExam">Physical Exam</mat-checkbox>
+                        </div>
+                        <div mat-menu-item (click)="$event.stopPropagation()">
+                            <mat-checkbox [(ngModel)]="visitsFilter.media.radio">Radio</mat-checkbox>
+                        </div>
+                        <div mat-menu-item (click)="$event.stopPropagation()">
+                            <mat-checkbox [(ngModel)]="visitsFilter.media.laboratory">Laboratory</mat-checkbox>
+                        </div>
+                        <div mat-menu-item (click)="$event.stopPropagation()">
+                            <mat-checkbox [(ngModel)]="visitsFilter.media.other">Other</mat-checkbox>
+                        </div>
+                    </mat-menu>
+                    <!-- / FILTER -->
+
+                </div>
+            </ng-template>
+            <!-- / TAB LABEL -->
+
+            <!-- BUTTONS CONTROLLER -->
+            <div class="pt-12 text-center control-buttons">
+                <!-- <button class="m-4" mat-stroked-button color="accent" [routerLink]="['./new-condition']">+ Condition</button> -->
+                <!-- <button class="m-4" mat-stroked-button color="accent">+ Followup</button>
+            <button class="m-4" mat-stroked-button color="accent">+ Operation</button> -->
+                <button class="m-4" mat-stroked-button color="accent" (click)="collapseAllVisits()"
+                    matTooltip="Collapse all">
+                    <mat-icon class="">vertical_align_center</mat-icon>
+                </button>
+                <button class="m-4" mat-stroked-button color="accent" (click)="expandAllVisits()"
+                    matTooltip="Expand all">
+                    <mat-icon class="">vertical_align_bottom</mat-icon>
+                </button>
+            </div>
+            <!-- / BUTTONS CONTROLLER -->
+
+            <div class="p-8 mb-100">
+
+                <div class="w-per-100 text-center mt-40 flex-center" *ngIf="!visits?.length">
+                    <mat-icon class="mat-18 mr-12">work</mat-icon>
+                    No visits found.
+                </div>
+
+                <!-- VISITS LOOPER -->
+                <ng-container
+                    *ngFor="let visit of visits; trackBy: trackId; let index= index; first as isFirst; last as isLast">
+                    <!-- TIMELINE CONDITION BLOCK -->
+                    <div class="timeline" *ngIf="visit.type === 'Condition' && visitsFilter.conditions">
+                        <div class="timeline-img is-narrow">
+                            <div class="index-num" (click)="toggleThisVisit(visit.id)">
+                                <div class="num"> {{ visits.length - index }} </div>
+                            </div>
+                        </div>
+                        <div class="timeline-date is-narrow secondary-text" (click)="toggleThisVisit(visit.id)">
+                            <span class="placeholder-narrow">Condition </span>
+                            <span> {{ visit.opened | date:'d MMM y'}} </span>
+                            <span>
+                                <span class="from-now h5">
+                                    <mat-icon class="s-14">arrow_upward</mat-icon>
+                                    <span style="width:unset;" matTooltip="Time between this visit and today">
+                                        {{ visit.opened | mdFromToday }}
+                                    </span>
+                                </span>
+                            </span>
+                        </div>
+
+                        <div class="timeline-content">
+                            <strong class="title blue-grey-400" (click)="toggleThisVisit(visit.id)">
+                                <mat-icon class="s-22 mr-4" mat-icon-button [matMenuTriggerFor]="cmenu2"
+                                    (click)="$event.stopPropagation()">
+                                    more_vert</mat-icon>
+                                <mat-menu #cmenu2="matMenu">
+                                    <button mat-menu-item [routerLink]="['./edit-condition', visit.id]">
+                                        <mat-icon>edit</mat-icon>
+                                        <span>Edit</span>
+                                    </button>
+                                </mat-menu>
+                                <span class="placeholder">Condition : </span>
+                                <span class="name">{{ visit.name }}</span>
+                                <span class="secondary-text">- {{ visit.location?.name }} </span>
+                                <span fxFlex></span>
+
+                                <a [routerLink]="['./edit-condition', visit.id]">
+                                    <mat-icon class="s-20 fuse-white-fg">edit</mat-icon>
+                                </a>
+                            </strong>
+                            <div class="body" fxLayout.xs="column wrap" *ngIf="visitsStates[visit.id]">
+
+
+                                <!-- CHEIF COMPLAINT BLOCK -->
+                                <div class="presentation-block" *ngIf="visit.cheifComplaint?.text?.length &&
+                                    visitsFilter.activityDetails">
+                                    <div class="label">
+                                        <div class="label-border">
+                                            <span class="presentation" style="font-size: 0.9em;">Chief Complaint</span>
+                                        </div>
+                                    </div>
+                                    <div class="present-text" [hidden]="!visitsFilter.activityDetails">
+                                        <ul class="m-0">
+                                            <li *ngFor="let item of visit.cheifComplaint.text; trackBy: trackText;">
+                                                {{ item.text }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- / CHEIF COMPLAINT BLOCK-->
+
+                                <!-- PRESENT HISTORY BLOCK -->
+                                <div class="presentation-block" *ngIf="visit.presentHistory?.text?.length &&
+                                    visitsFilter.activityDetails">
+                                    <div class="label">
+                                        <div class="label-border">
+                                            <span class="presentation">Present History</span>
+                                        </div>
+                                    </div>
+                                    <div class="present-text" [hidden]="!visitsFilter.activityDetails">
+                                        <ul class="m-0">
+                                            <li *ngFor="let item of visit.presentHistory.text; trackBy: trackText;">
+                                                {{ item.text }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- / PRESENT HISTORY BLOCK-->
+
+                                <!-- PHYSICAL EXAM BLOCK -->
+                                <div class="presentation-block" *ngIf="( visitsFilter.media.physicalExam &&
+                                    groupedFiles && groupedFiles[visit.id] && groupedFiles && groupedFiles[visit.id]?.physicalExam ) ||
+                                    ( visit.physicalExam?.text?.length && visitsFilter.activityDetails )">
+                                    <div class="label"
+                                        *ngIf="visitsFilter.media.physicalExam || visitsFilter.activityDetails">
+                                        <div class="label-border">
+                                            <span class="presentation">Physical Exam</span>
+                                        </div>
+                                    </div>
+                                    <div class="present-text">
+                                        <ul class="m-0" [hidden]="!visitsFilter.activityDetails">
+                                            <li *ngFor="let item of visit.physicalExam.text; trackBy: trackText;">
+                                                {{ item.text }}
+                                            </li>
+                                        </ul>
+                                        <div class="imgs-holder"
+                                            [hidden]="!visitsFilter.media.physicalExam ||
+                                            !groupedFiles && groupedFiles[visit.id] && groupedFiles && groupedFiles[visit.id]?.physicalExam.length">
+                                            <media-file-view-list
+                                                [files]="groupedFiles && groupedFiles[visit.id]?.physicalExam">
+                                            </media-file-view-list>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- / PHYSICAL EXAM BLOCK -->
+
+                                <!-- DIFFERENTIAL DIAGNOSIS BLOCK -->
+                                <div class="presentation-block" *ngIf="visit.differentialDiagnosis?.text?.length &&
+                                    visitsFilter.activityDetails">
+                                    <div class="label">
+                                        <div class="label-border">
+                                            <span class="presentation">Diff. Diagnosis</span>
+
+                                        </div>
+                                    </div>
+                                    <div class="present-text" [hidden]="!visitsFilter.activityDetails">
+                                        <ul class="m-0">
+                                            <li
+                                                *ngFor="let item of visit.differentialDiagnosis.text; trackBy: trackText;">
+                                                {{ item.text }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- / DIFFERENTIAL DIAGNOSIS BLOCK-->
+
+                                <!-- LABORATORY BLOCK -->
+                                <div class="presentation-block" *ngIf="( visitsFilter.media.laboratory &&
+                                    groupedFiles && groupedFiles[visit.id] && groupedFiles && groupedFiles[visit.id]?.laboratory.length ) ||
+                                    ( visit.laboratory?.text?.length && visitsFilter.activityDetails )">
+                                    <div class="label">
+                                        <div class="label-border">
+                                            <span class="presentation">Laboratory</span>
+                                        </div>
+                                    </div>
+                                    <div class="present-text">
+                                        <ul class="m-0" [hidden]="!visitsFilter.activityDetails">
+                                            <li *ngFor="let item of visit.laboratory.text; trackBy: trackText;">
+                                                {{ item.text }}
+                                            </li>
+                                        </ul>
+                                        <div class="imgs-holder"
+                                            *ngIf="visitsFilter.media.laboratory &&
+                                            groupedFiles && groupedFiles[visit.id] && groupedFiles && groupedFiles[visit.id]?.laboratory.length">
+                                            <media-file-view-list
+                                                [files]="groupedFiles && groupedFiles[visit.id]?.laboratory">
+                                            </media-file-view-list>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- / LABORATORY BLOCK -->
+
+                                <!-- RADIO BLOCK -->
+                                <div class="presentation-block" *ngIf="( visitsFilter.media.radio &&
+                                    groupedFiles && groupedFiles[visit.id] && groupedFiles && groupedFiles[visit.id]?.radio.length ) ||
+                                    ( visit.radio?.text?.length && visitsFilter.activityDetails )">
+                                    <div class="label">
+                                        <div class="label-border">
+                                            <span class="presentation">Radio</span>
+                                        </div>
+                                    </div>
+                                    <div class="present-text">
+                                        <ul class="m-0" [hidden]="!visitsFilter.activityDetails">
+                                            <li *ngFor="let item of visit.radio.text; trackBy: trackText;">
+                                                {{ item.text }}
+                                            </li>
+                                        </ul>
+                                        <div class="imgs-holder"
+                                            *ngIf="visitsFilter.media.radio &&
+                                            groupedFiles && groupedFiles[visit.id] && groupedFiles && groupedFiles[visit.id]?.radio.length">
+                                            <media-file-view-list
+                                                [files]="groupedFiles && groupedFiles[visit.id]?.radio">
+                                            </media-file-view-list>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- / RADIO BLOCK -->
+
+                                <!-- CONSULTATION BLOCK -->
+                                <div class="presentation-block" *ngIf="visit.consultation?.text?.length &&
+                                    visitsFilter.activityDetails">
+                                    <div class="label">
+                                        <div class="label-border">
+                                            <span class="presentation">Consultation</span>
+
+                                        </div>
+                                    </div>
+                                    <div class="present-text" [hidden]="!visitsFilter.activityDetails">
+                                        <ul class="m-0">
+                                            <li *ngFor="let item of visit.consultation.text; trackBy: trackText;">
+                                                {{ item.text }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- / CONSULTATION BLOCK-->
+
+                                <!-- DIAGNOSIS BLOCK -->
+                                <div class="presentation-block" *ngIf="visit.diagnosis?.text?.length &&
+                                    visitsFilter.activityDetails">
+                                    <div class="label">
+                                        <div class="label-border">
+                                            <span class="presentation">Diagnosis</span>
+
+                                        </div>
+                                    </div>
+                                    <div class="present-text" [hidden]="!visitsFilter.activityDetails">
+                                        <ul class="m-0">
+                                            <li *ngFor="let item of visit.diagnosis.text; trackBy: trackText;">
+                                                {{ item.text }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- / DIAGNOSIS BLOCK-->
+
+                                <!--  MEDICATIONS BLOCK -->
+                                <div class="presentation-block" *ngIf="visit.medications.length &&
+                                    visitsFilter.activityDetails">
+                                    <div class="label">
+                                        <div class="label-border">
+                                            <span class="presentation">Medications-Treatment</span>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="present-text" [hidden]="!visitsFilter.activityDetails">
+                                        <ul class="m-0">
+                                            <li *ngFor="let item of visit.medications">
+                                                {{ item.drug?.name }} {{ item.drug?.dosage }} {{ item.drug?.route }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- / OTHER MEDICATIONS BLOCK-->
+                                <!-- MEDICATIONS BLOCK -->
+                                <div class="presentation-block" *ngIf="medications.length &&
+                                 visitsFilter.activityDetails">
+                                    <div class="label">
+                                        <div class="label-border">
+                                            <span class="presentation">Medications</span>
+
+                                        </div>
+                                    </div>
+                                    <div class="present-text" [hidden]="!visitsFilter.activityDetails">
+                                        <ul class="m-0">
+
+                                            <ng-container *ngFor="let item of medications">
+                                                <ng-container *ngIf="item.conditionId===visit.id">
+                                                    <li>
+                                                        {{ item.drug?.name }} {{ item.drug?.dosage }}
+                                                        {{ item.drug?.route }}
+                                                        <span *ngIf="item.isActive">(Active)</span>
+                                                        <span *ngIf="!item.isActive">(InActive)</span>
+                                                    </li>
+                                                </ng-container>
+                                            </ng-container>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- / MEDICATIONS BLOCK-->
+
+                                <!-- OTHER TREATMENTS BLOCK -->
+                                <div class="presentation-block" *ngIf="visit.otherTreatments?.text?.length &&
+                                    visitsFilter.activityDetails">
+                                    <div class="label">
+                                        <div class="label-border">
+                                            <span class="presentation">Treatments</span>
+
+                                        </div>
+                                    </div>
+                                    <div class="present-text" [hidden]="!visitsFilter.activityDetails">
+                                        <ul class="m-0">
+                                            <li *ngFor="let item of visit.otherTreatments.text; trackBy: trackText;">
+                                                {{ item.text }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- / OTHER TREATMENTS BLOCK-->
+
+                                <!-- NOTE BLOCK -->
+                                <div class="presentation-block"
+                                    *ngIf="visit.note?.text?.length && visitsFilter.activityDetails">
+                                    <div class="label">
+                                        <div class="label-border">
+                                            <span class="presentation">Note</span>
+                                        </div>
+                                    </div>
+                                    <div class="present-text" [hidden]="!visitsFilter.activityDetails">
+                                        <ul class="m-0">
+                                            <li *ngFor="let item of visit.note.text; trackBy: trackText;">
+                                                {{ item.text }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- / NOTE BLOCK-->
+
+                                <!-- OTHER MEDIA -->
+                                <div class="presentation-block" *ngIf="( groupedFiles && groupedFiles[visit.id] && groupedFiles && groupedFiles[visit.id]?.other.length ) &&
+                                    ( visitsFilter.media.other )">
+                                    <div class="label">
+                                        <div class="label-border">
+                                            <span class="presentation">Other media</span>
+
+                                        </div>
+                                    </div>
+                                    <div class="present-text">
+                                        <div class="imgs-holder"
+                                            *ngIf="visitsFilter.media.other &&
+                                            groupedFiles && groupedFiles[visit.id] && groupedFiles && groupedFiles[visit.id]?.other.length">
+                                            <media-file-view-list
+                                                [files]="groupedFiles && groupedFiles[visit.id]?.other">
+                                            </media-file-view-list>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- / OTHER MEDIA -->
+
+                            </div>
+
+                            <!-- TIME BETWEEN -->
+                            <div *ngIf="!isLast" class="in-between h5 secondary-text">
+                                <mat-icon class="s-18">import_export</mat-icon>
+                                <span class="" matTooltip="Time between this visit and previous visit">
+                                    {{ visits[index+1].opened | mdFromDate: visit.opened }}
+                                </span>
+                            </div>
+                            <!-- / TIME BETWEEN -->
+
+                        </div>
+
+                    </div>
+                    <!-- / TIMELINE CONDITION BLOCK -->
+
+                    <!-- TIMELINE FOLLOWUP BLOCK -->
+                    <div class="timeline" *ngIf="visit.type === 'Followup' && visitsFilter.followups">
+                        <div class="timeline-img is-narrow">
+                            <div class="index-num" (click)="toggleThisVisit(visit.id)">
+                                <div class="num"> {{ visits.length - index }} </div>
+                            </div>
+                        </div>
+                        <div class="timeline-date is-narrow secondary-text" (click)="toggleThisVisit(visit.id)">
+                            <span class="placeholder-narrow">Followup </span>
+                            <span> {{ visit.opened | date:'d MMM y'}} </span>
+                            <span>
+                                <span class="from-now h5">
+                                    <mat-icon class="s-14">arrow_upward</mat-icon>
+                                    <span style="width:unset;" matTooltip="Time between this visit and today"> {{
+                                        visit.opened
+                                        | mdFromToday }} </span>
+                                </span>
+                            </span>
+                        </div>
+
+                        <div class="timeline-content">
+                            <strong class="title blue-grey-400" (click)="toggleThisVisit(visit.id)">
+                                <mat-icon class="s-22 mr-4" mat-icon-button [matMenuTriggerFor]="fEditMenu2"
+                                    (click)="$event.stopPropagation()">
+                                    more_vert</mat-icon>
+                                <mat-menu #fEditMenu2="matMenu">
+                                    <button mat-menu-item [routerLink]="['./edit-followup', visit.id]"
+                                        [queryParams]="{ conditionId: visit.conditionId, patientId: patient.id }"
+                                        queryParamsHandling="merge">
+                                        <mat-icon>edit</mat-icon>
+                                        <span>Edit</span>
+                                    </button>
+                                    <button mat-button
+                                        (click)="openThisConditionId(visit.conditionId,visit.id,'Followup')"> <a>view {{
+                                            visit.conditionName }}</a></button>
+                                </mat-menu>
+                                <span class="placeholder">Followup : </span>
+                                <span class="name">{{ visit.name }}</span>
+                                <span class="secondary-text">- {{ visit.location?.name }} </span>
+                                <span class="name p-4"> / {{ visit.conditionName }}</span>
+                                <span fxFlex></span>
+
+                                <a [routerLink]="['./edit-followup', visit.id]"
+                                    [queryParams]="{ conditionId: visit.conditionId, patientId: patient.id }"
+                                    queryParamsHandling="merge">
+                                    <mat-icon class="s-20 fuse-white-fg">edit</mat-icon>
+                                </a>
+                            </strong>
+                            <div class="body" fxLayout.xs="column wrap" *ngIf="visitsStates[visit.id]">
+
+                                <!-- SUBJECTIVE BLOCK -->
+                                <div class="presentation-block" *ngIf="visit.subjective?.text?.length &&
+                                    visitsFilter.activityDetails">
+                                    <div class="label">
+                                        <div class="label-border">
+                                            <span class="presentation">Subjective</span>
+                                        </div>
+                                    </div>
+                                    <div class="present-text">
+                                        <ul class="m-0">
+                                            <li *ngFor="let item of visit.subjective.text; trackBy: trackText;">
+                                                {{ item.text }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- / SUBJECTIVE BLOCK-->
+
+                                <!-- PYSICAL EXAM BLOCK -->
+                                <div class="presentation-block" *ngIf="(visitsFilter.media.physicalExam &&
+                                    groupedFiles && groupedFiles[visit.id] && groupedFiles && groupedFiles[visit.id]?.physicalExam ) ||
+                                    ( visit.physicalExam?.text?.length && visitsFilter?.activityDetails )">
+                                    <div class="label">
+                                        <div class="label-border">
+                                            <span class="presentation">Physical Exam</span>
+                                        </div>
+                                    </div>
+                                    <div class="present-text">
+                                        <ul class="m-0" [hidden]="!visitsFilter.activityDetails">
+                                            <li *ngFor="let item of visit.physicalExam.text; trackBy: trackText;">
+                                                {{ item.text }}
+                                            </li>
+                                        </ul>
+                                        <div class="imgs-holder"
+                                            *ngIf="visitsFilter.media.physicalExam &&
+                                            groupedFiles && groupedFiles[visit.id] && groupedFiles && groupedFiles[visit.id]?.physicalExam">
+                                            <media-file-view-list
+                                                [files]="groupedFiles && groupedFiles[visit.id]?.physicalExam">
+                                            </media-file-view-list>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- / PYSICAL EXAM BLOCK -->
+
+                                <!-- LABORATORY BLOCK -->
+                                <div class="presentation-block" *ngIf="( visitsFilter.media.laboratory &&
+                                    groupedFiles && groupedFiles[visit.id] && groupedFiles && groupedFiles[visit.id]?.laboratory?.length ) ||
+                                    ( visit.laboratory?.text?.length && visitsFilter?.activityDetails )">
+                                    <div class="label">
+                                        <div class="label-border">
+                                            <span class="presentation">Laboratory</span>
+                                        </div>
+                                    </div>
+                                    <div class="present-text">
+                                        <ul class="m-0" [hidden]="!visitsFilter.activityDetails">
+                                            <li *ngFor="let item of visit.laboratory.text; trackBy: trackText;">
+                                                {{ item.text }}
+                                            </li>
+                                        </ul>
+                                        <div class="imgs-holder"
+                                            *ngIf="visitsFilter.media.laboratory &&
+                                            groupedFiles && groupedFiles[visit.id] && groupedFiles && groupedFiles[visit.id]?.laboratory.length">
+                                            <media-file-view-list
+                                                [files]="groupedFiles && groupedFiles[visit.id]?.laboratory">
+                                            </media-file-view-list>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- / LABORATORY BLOCK -->
+
+                                <!-- RADIO BLOCK -->
+                                <div class="presentation-block" *ngIf="( visitsFilter.media.radio &&
+                                    groupedFiles && groupedFiles[visit.id] && groupedFiles && groupedFiles[visit.id]?.radio?.length ) ||
+                                    ( visit.radio?.text?.length && visitsFilter.activityDetails )">
+                                    <div class="label">
+                                        <div class="label-border">
+                                            <span class="presentation">Radio</span>
+                                        </div>
+                                    </div>
+                                    <div class="present-text">
+                                        <ul class="m-0" [hidden]="!visitsFilter.activityDetails">
+                                            <li *ngFor="let item of visit.radio.text; trackBy: trackText;">
+                                                {{ item.text }}
+                                            </li>
+                                        </ul>
+                                        <div class="imgs-holder"
+                                            *ngIf="visitsFilter.media.radio &&
+                                            groupedFiles && groupedFiles[visit.id] && groupedFiles && groupedFiles[visit.id]?.radio.length">
+                                            <media-file-view-list
+                                                [files]="groupedFiles && groupedFiles[visit.id]?.radio">
+                                            </media-file-view-list>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- / RADIO BLOCK -->
+
+                                <!-- CONSULTATION BLOCK -->
+                                <div class="presentation-block" *ngIf="visit.consultation?.text?.length &&
+                                    visitsFilter.activityDetails">
+                                    <div class="label">
+                                        <div class="label-border">
+                                            <span class="presentation">Consultation</span>
+
+                                        </div>
+                                    </div>
+                                    <div class="present-text" [hidden]="!visitsFilter.activityDetails">
+                                        <ul class="m-0">
+                                            <li *ngFor="let item of visit.consultation.text; trackBy: trackText;">
+                                                {{ item.text }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- / CONSULTATION BLOCK-->
+
+                                <!-- ASSESSMENT BLOCK -->
+                                <div class="presentation-block" *ngIf="visit.assessment?.text?.length &&
+                                    visitsFilter.activityDetails">
+                                    <div class="label">
+                                        <div class="label-border">
+                                            <span class="presentation">Assessment</span>
+
+                                        </div>
+                                    </div>
+                                    <div class="present-text" [hidden]="!visitsFilter.activityDetails">
+                                        <ul class="m-0">
+                                            <li *ngFor="let item of visit.assessment.text; trackBy: trackText;">
+                                                {{ item.text }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- / ASSESSMENT BLOCK-->
+
+                                <!-- DIAGNOSIS BLOCK -->
+                                <div class="presentation-block" *ngIf="visit.diagnosis?.text?.length &&
+                                    visitsFilter.activityDetails">
+                                    <div class="label">
+                                        <div class="label-border">
+                                            <span class="presentation">Diagnosis</span>
+
+                                        </div>
+                                    </div>
+                                    <div class="present-text" [hidden]="!visitsFilter.activityDetails">
+                                        <ul class="m-0">
+                                            <li *ngFor="let item of visit.diagnosis.text; trackBy: trackText;">
+                                                {{ item.text }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- / DIAGNOSIS BLOCK-->
+
+                                <!-- MEDICATIONS BLOCK -->
+                                <div class="presentation-block" *ngIf="visit.medications.length &&
+                                    visitsFilter.activityDetails">
+                                    <div class="label">
+                                        <div class="label-border">
+                                            <span class="presentation">Medications</span>
+
+                                        </div>
+                                    </div>
+                                    <div class="present-text" [hidden]="!visitsFilter.activityDetails">
+                                        <ul class="m-0">
+                                            <li *ngFor="let item of visit.medications">
+                                                {{ item.drug?.name }} {{ item.drug?.dosage }} {{ item.drug?.route }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- / MEDICATIONS BLOCK-->
+
+                                <!-- MEDICATIONS BLOCK -->
+                                <div class="presentation-block" *ngIf="medicationsByFollowup.length &&
+ visitsFilter.activityDetails">
+                                    <div class="label">
+                                        <div class="label-border">
+                                            <span class="presentation">Medications</span>
+
+                                        </div>
+                                    </div>
+                                    <div class="present-text" *ngIf="visitsFilter.activityDetails">
+                                        <ul class="m-0">
+                                            <!-- <li *ngFor="let item of activeMedications"> {{ item.name }} {{ item.dosage }} </li>      -->
+                                            <!-- <li *ngFor="let item of medications">                                                              
+             {{ item.drug?.name }} {{ item.drug?.dosage }}
+             {{ item.drug?.route }} 
+         </li> -->
+                                            <ng-container *ngFor="let item of medicationsByFollowup">
+                                                <ng-container *ngIf="item.followupId===visit.id">
+                                                    <li>
+                                                        {{ item.drug?.name }} {{ item.drug?.dosage }}
+                                                        {{ item.drug?.route }}
+                                                        <span *ngIf="item.isActive">(Active)</span>
+                                                        <span *ngIf="!item.isActive">(InActive)</span>
+                                                    </li>
+                                                </ng-container>
+                                            </ng-container>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- / MEDICATIONS BLOCK-->
+
+                                <!-- OTHER TREATMENTS BLOCK -->
+                                <div class="presentation-block" *ngIf="visit.otherTreatments?.text?.length &&
+                                    visitsFilter.activityDetails">
+                                    <div class="label">
+                                        <div class="label-border">
+                                            <span class="presentation">Treatments</span>
+
+                                        </div>
+                                    </div>
+                                    <div class="present-text" [hidden]="!visitsFilter.activityDetails">
+                                        <ul class="m-0">
+                                            <li *ngFor="let item of visit.otherTreatments.text; trackBy: trackText;">
+                                                {{ item.text }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- / OTHER TREATMENTS BLOCK-->
+
+                                <!-- NOTE BLOCK -->
+                                <div class="presentation-block"
+                                    *ngIf="visit.note?.text?.length && visitsFilter.activityDetails">
+                                    <div class="label">
+                                        <div class="label-border">
+                                            <span class="presentation">Notes</span>
+                                        </div>
+                                    </div>
+                                    <div class="present-text" [hidden]="!visitsFilter.activityDetails">
+                                        <ul class="m-0">
+                                            <li *ngFor="let item of visit.note.text; trackBy: trackText;">
+                                                {{ item.text }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- / NOTE BLOCK-->
+
+                                <!-- OTHER MEDIA -->
+                                <div class="presentation-block" *ngIf="( groupedFiles && groupedFiles[visit.id] && groupedFiles && groupedFiles[visit.id]?.other.length ) &&
+                                    ( visitsFilter.media.other )">
+                                    <div class="label">
+                                        <div class="label-border">
+                                            <span class="presentation">Other media</span>
+
+                                        </div>
+                                    </div>
+                                    <div class="present-text">
+                                        <div class="imgs-holder"
+                                            *ngIf="visitsFilter.media.other &&
+                                            groupedFiles && groupedFiles[visit.id] && groupedFiles && groupedFiles[visit.id]?.other.length">
+                                            <media-file-view-list
+                                                [files]="groupedFiles && groupedFiles[visit.id]?.other">
+                                            </media-file-view-list>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- / OTHER MEDIA -->
+
+                            </div>
+
+                            <!-- TIME BETWEEN -->
+                            <div *ngIf="!isLast" class="in-between h5 in-between secondary-text">
+                                <mat-icon class="s-18">import_export</mat-icon>
+                                <span class="" matTooltip="Time between this visit and previous visit"> {{
+                                    visits[index+1].opened | mdFromDate: visit.opened }} </span>
+                            </div>
+                            <!-- / TIME BETWEEN -->
+
+                        </div>
+
+                    </div>
+                    <!-- / TIMELINE FOLLOWUP BLOCK -->
+
+                    <!-- TIMELINE OPERATION BLOCK -->
+                    <div class="timeline" *ngIf="visit.type === 'Operation' && visitsFilter.operations">
+                        <div class="timeline-img is-narrow">
+                            <div class="index-num" (click)="toggleThisVisit(visit.id)">
+                                <div class="num"> {{ visits.length - index }} </div>
+                            </div>
+                        </div>
+                        <div class="timeline-date is-narrow secondary-text" (click)="toggleThisVisit(visit.id)">
+                            <span class="placeholder-narrow">Operation </span>
+                            <span> {{ visit.opened | date:'d MMM y'}} </span>
+                            <span>
+                                <span class="from-now h5">
+                                    <mat-icon class="s-14">arrow_upward</mat-icon>
+                                    <span style="width:unset;" matTooltip="Time between this visit and today">
+                                        {{ visit.opened | mdFromToday }}
+                                    </span>
+                                </span>
+                            </span>
+                        </div>
+
+                        <div class="timeline-content">
+                            <strong class="title blue-grey-400" (click)="toggleThisVisit(visit.id)">
+                                <mat-icon class="s-22 mr-4" mat-icon-button [matMenuTriggerFor]="opEditMenu2"
+                                    (click)="$event.stopPropagation()">more_vert</mat-icon>
+                                <mat-menu #opEditMenu2="matMenu">
+                                    <button mat-menu-item [routerLink]="['./edit-operation', visit.id]"
+                                        [queryParams]="{ conditionId: visit.conditionId, patientId: patient.id }"
+                                        queryParamsHandling="merge">
+                                        <mat-icon>edit</mat-icon>
+                                        <span>Edit</span>
+                                    </button>
+                                    <button mat-button
+                                        (click)="openThisConditionId(visit.conditionId,visit.id,'Operation')"> <a> view
+                                            {{ visit.conditionName }}</a></button>
+
+                                </mat-menu>
+                                <span class="placeholder">Operation : </span>
+                                <span class="name">{{ visit.name }}</span>
+                                <span class="secondary-text">- {{ visit.location?.name }} </span>
+                                <span class="name p-4"> / {{ visit.conditionName }}</span>
+                                <span fxFlex></span>
+
+                                <a [routerLink]="['./edit-operation', visit.id]"
+                                    [queryParams]="{ conditionId: visit.conditionId, patientId: patient.id }"
+                                    queryParamsHandling="merge">
+                                    <mat-icon class="s-20 fuse-white-fg">edit</mat-icon>
+                                </a>
+                            </strong>
+                            <div class="body" fxLayout.xs="column wrap" *ngIf="visitsStates[visit.id]">
+
+                                <!-- ANESTHESIA BLOCK -->
+                                <div class="presentation-block" *ngIf="visit.anesthesia?.text?.length &&
+                                    visitsFilter.activityDetails">
+                                    <div class="label">
+                                        <div class="label-border">
+                                            <span class="presentation">Anesthesia</span>
+                                        </div>
+                                    </div>
+                                    <div class="present-text" [hidden]="!visitsFilter.activityDetails">
+                                        <ul class="m-0">
+                                            <li *ngFor="let item of visit.anesthesia.text; trackBy: trackText;">
+                                                {{ item.text }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- / ANESTHESIA BLOCK-->
+
+                                <!-- CODE BLOCK -->
+                                <div class="presentation-block"
+                                    *ngIf="visit.code.length && visitsFilter.activityDetails">
+                                    <div class="label">
+                                        <div class="label-border">
+                                            <span class="presentation">Code</span>
+                                        </div>
+                                    </div>
+                                    <div class="present-text" [hidden]="!visitsFilter.activityDetails">
+                                        <ul class="m-0">
+                                            <li *ngFor="let item of visit.code">
+                                                {{ item }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- / CODE BLOCK-->
+
+                                <!-- DEPARTMENT BLOCK -->
+                                <div class="presentation-block"
+                                    *ngIf="visit.department && visitsFilter.activityDetails">
+                                    <div class="label">
+                                        <div class="label-border">
+                                            <span class="presentation">Department</span>
+                                        </div>
+                                    </div>
+                                    <div class="present-text" [hidden]="!visitsFilter.activityDetails">
+                                        <ul class="m-0">
+                                            <li>
+                                                {{ visit.department }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- / DEPARTMENT BLOCK-->
+
+                                <!-- OPERATION DIAGNOSIS BLOCK -->
+                                <div class="presentation-block" *ngIf="visit.operationDiagnosis?.text?.length &&
+                                    visitsFilter.activityDetails">
+                                    <div class="label">
+                                        <div class="label-border">
+                                            <span class="presentation">Op. Diagnosis</span>
+                                        </div>
+                                    </div>
+                                    <div class="present-text" [hidden]="!visitsFilter.activityDetails">
+                                        <ul class="m-0">
+                                            <li *ngFor="let item of visit.operationDiagnosis.text; trackBy: trackText;">
+                                                {{ item.text }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- / OPERATION DIAGNOSIS BLOCK-->
+
+                                <!-- OPERATION PERFORMED BLOCK -->
+                                <div class="presentation-block" *ngIf="visit.operationPerformed?.text?.length &&
+                                    visitsFilter.activityDetails">
+                                    <div class="label">
+                                        <div class="label-border">
+                                            <span class="presentation">Op. Performed</span>
+                                        </div>
+                                    </div>
+                                    <div class="present-text" [hidden]="!visitsFilter.activityDetails">
+                                        <ul class="m-0">
+                                            <li *ngFor="let item of visit.operationPerformed.text; trackBy: trackText;">
+                                                {{ item.text }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- / OPERATION PERFORMED BLOCK-->
+
+                                <!-- OPERATION  POST DIAGNOSIS BLOCK -->
+                                <div class="presentation-block" *ngIf="visit.operationPostDiagnosis?.text?.length &&
+                                    visitsFilter.activityDetails">
+                                    <div class="label">
+                                        <div class="label-border">
+                                            <span class="presentation">Post Diag.</span>
+                                        </div>
+                                    </div>
+                                    <div class="present-text" [hidden]="!visitsFilter.activityDetails">
+                                        <ul class="m-0">
+                                            <li
+                                                *ngFor="let item of visit.operationPostDiagnosis.text; trackBy: trackText;">
+                                                {{ item.text }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- / OPERATION POST DIAGNOSIS BLOCK-->
+
+                                <!-- OPERATION PRE FINDINGS BLOCK -->
+                                <div class="presentation-block" *ngIf="visit.operationPreFindings.text?.length &&
+                                    visitsFilter.activityDetails">
+                                    <div class="label">
+                                        <div class="label-border">
+                                            <span class="presentation">Pre Findings</span>
+                                        </div>
+                                    </div>
+                                    <div class="present-text" [hidden]="!visitsFilter.activityDetails">
+                                        <ul class="m-0">
+                                            <li
+                                                *ngFor="let item of visit.operationPreFindings.text; trackBy: trackText;">
+                                                {{ item.text }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- / OPERATION PRE FINDINGS BLOCK-->
+
+                                <!-- OPERATION TYPE BLOCK -->
+                                <div class="presentation-block" *ngIf="visit.operationType?.text?.length &&
+                                    visitsFilter.activityDetails">
+                                    <div class="label">
+                                        <div class="label-border">
+                                            <span class="presentation">Type</span>
+                                        </div>
+                                    </div>
+                                    <div class="present-text" [hidden]="!visitsFilter.activityDetails">
+                                        <ul class="m-0">
+                                            <li *ngFor="let item of visit.operationType.text; trackBy: trackText;">
+                                                {{ item.text }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- / OPERATION TYPE BLOCK-->
+
+                                <!-- PHYSICAL EXAM BLOCK -->
+                                <div class="presentation-block" *ngIf="( visitsFilter?.media?.physicalExam &&
+                                    groupedFiles && groupedFiles[visit.id] && groupedFiles && groupedFiles[visit.id].physicalExam ) ||
+                                    ( visit.physicalExam?.text?.length && visitsFilter.activityDetails )">
+                                    <div class="label"
+                                        *ngIf="visitsFilter.media.physicalExam || visitsFilter.activityDetails">
+                                        <div class="label-border">
+                                            <span class="presentation">Physical Exam</span>
+                                        </div>
+                                    </div>
+                                    <div class="present-text">
+                                        <ul class="m-0" [hidden]="!visitsFilter.activityDetails">
+                                            <li *ngFor="let item of visit.physicalExam.text; trackBy: trackText;">
+                                                {{ item.text }}
+                                            </li>
+                                        </ul>
+                                        <div class="imgs-holder"
+                                            [hidden]="!visitsFilter.media.physicalExam ||
+                                            !groupedFiles && groupedFiles[visit.id] && groupedFiles && groupedFiles[visit.id]?.physicalExam.length">
+                                            <media-file-view-list
+                                                [files]="groupedFiles && groupedFiles[visit.id]?.physicalExam">
+                                            </media-file-view-list>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- / PHYSICAL EXAM BLOCK -->
+
+                                <!-- DETAILS BLOCK -->
+                                <div class="presentation-block" *ngIf="visit.details && visitsFilter.activityDetails">
+                                    <div class="label">
+                                        <div class="label-border">
+                                            <span class="presentation">Details</span>
+                                        </div>
+                                    </div>
+                                    <div class="present-text" [hidden]="!visitsFilter.activityDetails">
+                                        <ul class="m-0">
+                                            <li>
+                                                {{ visit.details }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- / DETAILS BLOCK-->
+
+                                <!-- OTHER MEDIA -->
+                                <div class="presentation-block" *ngIf="( groupedFiles && groupedFiles[visit.id] && groupedFiles && groupedFiles[visit.id]?.other.length ) &&
+                                    ( visitsFilter.media.other )">
+                                    <div class="label">
+                                        <div class="label-border">
+                                            <span class="presentation">Other media</span>
+
+                                        </div>
+                                    </div>
+                                    <div class="present-text">
+                                        <div class="imgs-holder"
+                                            *ngIf="visitsFilter.media.other &&
+                                            groupedFiles && groupedFiles[visit.id] && groupedFiles && groupedFiles[visit.id]?.other.length">
+                                            <media-file-view-list
+                                                [files]="groupedFiles && groupedFiles[visit.id]?.other">
+                                            </media-file-view-list>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- / OTHER MEDIA -->
+
+                            </div>
+
+                            <!-- TIME BETWEEN -->
+                            <div *ngIf="!isLast" class="in-between h5 in-between secondary-text">
+                                <mat-icon class="s-18">import_export</mat-icon>
+                                <span class="" matTooltip="Time between this visit and previous visit"> {{
+                                    visits[index+1].opened | mdFromDate: visit.opened }} </span>
+                            </div>
+                            <!-- / TIME BETWEEN -->
+
+                        </div>
+
+                    </div>
+                    <!-- / TIMELINE OPERATION BLOCK -->
+
+                </ng-container>
+                <!-- / VISITS LOOPER -->
+
+            </div>
+
+
+        </mat-tab>
+        <!-- / VISITS TAB -->
+
+        <mat-tab disabled>
+            <ng-template mat-tab-label>
+                <button mat-icon-button [routerLink]="['./new-condition']" style="color:#fff;">
+                    <mat-icon>add_box</mat-icon>
+                </button>
+            </ng-template>
+        </mat-tab>
+
+        <mat-tab *ngIf="!ShowAllHidden && conditions?.length">
+            <ng-template mat-tab-label>
+                <button mat-button (click)="ShowAllHidden=true" matTooltip="Show Hiddentes">
+                    <mat-icon>preview</mat-icon>
+                </button>
+            </ng-template>
+        </mat-tab>
+        <mat-tab *ngIf="ShowAllHidden && conditions?.length">
+            <ng-template mat-tab-label>
+                <button mat-button (click)="ShowAllHidden=false" matTooltip="Hide">
+                    <mat-icon>hide_source</mat-icon>
+                </button>
+            </ng-template>
+        </mat-tab>
+    </mat-tab-group>
+    <!-- / TABS -->
+
+</div>

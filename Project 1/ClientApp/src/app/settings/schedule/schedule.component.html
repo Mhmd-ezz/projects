@@ -1,0 +1,76 @@
+<form class="event-form mat-card mat-elevation-z4 p-24" fxLayout="column" fxLayoutAlign="start"
+    fxFlex.xs="1 0 auto" fxFlex.sm="0 0 50%" fxFlex.gt-md="0 0 550px" #form="ngForm">
+
+    <div class="h2 mb-24">Schedule settings</div>
+
+    <!-- ERRORS -->
+    <mdc-form-infobox-error [dataLink]="errors"></mdc-form-infobox-error>
+    <!-- / ERRORS -->
+
+    <!-- STARTHOUR -->
+    <div class="pt-12" fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto" fxLayoutGap="20px">
+
+        <div class="grey-600-fg label">Start hour:</div>
+
+        <div>
+            <ejs-timepicker
+                style="width:200px;"
+                name="startHour"
+                [(ngModel)]="startHour"
+                (change)="onStartHourChange($event)"
+                [ngModelOptions]="{updateOn: 'blur'}"
+                #startHourCtrl="ngModel"
+                [strictMode]="true"
+                required>
+            </ejs-timepicker>
+            <div class="custom-error" *ngIf="startHourCtrl.hasError('required')">This field is required.</div>
+        </div>
+
+    </div>
+    <!-- / STARTHOUR -->
+
+    <!-- ENDHOUR -->
+    <div class="pt-12" fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto" fxLayoutGap="20px">
+
+        <div class="grey-600-fg label">End hour:</div>
+
+        <div>
+            <ejs-timepicker
+                style="width:200px;"
+                name="endHour"
+                [(ngModel)]="endHour"
+                (change)="onEndHourChange($event)"
+                [ngModelOptions]="{updateOn: 'blur'}"
+                #endHourCtrl="ngModel"
+                [strictMode]="true"
+                required>
+            </ejs-timepicker>
+            <div class="custom-error" *ngIf="endHourCtrl.hasError('required')">This field is required.</div>
+        </div>
+
+    </div>
+    <!-- / ENDHOUR -->
+
+    <!-- DISPLAYROTA -->
+    <div class="pt-12" fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto" fxLayoutGap="20px">
+
+        <div class="grey-600-fg label">Display rota:</div>
+
+        <div>
+            <mat-checkbox
+                name="displayRota"
+                [(ngModel)]="schedule.displayRota">
+            </mat-checkbox>
+        </div>
+
+    </div>
+    <!-- / DISPLAYROTA -->
+
+    <!-- FOOTER -->
+    <div class="pt-12 mt-24" fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
+        <button color="accent" mat-raised-button (click)="onSave()">SAVE</button>
+    </div>
+    <!-- / FOOTER -->
+
+
+</form>

@@ -1,0 +1,94 @@
+<div id="element_within_div">
+    <h1 mat-dialog-title>Edit Surgical History</h1>
+    <div mat-dialog-content class="mat-dialog-content">
+        <form  name="surgeryForm" [formGroup]="surgeryForm">
+            <div class="table-responsive patient-surgeries">
+                <table class="mat-elevation-z8" style="width:100%;">
+
+                        <!-- type Column -->
+                    <td>
+                    
+                        <mat-form-field>
+                            <mat-select placeholder="Operation Type" name="op_type" formControlName="type">
+                                <mat-option>-- SELECT TYPE --</mat-option>
+                                <mat-option *ngFor="let type of types" [value]="type.name">
+                                    {{type.name}}
+                                </mat-option>
+                                <!-- <mat-option value="cvs_endovascular_procedure">CVS / Endovascular Procedure</mat-option>
+                                <mat-option value="cvs_surgical">CVS / Surgical</mat-option>
+                                <mat-option value="chest_surgery">Chest surgery</mat-option>
+                                <mat-option value="orthopedic_surgery">Orthopedic surgery</mat-option>
+                                <mat-option value="neuro_surgery">Neuro surgery</mat-option>
+                                <mat-option value="thyroid_surgery">Thyroid surgery</mat-option>
+                                <mat-option value="general_surgery">General surgery</mat-option> -->
+                            </mat-select>
+                        </mat-form-field>
+                    </td>
+               
+                    <!-- what Column -->
+
+
+
+                    <td>
+                        
+                        <mdc-lookup-input-advanced
+                     
+                        [dataLinkSurgery]="data.surgery.what"
+                        [groupkey]="'op_type'"
+                        [modelName]="'SurgicalHistory'"
+                        [placeholder]="'Operation'"
+                        [risk]="true"                     
+                        (notify)="lookupNotifyHandler($event)"
+                        >
+                        <mat-form-field class="mdc-smart-input">
+                            <input matInput #input placeholder="Operation" name="operation" matInput >
+                            <mat-icon class="cursor-pointer" (click)="$event.stopPropagation()" matSuffix
+                                matTooltip="Click here or press enter to store this record"
+                                [matTooltipClass]="'font-size-12'" #save>add_box</mat-icon>
+                            
+                        </mat-form-field>
+                    </mdc-lookup-input-advanced>
+                       
+                    </td>
+
+
+                    <!-- when Column -->
+
+
+
+                    <td>
+                        <div fxLayout="row" fxLayoutGap="10px">
+                            <mat-form-field fxFlex class="pr-20" fxFlex="75">
+                                <input appMaskDate matInput placeholder="When" name="when"
+                                formControlName="when"  
+                                    [matDatepicker]="dp" >
+                                <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+                                <mat-datepicker #dp>
+                                </mat-datepicker>
+                            </mat-form-field>
+
+                        </div>
+                    </td>
+
+                    <!-- note Column -->
+
+
+
+                    <td>
+                        <mat-form-field class="pr-20" style="width: 100%;" >
+                            <input matInput placeholder="Note" name="note"  formControlName="note">
+                        </mat-form-field>
+                    </td>
+
+
+                </table>
+            </div>
+
+
+        </form>
+    </div>
+    <div mat-dialog-actions>
+        <button mat-raised-button (click)="cancel()">Cancel</button>
+        <button mat-raised-button color="accent" (click)="saveSurgery()" cdkFocusInitial>Save</button>
+    </div>
+</div>

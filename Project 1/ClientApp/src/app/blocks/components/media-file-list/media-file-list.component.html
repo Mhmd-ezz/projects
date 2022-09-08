@@ -1,0 +1,113 @@
+<div class="media-container no-selection">
+
+    <!-- HEADER -->
+    <div class="media-header">
+
+        <span class="flex-center">
+            <mat-icon class="s-18 mr-4" (click)="fileInput.click()">photo_camera</mat-icon>
+            <span class="name">{{headerName}}</span>
+        </span>
+
+        <span class="flex-center action-bar">
+            <input hidden
+                type="file"
+                #fileInput
+                flowButton
+                id="{{autoTagName}}"
+                [flow]="flow.flowJs"
+                [flowAttributes]="{accept: 'image/*'}" />
+            <span class="flex-center action-box" (click)="fileInput.click()">
+                <span class="action-btn">Add</span>
+            </span>
+            <span class="flex-center action-box" (click)="toggleViewMode()">
+                <span class="action-btn" [hidden]="!mediaSelectMode">View Mode</span>
+                <span class="action-btn" [hidden]="mediaSelectMode">Edit Mode</span>
+            </span>
+            <span class="flex-center action-box">
+                <span
+                    class="action-btn"
+                    [class.btn-disabled]="selectedRowSet.size === 0"
+                    (click)="selectedRowSet.size> 0 && deleteSelected()">Delete</span>
+            </span>
+            <span class="flex-center action-box">
+                <span
+                    class="action-btn"
+                    [class.btn-disabled]="selectedRowSet.size === 0"
+                    (click)="selectedRowSet.size> 0 && attachSelected()">Attach</span>
+            </span>
+        </span>
+
+    </div>
+    <!-- / HEADER -->
+
+    <!-- LIST -->
+    <div class="media-carousel">
+        <!-- auto-tagged-file class is a point for controller to hande tag name -->
+        <div class="files-container auto-tagged-file"
+            [class.select-mode]="toggleViewMode"
+            appDnd
+            flowDrop
+            id="{{autoTagName}}"
+            [flow]="flow.flowJs">
+
+            <div class="carousel-box">
+
+                <mat-icon class="mat-18 cursor-pointer"
+                    (click)="!isLeftMainMediaDisabled && mainMedia.moveLeft()"
+                    [class.btn-disabled]="isLeftMainMediaDisabled">chevron_left</mat-icon>
+
+                <drag-scroll #mainMedia
+                    [snap-duration]="200"
+                    (reachesLeftBound)="mainMediaLeftBound($event)"
+                    (reachesRightBound)="mainMediaRighttBound($event)"
+                    [drag-scroll-disabled]="false">
+
+                    <div class="holder" *ngFor="let item of files">
+
+                        <!-- IMAGES -->
+                        <div class="item-box" *ngIf="item.type != null && item?.type.startsWith('image')">
+                            <div class="ctnr">
+                                <div class="img-overlay" *ngIf="mediaSelectMode">
+                                    <mat-checkbox
+                                        value="{{item.path}}" color="warn"
+                                        (change)="selectFile($event,item)"></mat-checkbox>
+                                </div>
+                                <img drag-scroll-item
+                                    src="{{mediaEndpoint}}/photos/{{tenantId}}/{{item.name.toLowerCase()}}?preset=small"
+                                    (click)="previewImage(item,'other')"
+                                    src-fallback="{{imageFallback}}" />
+                            </div>
+                        </div>
+                        <!-- / IMAGES -->
+
+                        <!-- PDF  -->
+                        <!-- <div class="item-box" *ngIf="item.type != null && item?.type?.startsWith('application/pdf')" [matTooltip]="item.name">
+                            <div class="ctnr">
+                                <div class="img-overlay" *ngIf="mediaSelectMode">
+                                    <mat-checkbox
+                                        value="{{item.path}}" color="warn"
+                                        (change)="selectFile($event,item)"></mat-checkbox>
+                                </div>
+
+                                <img drag-scroll-item
+                                    style="box-shadow: none;"
+                                    (click)="previewPdf(item)"
+                                    src="../../../../../assets/images/icons/pdf-file-logo-icon.jpg" />
+                                <span class="file-name text-truncate">{{item.name}}</span>
+                            </div>
+                        </div> -->
+                        <!-- / PDF  -->
+
+                    </div>
+                </drag-scroll>
+
+                <mat-icon class="mat-18 cursor-pointer"
+                    (click)="!isRightMainMediaDisabled && mainMedia.moveRight()"
+                    [class.btn-disabled]="isRightMainMediaDisabled"
+                    style="justify-content: flex-end;">chevron_right</mat-icon>
+            </div>
+        </div>
+    </div>
+    <!-- / LIST -->
+
+</div>

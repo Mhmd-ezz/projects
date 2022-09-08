@@ -1,0 +1,1810 @@
+type Appointment {
+  """The id of the appointment."""
+  id: String
+
+  """The title of appointment."""
+  subject: String
+
+  """The start time of appointment."""
+  startTime: DateTime
+
+  """The end time of appointment."""
+  endTime: DateTime
+
+  """The reason of appointment."""
+  reason: String
+
+  """The color of appointment.  Ex: '#fff' """
+  color: String
+
+  """Any related notes."""
+  note: String
+  conditionId: String
+  speciality: String
+  recurrenceId: String
+  recurrenceException: String
+  recurrenceRule: String
+
+  """If reservations are blocked due to time range."""
+  isBlock: Boolean
+
+  """Is appointment readonly?"""
+  isReadonly: Boolean
+
+  """If appointment is all day event."""
+  isAllDay: Boolean
+
+  """The type of appointment."""
+  type: String
+
+  """The status of appointment."""
+  status: String
+
+  """The location associated with the appointment."""
+  location: LocationViewType
+
+  """The contact associated with the appointment."""
+  contact: Contact
+}
+
+type AppointmentEventType {
+  content: Appointment
+  event: String
+  sentAt: DateTime
+  sub: String
+  from: EventFromType
+}
+
+input AppointmentInput {
+  id: String
+  subject: String
+  startTime: DateTime
+  endTime: DateTime
+  reason: String
+  color: String
+  note: String
+  isBlock: Boolean
+  isReadonly: Boolean
+  isAllDay: Boolean
+  type: String
+  conditionId: String
+  speciality: String
+  recurrenceRule: String
+  recurrenceId: String
+  recurrenceException: String
+  status: String
+  contact: ContactInput
+  location: LocationViewInputType
+}
+
+type Cardiology {
+  conditions: [CardiologyCondition]
+  medicalHistory: CardiologyMedicalHistory
+}
+
+type CardiologyActivities {
+  followups: [CardiologyFollowup]
+  operations: [CardiologyOperation]
+}
+
+input CardiologyActivitiesInput {
+  followups: [CardiologyFollowupInput]
+  operations: [CardiologyOperationInput]
+}
+
+type CardiologyClinicalExamination {
+  """The examined Bp."""
+  bp: String
+
+  """The examined Hr."""
+  hr: String
+
+  """The examined Pulse."""
+  pulse: String
+
+  """The Classification of examined Pulse."""
+  pulseClassification: String
+
+  """The examined Sound of Cardiac Ausculation."""
+  sound: String
+
+  """The examined value of Cardiac Ausculation."""
+  value: String
+
+  """The examined Intensity."""
+  intensity: String
+
+  """The examined Pericardial Friction."""
+  pericardialFriction: Boolean
+
+  """The examined Lung Auscultation."""
+  lungAuscultation: String
+
+  """The examined Extremities Aspect."""
+  aspect: String
+
+  """The examined Extremities Puls."""
+  puls: Boolean
+  rightSuperior: Boolean
+  rightTransverse: Boolean
+  rightInferior: Boolean
+  leftSuperior: Boolean
+  leftTransverse: Boolean
+  leftInferior: Boolean
+
+  """The examined Neck Hepato Jugular Reflux."""
+  hepatoJugularReflux: Boolean
+
+  """The examined Neck Carotid Murmur."""
+  neckCarotidMurmur: String
+
+  """The examined Abdomen Soft."""
+  soft: Boolean
+
+  """The examined Abdomen Tender."""
+  tender: String
+
+  """The examined Abdomen Hepatomegaly."""
+  hepatomegaly: Boolean
+
+  """The examined Abdomen Ascites."""
+  ascites: Boolean
+}
+
+input CardiologyClinicalExaminationInput {
+  bp: String
+  hr: String
+  pulse: String
+  pulseClassification: String
+  sound: String
+  value: String
+  intensity: String
+  pericardialFriction: Boolean
+  lungAuscultation: String
+  aspect: String
+  puls: Boolean
+  rightSuperior: Boolean
+  rightInferior: Boolean
+  rightTransverse: Boolean
+  leftTransverse: Boolean
+  leftSuperior: Boolean
+  leftInferior: Boolean
+  hepatoJugularReflux: Boolean
+  neckCarotidMurmur: String
+  soft: Boolean
+  tender: String
+  hepatomegaly: Boolean
+  ascites: Boolean
+}
+
+type CardiologyCondition {
+  """The id of the Condition."""
+  id: String
+
+  """The name of the Condition."""
+  name: String
+
+  """The type of the Condition."""
+  type: String
+
+  """The status of the Condition."""
+  status: String
+
+  """The sub-location that inherets from location."""
+  subLocation: String
+
+  """The opening date of the Condition."""
+  opened: DateTime
+
+  """The closing date of the Condition."""
+  closed: DateTime
+  location: LocationViewType
+
+  """The list of Cheif Complaint of the Condition."""
+  cheifComplaint: DataPartition
+
+  """The list of Present History of the Condition."""
+  presentHistory: DataPartition
+
+  """The list of Diagnosis of the Condition."""
+  diagnosis: DataPartition
+
+  """The list of Differential Diagnosis of the Condition."""
+  differentialDiagnosis: DataPartition
+
+  """The list of Consultations of the Condition."""
+  consultation: DataPartition
+
+  """The list of OtherTreatments of the Condition."""
+  otherTreatments: DataPartition
+
+  """The list of physical exam of the Condition."""
+  physicalExam: DataPartition
+
+  """The list of Laboratory test of the Condition."""
+  laboratory: DataPartition
+
+  """The list of Radio of the Condition."""
+  radio: DataPartition
+
+  """The list of notes of the Condition."""
+  note: DataPartition
+
+  """A remark to identify if a condition is duplicated."""
+  isDuplicate: Boolean
+
+  """The show/hide status of the condition."""
+  isHidden: Boolean
+  medications: [Medication]
+  activities: CardiologyActivities
+  height: Float
+  weight: Float
+  bmi: Float
+  cardiologyClinicalExamination: CardiologyClinicalExamination
+}
+
+input CardiologyConditionInput {
+  id: String
+  name: String
+  type: String
+  status: String
+  subLocation: String
+  opened: DateTime
+  closed: DateTime
+  location: LocationViewInputType
+  cheifComplaint: DataPartitionInput
+  presentHistory: DataPartitionInput
+  diagnosis: DataPartitionInput
+  differentialDiagnosis: DataPartitionInput
+  consultation: DataPartitionInput
+  otherTreatments: DataPartitionInput
+  physicalExam: DataPartitionInput
+  laboratory: DataPartitionInput
+  radio: DataPartitionInput
+  note: DataPartitionInput
+  activities: CardiologyActivitiesInput
+  isDuplicate: Boolean
+  medications: [MedicationInput]
+  isHidden: Boolean
+  height: Float
+  weight: Float
+  bmi: Float
+  cardiologyClinicalExamination: CardiologyClinicalExaminationInput
+}
+
+type CardiologyFollowup {
+  id: String
+  name: String
+  type: String
+  status: String
+
+  """The sub-location that inherets from location."""
+  subLocation: String
+
+  """A remark to identify if a followup is duplicated."""
+  isDuplicate: Boolean
+  opened: DateTime
+  closed: DateTime
+  location: LocationViewType
+  subjective: DataPartition
+  diagnosis: DataPartition
+  medication: DataPartition
+  otherTreatments: DataPartition
+  assessment: DataPartition
+  consultation: DataPartition
+  physicalExam: DataPartition
+  laboratory: DataPartition
+  note: DataPartition
+  radio: DataPartition
+
+  """The show/hide status of the condition."""
+  isHidden: Boolean
+  medications: [Medication]
+  cardiologyClinicalExamination: CardiologyClinicalExamination
+}
+
+input CardiologyFollowupInput {
+  id: String
+  name: String
+  type: String
+  status: String
+  subLocation: String
+  opened: DateTime
+  closed: DateTime
+  location: LocationViewInputType
+  subjective: DataPartitionInput
+  medication: DataPartitionInput
+  otherTreatments: DataPartitionInput
+  assessment: DataPartitionInput
+  consultation: DataPartitionInput
+  physicalExam: DataPartitionInput
+  laboratory: DataPartitionInput
+  radio: DataPartitionInput
+  note: DataPartitionInput
+  diagnosis: DataPartitionInput
+  isDuplicate: Boolean
+  isHidden: Boolean
+  medications: [MedicationInput]
+  cardiologyClinicalExamination: CardiologyClinicalExaminationInput
+}
+
+input CardiologyInput {
+  conditions: [CardiologyConditionInput]
+  medicalHistory: CardiologyMedicalHistoryInput
+}
+
+type CardiologyMedicalHistory {
+  """Alerts"""
+  alerts: MedicalHistoryAlert
+  allergies: MedicalHistoryAlert
+  familyHistory: MedicalHistoryAlert
+  medicalIssues: MedicalHistoryAlert
+  cardioVascular: MedicalHistoryAlert
+  gi: MedicalHistoryAlert
+  endocrinology: MedicalHistoryAlert
+  lungDiseases: MedicalHistoryAlert
+  neurology: MedicalHistoryAlert
+  physiomaticDisorder: MedicalHistoryAlert
+  riskFactors: MedicalHistoryAlert
+  pastMedication: MedicalHistoryMedication
+  presentMedication: MedicalHistoryMedication
+  surgicalHistory: CardiologyMedicalHistorySurgery
+}
+
+input CardiologyMedicalHistoryInput {
+  alerts: MedicalHistoryAlertInput
+  allergies: MedicalHistoryAlertInput
+  familyHistory: MedicalHistoryAlertInput
+  medicalIssues: MedicalHistoryAlertInput
+  cardioVascular: MedicalHistoryAlertInput
+  gi: MedicalHistoryAlertInput
+  endocrinology: MedicalHistoryAlertInput
+  lungDiseases: MedicalHistoryAlertInput
+  neurology: MedicalHistoryAlertInput
+  physiomaticDisorder: MedicalHistoryAlertInput
+  riskFactors: MedicalHistoryAlertInput
+  pastMedication: MedicalHistoryMedicationInput
+  presentMedication: MedicalHistoryMedicationInput
+  surgicalHistory: CardiologyMedicalHistorySurgeryInput
+}
+
+type CardiologyMedicalHistorySurgery {
+  alert: Boolean
+  lastUpdate: DateTime
+  data: [CardiologySurgicalHistory]
+}
+
+input CardiologyMedicalHistorySurgeryInput {
+  alert: Boolean
+  lastUpdate: DateTime
+  data: [CardiologySurgicalHistoryInput]
+}
+
+type CardiologyOperation {
+  id: String
+  name: String
+  type: String
+  status: String
+
+  """The sub-location that inherets from location."""
+  subLocation: String
+
+  """A remark to identify if a operation is duplicated."""
+  isDuplicate: Boolean
+  opened: DateTime
+  closed: DateTime
+  location: LocationViewType
+  department: String
+  anesthesia: DataPartition
+  code: [String]
+  operationType: DataPartition
+  operationPerformed: DataPartition
+  operationDiagnosis: DataPartition
+  operationPostDiagnosis: DataPartition
+  operationPreFindings: DataPartition
+  operationCategory: DataPartition
+  physicalExam: DataPartition
+  surgeons: DataPartition
+  operationDetails: String
+}
+
+input CardiologyOperationInput {
+  id: String
+  name: String
+  type: String
+  status: String
+  subLocation: String
+  opened: DateTime
+  closed: DateTime
+  location: LocationViewInputType
+  department: String
+  anesthesia: DataPartitionInput
+  code: [String]
+  operationType: DataPartitionInput
+  operationPerformed: DataPartitionInput
+  operationDiagnosis: DataPartitionInput
+  operationPostDiagnosis: DataPartitionInput
+  operationPreFindings: DataPartitionInput
+  operationCategory: DataPartitionInput
+  physicalExam: DataPartitionInput
+  surgeons: DataPartitionInput
+  operationDetails: String
+  isDuplicate: Boolean
+}
+
+type CardiologySurgicalHistory {
+  note: String
+  what: [LookupView]
+  type: String
+  when: DateTime
+}
+
+input CardiologySurgicalHistoryInput {
+  type: String
+  what: [LookupViewModelInput]
+  when: DateTime
+  note: String
+}
+
+type Condition {
+  """The name of the Condition."""
+  name: String
+
+  """The type of the Condition."""
+  type: String
+
+  """The closing date of the Condition."""
+  closed: DateTime
+
+  """The opening date of the Condition."""
+  opened: DateTime
+
+  """The status of the Condition."""
+  status: DateTime
+}
+
+type Contact {
+  """The id of the patient."""
+  id: String
+
+  """A remark to identify if a contact is duplicated."""
+  isDuplicate: Boolean
+
+  """The name of the contact."""
+  name: String
+
+  """The sex of the patient."""
+  gender: String
+
+  """Telphone number of the patient."""
+  telephone: String
+
+  """Contact Numbers of the patient."""
+  contactNumbers: [String]
+
+  """The birthdate of the patient."""
+  birthDate: DateTime
+
+  """The Occupation of the patient."""
+  occupation: String
+
+  """The Partner of the patient."""
+  partner: String
+
+  """The name of the patient."""
+  country: String
+
+  """The city of the patient."""
+  city: String
+
+  """The identity number (Identity card or passport) of the patient."""
+  identityNumber: String
+
+  """The Country of the patient."""
+  email: String
+
+  """Creation Date."""
+  createdOn: DateTime
+
+  """Modified Date."""
+  modified: DateTime
+
+  """Contact type."""
+  contactType: String
+}
+
+input ContactInput {
+  id: String
+  name: String!
+  telephone: String!
+  contactNumbers: [String]
+  gender: String
+  birthDate: DateTime
+  occupation: String
+  partner: String
+  country: String
+  city: String
+  email: String
+  identityNumber: String
+  createdOn: DateTime
+  modified: DateTime
+  contactType: String
+  isDuplicate: Boolean
+}
+
+type DataPartition {
+  """Text"""
+  text: [LookupView]
+
+  """Media"""
+  media: [MediaPartition]
+  tags: [String]
+}
+
+input DataPartitionInput {
+  text: [LookupViewModelInput]
+  media: [MediaPartitionInput]
+  tags: [String]
+}
+
+"""
+The `Date` scalar type represents a year, month and day in accordance with the
+[ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) standard.
+"""
+scalar Date
+
+"""
+The `DateTime` scalar type represents a date and time. `DateTime` expects
+timestamps to be formatted in accordance with the
+[ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) standard.
+"""
+scalar DateTime
+
+type Drug {
+  id: String
+  atcCode: String
+  name: String
+  dosage: String
+  form: String
+}
+
+input DrugInput {
+  id: String
+  name: String!
+  dosage: String
+  atcCode: String
+  form: String
+  route: String
+}
+
+type DrugView {
+  """The id of the drug."""
+  id: String
+
+  """The name of the drug."""
+  name: String
+
+  """Drug Dosage Ex :20mg or 20mg/10ml."""
+  dosage: String
+}
+
+input DrugViewInput {
+  id: String
+  name: String!
+  dosage: String
+}
+
+type EventFromType {
+  id: String!
+  displayName: String!
+}
+
+type General {
+  conditions: [GeneralCondition]
+  medicalHistory: GeneralMedicalHistory
+}
+
+type GeneralActivities {
+  followups: [GeneralFollowup]
+  operations: [GeneralOperation]
+}
+
+input GeneralActivitiesInput {
+  followups: [GeneralFollowupInput]
+  operations: [GeneralOperationInput]
+}
+
+type GeneralCondition {
+  """The id of the Condition."""
+  id: String
+
+  """The name of the Condition."""
+  name: String
+
+  """The type of the Condition."""
+  type: String
+
+  """The status of the Condition."""
+  status: String
+
+  """The sub-location that inherets from location."""
+  subLocation: String
+
+  """The opening date of the Condition."""
+  opened: DateTime
+
+  """The closing date of the Condition."""
+  closed: DateTime
+  location: LocationViewType
+
+  """The list of Cheif Complaint of the Condition."""
+  cheifComplaint: DataPartition
+
+  """The list of Present History of the Condition."""
+  presentHistory: DataPartition
+
+  """The list of Diagnosis of the Condition."""
+  diagnosis: DataPartition
+
+  """The list of Differential Diagnosis of the Condition."""
+  differentialDiagnosis: DataPartition
+
+  """The list of Consultations of the Condition."""
+  consultation: DataPartition
+
+  """The list of OtherTreatments of the Condition."""
+  otherTreatments: DataPartition
+
+  """The list of physical exam of the Condition."""
+  physicalExam: DataPartition
+
+  """The list of Laboratory test of the Condition."""
+  laboratory: DataPartition
+
+  """The list of Radio of the Condition."""
+  radio: DataPartition
+
+  """The list of notes of the Condition."""
+  note: DataPartition
+
+  """A remark to identify if a condition is duplicated."""
+  isDuplicate: Boolean
+
+  """The show/hide status of the condition."""
+  isHidden: Boolean
+  medications: [Medication]
+  activities: GeneralActivities
+}
+
+input GeneralConditionInput {
+  id: String
+  name: String
+  type: String
+  status: String
+  subLocation: String
+  opened: DateTime
+  closed: DateTime
+  location: LocationViewInputType
+  cheifComplaint: DataPartitionInput
+  presentHistory: DataPartitionInput
+  diagnosis: DataPartitionInput
+  differentialDiagnosis: DataPartitionInput
+  consultation: DataPartitionInput
+  otherTreatments: DataPartitionInput
+  physicalExam: DataPartitionInput
+  laboratory: DataPartitionInput
+  radio: DataPartitionInput
+  note: DataPartitionInput
+  activities: GeneralActivitiesInput
+  isDuplicate: Boolean
+  medications: [MedicationInput]
+  isHidden: Boolean
+}
+
+type GeneralFollowup {
+  id: String
+  name: String
+  type: String
+  status: String
+
+  """The sub-location that inherets from location."""
+  subLocation: String
+
+  """A remark to identify if a followup is duplicated."""
+  isDuplicate: Boolean
+  opened: DateTime
+  closed: DateTime
+  location: LocationViewType
+  subjective: DataPartition
+  diagnosis: DataPartition
+  medication: DataPartition
+  otherTreatments: DataPartition
+  assessment: DataPartition
+  consultation: DataPartition
+  physicalExam: DataPartition
+  laboratory: DataPartition
+  note: DataPartition
+  radio: DataPartition
+
+  """The show/hide status of the condition."""
+  isHidden: Boolean
+  medications: [Medication]
+}
+
+input GeneralFollowupInput {
+  id: String
+  name: String
+  type: String
+  status: String
+  subLocation: String
+  opened: DateTime
+  closed: DateTime
+  location: LocationViewInputType
+  subjective: DataPartitionInput
+  medication: DataPartitionInput
+  otherTreatments: DataPartitionInput
+  assessment: DataPartitionInput
+  consultation: DataPartitionInput
+  physicalExam: DataPartitionInput
+  laboratory: DataPartitionInput
+  radio: DataPartitionInput
+  note: DataPartitionInput
+  diagnosis: DataPartitionInput
+  isDuplicate: Boolean
+  medications: [MedicationInput]
+  isHidden: Boolean
+}
+
+input GeneralInput {
+  conditions: [GeneralConditionInput]
+  medicalHistory: GeneralMedicalHistoryInput
+}
+
+type GeneralMedicalHistory {
+  alerts: MedicalHistoryAlert
+  allergies: MedicalHistoryAlert
+  familyHistory: MedicalHistoryAlert
+  medicalIssues: MedicalHistoryAlert
+  pastMedication: MedicalHistoryMedication
+  presentMedication: MedicalHistoryMedication
+  surgicalHistory: MedicalHistorySurgery
+}
+
+input GeneralMedicalHistoryInput {
+  alerts: MedicalHistoryAlertInput
+  allergies: MedicalHistoryAlertInput
+  familyHistory: MedicalHistoryAlertInput
+  medicalIssues: MedicalHistoryAlertInput
+  pastMedication: MedicalHistoryMedicationInput
+  presentMedication: MedicalHistoryMedicationInput
+  surgicalHistory: MedicalHistorySurgeryInput
+}
+
+type GeneralOperation {
+  id: String
+  name: String
+  type: String
+  status: String
+
+  """The sub-location that inherets from location."""
+  subLocation: String
+
+  """A remark to identify if a operation is duplicated."""
+  isDuplicate: Boolean
+  opened: DateTime
+  closed: DateTime
+  location: LocationViewType
+  department: String
+  anesthesia: DataPartition
+  code: [String]
+  operationType: DataPartition
+  operationPerformed: DataPartition
+  operationDiagnosis: DataPartition
+  operationPostDiagnosis: DataPartition
+  operationPreFindings: DataPartition
+  operationCategory: DataPartition
+  physicalExam: DataPartition
+  surgeons: DataPartition
+  operationDetails: String
+}
+
+input GeneralOperationInput {
+  id: String
+  name: String
+  type: String
+  status: String
+  subLocation: String
+  opened: DateTime
+  closed: DateTime
+  location: LocationViewInputType
+  department: String
+  anesthesia: DataPartitionInput
+  code: [String]
+  operationType: DataPartitionInput
+  operationPerformed: DataPartitionInput
+  operationDiagnosis: DataPartitionInput
+  operationPostDiagnosis: DataPartitionInput
+  operationPreFindings: DataPartitionInput
+  operationCategory: DataPartitionInput
+  physicalExam: DataPartitionInput
+  surgeons: DataPartitionInput
+  operationDetails: String
+  isDuplicate: Boolean
+}
+
+type Grantor {
+  """Id of the Grantors"""
+  id: String
+
+  """Name of the Grantors"""
+  name: String
+}
+
+input GrantorInput {
+  id: String
+  name: String!
+}
+
+type Location {
+  """The id of the location."""
+  id: String
+
+  """The name of the location."""
+  name: String
+
+  """the contact number of the location."""
+  contact: String
+
+  """The address of the location."""
+  address: String
+
+  """The type of the location."""
+  type: String
+
+  """List of sub-locations."""
+  subLocations: [String]
+}
+
+input LocationInput {
+  id: String
+  name: String!
+  contact: String
+  address: String
+  type: String
+  subLocations: [String]
+}
+
+input LocationViewInputType {
+  id: String!
+  name: String
+}
+
+type LocationViewType {
+  """The id of the location."""
+  id: String
+
+  """The name of the location."""
+  name: String
+}
+
+scalar Long
+
+type Lookup {
+  """The id of the lookup."""
+  id: String
+
+  """The tenantId of the lookup."""
+  tenantId: String
+
+  """The groupKey of the lookup."""
+  groupKey: String
+
+  """Value of the lookup."""
+  value: String
+
+  """Symbol of the lookup."""
+  symbol: String
+
+  """The display text of the lookup."""
+  text: String
+
+  """The description of the lookup."""
+  description: String
+
+  """The culture of the lookup."""
+  cultureName: String
+
+  """The Parent value of the lookup."""
+  parentValue: String
+
+  """Parent value"""
+  parentId: String
+
+  """Created Date."""
+  createdDate: DateTime
+
+  """Modified Date"""
+  modifiedDate: DateTime
+
+  """The order of the lookup entry in a list"""
+  order: Int
+
+  """Whether the lookup entry is predefined."""
+  predefined: Boolean
+}
+
+input LookupInput {
+  id: String
+  groupKey: String!
+  value: String
+  text: String!
+  predefined: Boolean
+}
+
+type LookupView {
+  """The group of the lookup."""
+  group: String
+
+  """Value of the lookup."""
+  value: String
+
+  """The display text of the lookup."""
+  text: String
+}
+
+input LookupViewModelInput {
+  group: String!
+  value: String!
+  text: String!
+}
+
+type MediaFile {
+  """Id of the File."""
+  id: String
+
+  """Name of the File."""
+  name: String
+
+  """Path of the File."""
+  path: String
+
+  """Type of the File."""
+  type: String
+
+  """Size of the File."""
+  size: String
+
+  """To which tenant this file belongs."""
+  tenantId: String
+
+  """To which patient this file belongs."""
+  patientId: String
+
+  """Patient name that file belongs to."""
+  patientName: String
+
+  """In which speciality the file exists."""
+  speciality: String
+
+  """In which condition the file exists."""
+  conditionId: String
+
+  """Specified activity type Ex: (followup, operation)."""
+  activityType: String
+
+  """In which activity the file exists."""
+  activityId: String
+
+  """To which ticket this file belongs."""
+  ticketNumber: String
+
+  """If file is deleted."""
+  isDeleted: Boolean
+
+  """Last modified date."""
+  modified: DateTime
+
+  """Date of delete."""
+  deletedOn: DateTime
+
+  """Built-in tags."""
+  systemTagging: [String]
+
+  """Custom tags."""
+  tags: DataPartition
+}
+
+input MediaFileInput {
+  id: String
+  name: String
+  path: String
+  type: String
+  size: String
+  tenantId: String
+  patientId: String
+  patientName: String
+  speciality: String
+  conditionId: String
+  activityType: String
+  activityId: String
+  ticketNumber: String
+  isDeleted: Boolean
+  deletedOn: DateTime
+  modified: DateTime
+  tags: DataPartitionInput
+  systemTagging: [String]
+}
+
+type MediaPartition {
+  text: String
+  tags: [String]
+  date: DateTime
+}
+
+input MediaPartitionInput {
+  text: String
+  tags: [String]
+  date: DateTime
+}
+
+type MedicalHistoryAlert {
+  alert: Boolean
+  lastUpdate: DateTime
+  data: [LookupView]
+}
+
+input MedicalHistoryAlertInput {
+  alert: Boolean
+  lastUpdate: DateTime
+  data: [LookupViewModelInput]
+}
+
+type MedicalHistoryMedication {
+  alert: Boolean
+  lastUpdate: DateTime
+  data: [Medication]
+}
+
+input MedicalHistoryMedicationInput {
+  alert: Boolean
+  lastUpdate: DateTime
+  data: [MedicationInput]
+}
+
+type MedicalHistorySurgery {
+  alert: Boolean
+  lastUpdate: DateTime
+  data: [SurgicalHistory]
+}
+
+input MedicalHistorySurgeryInput {
+  alert: Boolean
+  lastUpdate: DateTime
+  data: [SurgicalHistoryInput]
+}
+
+type Medication {
+  frequency: String
+  note: String
+  isActive: Boolean
+  usageType: String
+  noSubstitutes: Boolean
+  startDate: DateTime
+  endDate: DateTime
+  describedBy: String
+  drug: DrugView
+}
+
+input MedicationInput {
+  frequency: String
+  drug: DrugViewInput!
+  note: String
+  usageType: String
+  describedBy: String
+  noSubstitutes: Boolean
+  isActive: Boolean
+  startDate: DateTime
+  endDate: DateTime
+}
+
+type MessageFromType {
+  id: String!
+  displayName: String!
+}
+
+input MessageInputType {
+  fromId: String
+  content: String
+  sentAt: Date
+}
+
+type MessageType {
+  content: String!
+  sentAt: Date
+  sub: String
+  from: MessageFromType
+}
+
+type Mutation {
+  updateSchedule(schedule: ScheduleInput!): Schedule
+  createRota(rota: RotaInput!): Rota
+  updateRota(rota: RotaInput!): Rota
+  deleteRota(
+    """id of the rota"""
+    id: String!
+  ): String
+  createLocation(location: LocationInput!): Location
+  updateLocation(location: LocationInput!): Location
+  deleteLocation(
+    """id of the location"""
+    id: String!
+  ): Location
+  deleteSubLocation(
+    """id of the location"""
+    id: String!
+    subLocation: String!
+  ): Location
+  updateSettings(settings: SettingsInput!): Settings
+  createAppointment(appointment: AppointmentInput!): Appointment
+  updateAppointment(appointment: AppointmentInput!): Appointment
+  addMessage(message: MessageInputType): MessageType
+  deleteAppointment(id: String!): String
+  createContact(contact: ContactInput!): Contact
+  updateContact(contact: ContactInput!): Contact
+  createPatient(patient: PatientInput!): Patient
+  updatePatient(patient: PatientInput!): Patient
+  updateCardiologyMedicalHistory(patientId: String!, medicalHistory: CardiologyMedicalHistoryInput!): CardiologyMedicalHistory
+  updateGeneralMedicalHistory(patientId: String!, medicalHistory: GeneralMedicalHistoryInput!): GeneralMedicalHistory
+  createCardiologyCondition(patientId: String!, condition: CardiologyConditionInput!): CardiologyCondition
+  createGeneralCondition(patientId: String!, condition: GeneralConditionInput!): GeneralCondition
+  updateCardiologyCondition(patientId: String!, condition: CardiologyConditionInput!): CardiologyCondition
+  updateGeneralCondition(patientId: String!, condition: GeneralConditionInput!): GeneralCondition
+  createCardiologyFollowup(patientId: String!, conditionId: String!, followup: CardiologyFollowupInput!): CardiologyFollowup
+  createGeneralFollowup(patientId: String!, conditionId: String!, followup: GeneralFollowupInput!): GeneralFollowup
+  updateCardiologyFollowup(patientId: String!, conditionId: String!, replacedConditionId: String, followup: CardiologyFollowupInput!): CardiologyFollowup
+  updateGeneralFollowup(patientId: String!, conditionId: String!, replacedConditionId: String, followup: GeneralFollowupInput!): GeneralFollowup
+  createCardiologyOperation(patientId: String!, conditionId: String!, operation: CardiologyOperationInput!): CardiologyOperation
+  createGeneralOperation(patientId: String!, conditionId: String!, operation: GeneralOperationInput!): GeneralOperation
+  updateCardiologyOperation(patientId: String!, conditionId: String!, replacedConditionId: String, operation: CardiologyOperationInput!): CardiologyOperation
+  updateGeneralOperation(patientId: String!, conditionId: String!, replacedConditionId: String, operation: GeneralOperationInput!): GeneralOperation
+  remarkDuplicateActivity(patientId: String!, speciality: String!, conditionId: String!, activityType: String, activityId: String, isDuplicate: Boolean): String
+  deleteMedicalActivity(patientId: String!, speciality: String!, conditionId: String!, activityType: String, activityId: String): String
+  remarkDuplicatePatient(patientId: String!, isDuplicate: Boolean): String
+  deletePatient(patientId: String!): String
+  createLookup(lookup: LookupInput!): Lookup
+  createLookups(lookups: [LookupInput]!): [Lookup]
+  updateLookup(lookup: LookupInput!): Lookup
+  deleteLookup(
+    """id of the lookup"""
+    id: String!
+  ): Lookup
+  createDrug(drug: DrugInput!): Drug
+  updateDrug(drug: DrugInput!): Drug
+  deleteDrug(
+    """id of the drug"""
+    id: String!
+  ): Drug
+  createGrantor(grantor: GrantorInput!): Grantor
+  updateGrantor(grantor: GrantorInput!): Grantor
+  deleteGrantor(
+    """id of the grantor"""
+    id: String!
+  ): Grantor
+  createTag(tag: TagInput!): Tag
+  updateTag(tag: TagInput!): Tag
+  deleteTag(
+    """id of the tag"""
+    id: String!
+  ): Tag
+  createMediaFile(mediaFile: MediaFileInput!): MediaFile
+  updateMediaFiles(mediaFiles: [MediaFileInput]!): [MediaFile]
+  deleteMediaFiles(id: [String]!): [String]
+  createMedication(patientMedications: PatientMedicationsInput!): PatientMedications
+  updateMedications(patientMedications: PatientMedicationsInput!, patientId: String!, medicationId: String!): PatientMedications
+  createTodo(todo: TodoInput!): Todo
+  updateTodo(todo: TodoInput!): Todo
+  deleteTodo(
+    """id of the todo"""
+    id: String!
+  ): Todo
+  createTicket(ticket: TicketInput!): Ticket
+  updateTicket(ticket: TicketInput!, broadcast: Boolean): Ticket
+  updateTicketAdmin(ticket: TicketInput!, broadcast: Boolean): Ticket
+}
+
+type PageResultTicket {
+  """count of the tickets."""
+  count: Long
+
+  """Tickets."""
+  items: [Ticket]
+}
+
+type Patient {
+  """The id of the patient."""
+  id: String
+
+  """The name of the patient."""
+  name: String
+
+  """The sex of the patient."""
+  gender: String
+
+  """Telphone number of the patient."""
+  telephone: String
+
+  """Contact Numbers of the patient."""
+  contactNumbers: [String]
+
+  """The birthdate of the patient."""
+  birthDate: DateTime
+
+  """The Occupation of the patient."""
+  occupation: String
+
+  """The Partner of the patient."""
+  partner: String
+
+  """The name of the patient."""
+  country: String
+
+  """The city of the patient."""
+  city: String
+
+  """The identity number (Identity card or passport) of the patient."""
+  identityNumber: String
+
+  """The Country of the patient."""
+  email: String
+
+  """Creation Date."""
+  createdOn: DateTime
+
+  """Modified Date."""
+  modified: DateTime
+
+  """Modified Date."""
+  isDuplicate: Boolean
+  patientInfo: PatientInfo
+}
+
+type PatientInfo {
+  """The blood type of the patient."""
+  bloodType: String
+
+  """The marital status of the patient."""
+  maritalStatus: String
+
+  """The Emergancy Contact of the patient."""
+  emergancyContact: String
+
+  """Entry Date."""
+  entryDate: DateTime
+
+  """The File Number (papers) of the patient."""
+  fileNumber: String
+
+  """Who reffered this patient."""
+  referral: [String]
+
+  """A date represents the last activity date """
+  lastSeen: DateTime
+
+  """Percentage of process moving from patient paper files to Digitized."""
+  totalDigitizedData: Int
+
+  """Patient's flags."""
+  flags: [String]
+
+  """The grantors of the patient"""
+  grantors: [Grantor]
+
+  """The tags of the patient"""
+  tags: [Tag]
+
+  """Creation Date."""
+  createdOn: DateTime
+
+  """Modified Date."""
+  modified: DateTime
+  specialities: Speciality
+}
+
+input PatientInfoInput {
+  entryDate: DateTime
+  lastSeen: DateTime
+  maritalStatus: String
+  referral: [String]
+  emergancyContact: String
+  fileNumber: String
+  grantors: [GrantorInput]
+  tags: [TagInput]
+  bloodType: String
+  totalDigitizedData: Int
+  flags: [String]
+  createdOn: DateTime
+  modified: DateTime
+  specialities: SpecialityInput
+}
+
+input PatientInput {
+  id: String
+  name: String!
+  gender: String!
+  telephone: String!
+  contactNumbers: [String]
+  birthDate: DateTime!
+  occupation: String
+  partner: String
+  country: String
+  city: String
+  email: String
+  isDuplicate: Boolean
+  identityNumber: String
+  createdOn: DateTime
+  modified: DateTime
+  patientInfo: PatientInfoInput
+}
+
+type PatientMedications {
+  """The id of the medication."""
+  medicationId: String
+
+  """The id of patient."""
+  patientId: String
+
+  """The id of the condition."""
+  conditionId: String
+
+  """The id of followup."""
+  followupId: String
+
+  """The start time of medication."""
+  startTime: DateTime
+
+  """The end time of medication."""
+  endTime: DateTime
+
+  """The drug of the appointment."""
+  drug: DrugView
+
+  """The status of medication."""
+  isActive: Boolean
+  reason: String
+
+  """The history of the appointment."""
+  history: [PatientMedicationsHistory]
+}
+
+type PatientMedicationsHistory {
+  """The start time of medication history."""
+  startDate: DateTime
+
+  """The end time of medication history."""
+  endDate: DateTime
+
+  """The duration of the medication."""
+  duration: String
+
+  """The frequency of the medication."""
+  frequency: String
+
+  """note of the medication."""
+  note: String
+
+  """The status of medication."""
+  status: String
+}
+
+input PatientMedicationsHistoryInput {
+  startDate: DateTime
+  endDate: DateTime
+  duration: String
+  frequency: String
+  note: String
+  status: String
+}
+
+input PatientMedicationsInput {
+  medicationId: String
+  patientId: String
+  conditionId: String
+  followupId: String
+  drug: DrugViewInput
+  startTime: DateTime
+  endTime: DateTime
+  reason: String
+  isActive: Boolean
+  history: [PatientMedicationsHistoryInput]
+}
+
+type PatientsMediaFiles {
+  """ID of patient"""
+  id: String
+
+  """Patient name"""
+  patientName: String
+
+  """Total patient images"""
+  imagesCount: Int
+
+  """Total patient PDF files"""
+  pdfCount: Int
+
+  """List of files found in patient pool"""
+  pool: [MediaFile]
+
+  """List of files found in patient activities"""
+  files: [MediaFile]
+}
+
+type Query {
+  messages: [MessageType]
+  getAppointmentsEvents: [AppointmentEventType]
+  schedule: Schedule
+  rotaAll: [Rota]
+  rota(
+    """id of the rota"""
+    id: String!
+  ): Rota
+  locations: [Location]
+  location(
+    """id of the location"""
+    id: String!
+  ): Location
+  settings: [Settings]
+  appointments(startTime: DateTime, endTime: DateTime, sortBy: String, page: Int, size: Int, filter: String, descending: Boolean): [Appointment]
+  appointment(
+    """id of the appointment"""
+    id: String!
+  ): Appointment
+  contactsTotal(sortBy: String, page: Int, size: Int, filter: String, descending: Boolean): Int
+  contacts(sortBy: String, page: Int, size: Int, filter: String, descending: Boolean): [Contact]
+  contact(
+    """id of the contact"""
+    id: String!
+  ): Contact
+  patientsTotal(sortBy: String, page: Int, size: Int, filter: String, descending: Boolean): Int
+  patients(sortBy: String, page: Int, size: Int, filter: String, descending: Boolean): [Patient]
+  patient(
+    """id of the patient"""
+    id: String!
+  ): Patient
+  lookups: [Lookup]
+  lookup(
+    """id of the lookup"""
+    id: String!
+  ): Lookup
+  lookupByText(
+    """text of a lookup entry"""
+    text: String!
+
+    """groupKey of a lookup entry"""
+    group: String!
+  ): Lookup
+  lookupByValue(
+    """value of a lookup entry"""
+    value: String!
+
+    """groupKey of a lookup entry"""
+    group: String!
+  ): Lookup
+  lookupsByGroup(
+    """groupKey of a lookup entry"""
+    group: String!
+    filter: String
+    page: Int
+    size: Int
+    filterPredefined: Boolean
+  ): [Lookup]
+  lookupsByGroupTotal(
+    """groupKey of a lookup entry"""
+    group: String!
+    filter: String
+    page: Int
+    size: Int
+    filterPredefined: Boolean
+  ): Int
+  lookupsByGroups(
+    """groupKey of a lookup entry"""
+    groups: [String]!
+    filterPredefined: Boolean
+  ): [Lookup]
+  conditions: [Condition]
+  grantorsTotal(filter: String, page: Int, size: Int): Int
+  grantors(filter: String, page: Int, size: Int): [Grantor]
+  grantor(
+    """id of the grantor"""
+    id: String!
+  ): Grantor
+  todosTotal(filter: String, page: Int, size: Int, patientId: String): Int
+  todos(filter: String, page: Int, size: Int, patientId: String): [Todo]
+  todo(
+    """id of the todo"""
+    id: String!
+  ): Todo
+  tagsTotal(filter: String, page: Int, size: Int): Int
+  tags(filter: String, page: Int, size: Int): [Tag]
+  tag(
+    """id of the tag"""
+    id: String!
+  ): Tag
+  drugs(filter: String, page: Int, size: Int): [Drug]
+  drug(
+    """id of the drug"""
+    id: String!
+  ): Drug
+  patientsMediaFiles(page: Int, size: Int, filter: String, patientId: String): [PatientsMediaFiles]
+  tenantPoolMediaFiles(page: Int, size: Int, filter: String): [MediaFile]
+
+  """Get media files by patient id"""
+  patientMediaFiles(patientId: String!, page: Int, size: Int, filter: String): [MediaFile]
+  patientMediaFilesTotal(page: Int, size: Int, filter: String, patientId: String): Int
+
+  """Get patient pool media files by patient id"""
+  patientMediaPoolFiles(patientId: String!, page: Int, size: Int, filter: String): [MediaFile]
+
+  """Get media files by activity"""
+  activityMediaFiles(patientId: String!, speciality: String, conditionId: String, activitType: String, activityId: String, filter: String, page: Int, size: Int): [MediaFile]
+  mediaFiles: [MediaFile]
+  mediaFile(
+    """id of the file"""
+    id: String!
+  ): MediaFile
+  trashedMediaFiles: [MediaFile]
+  ticketMediaFiles(text: String!, ticketNumber: String!, page: Int, size: Int): [MediaFile]
+  patientMedications(startTime: DateTime, endTime: DateTime, sortBy: String, page: Int, size: Int, descending: Boolean): [PatientMedications]
+  patientMedication(
+    """The id of patient."""
+    patientId: String!
+  ): [PatientMedications]
+  patientMedicationByCondition(patientId: String!, conditionId: String): [PatientMedications]
+  patientMedicationByFollowup(patientId: String!, followupId: String): [PatientMedications]
+  tickets(filter: String, page: Int, size: Int, descending: Boolean, sortBy: String): PageResultTicket
+  allTickets(filter: String, page: Int, size: Int, descending: Boolean, sortBy: String, type: String): PageResultTicket
+  ticket(
+    """id of the ticket"""
+    id: String!
+  ): Ticket
+  ticketTenant(
+    """id of the ticket"""
+    id: String!
+  ): String
+}
+
+type Recurrence {
+  """The startTime of the recurrence."""
+  startTime: DateTime
+
+  """The endTime of the recurrence."""
+  endTime: DateTime
+
+  """The rule of the recurrence."""
+  rule: String
+}
+
+input RecurrenceInput {
+  startTime: DateTime
+  endTime: DateTime
+  rule: String
+}
+
+type Rota {
+  """The id of the rota."""
+  id: String
+
+  """The name of the rota."""
+  name: String
+
+  """The sign color to rota."""
+  color: String
+
+  """The location associated with the rota."""
+  location: LocationViewType
+
+  """The list of recurrence rules associated with the rota."""
+  recurrence: [Recurrence]
+}
+
+input RotaInput {
+  id: String
+  name: String
+  color: String
+  location: LocationViewInputType
+  recurrence: [RecurrenceInput]
+}
+
+type Schedule {
+  """The id of the schedule."""
+  id: String
+
+  """The startHour of the schedule."""
+  startHour: String
+
+  """The startHour of the schedule."""
+  endHour: String
+
+  """Whether to mark rota on schedule cells or not."""
+  displayRota: Boolean
+}
+
+input ScheduleInput {
+  id: String
+  startHour: String
+  endHour: String
+  displayRota: Boolean
+}
+
+type Settings {
+  """The id."""
+  id: String
+
+  """The assigned specialties to a tenant."""
+  specialties: [String]
+}
+
+input SettingsInput {
+  id: String
+  specialties: [String]
+}
+
+type Speciality {
+  general: General
+  cardiology: Cardiology
+}
+
+input SpecialityInput {
+  general: GeneralInput
+  cardiology: CardiologyInput
+}
+
+type Subscription {
+  messageAdded: MessageType
+  messageAddedByUser(id: String!): MessageType
+  appointmentEvent(tenantId: String!, userId: String!): AppointmentEventType
+  ticketEvent(tenantId: String!, userId: String!): TicketEventType
+  ticketEventAdmin: TicketEventType
+}
+
+type SurgicalHistory {
+  note: String
+  what: String
+  when: DateTime
+}
+
+input SurgicalHistoryInput {
+  what: String
+  when: DateTime
+  note: String
+}
+
+type Tag {
+  """Id of the Tags"""
+  id: String
+
+  """Name of the Tags"""
+  name: String
+
+  """Group of the Tags"""
+  group: String
+}
+
+input TagInput {
+  id: String
+  name: String!
+  group: String!
+}
+
+type Ticket {
+  """Id of the Ticket"""
+  id: String
+
+  """Ticket number of the Ticket"""
+  ticketNumber: String
+
+  """tenantName of the Ticket"""
+  tenantName: String
+
+  """Subject of the Ticket"""
+  subject: String
+
+  """Details of the Ticket"""
+  details: String
+
+  """Status of the Ticket"""
+  status: Int
+
+  """Attached File of the Ticket"""
+  attachFile: Boolean
+
+  """Admin read the ticket"""
+  isReadByAdmin: Boolean
+
+  """Client read the ticket"""
+  isReadByClient: Boolean
+
+  """date of replay message"""
+  ticketDate: DateTime
+  messages: [TicketMessages]
+}
+
+type TicketEventType {
+  content: Ticket
+  event: String
+  sentAt: DateTime
+  sub: String
+  from: EventFromType
+}
+
+input TicketInput {
+  id: String
+  ticketNumber: String
+  tenantName: String
+  subject: String
+  details: String
+  attachFile: Boolean
+  isReadByAdmin: Boolean
+  isReadByClient: Boolean
+  status: Int
+  ticketDate: DateTime
+  messages: [TicketMessagesInput]
+}
+
+type TicketMessages {
+  """Message content"""
+  message: String
+
+  """name of the requester"""
+  requestBy: String
+
+  """date of replay message"""
+  messageDate: DateTime
+}
+
+input TicketMessagesInput {
+  message: String
+  requestBy: String
+  messageDate: DateTime
+}
+
+type Todo {
+  """Id of the Todos"""
+  id: String
+
+  """Title of the Todos"""
+  title: String
+
+  """Notes of the Todos"""
+  notes: String
+
+  """Start Date of the Todos"""
+  startDate: DateTime
+
+  """Due Date of the Todos"""
+  dueDate: DateTime
+
+  """Completed of the Todos"""
+  isCompleted: Boolean
+
+  """Starred of the Todos"""
+  isStarred: Boolean
+
+  """Important of the Todos"""
+  isImportant: Boolean
+
+  """Patient Id of the Todos"""
+  patientId: String
+}
+
+input TodoInput {
+  id: String
+  title: String!
+  notes: String
+  startDate: DateTime
+  dueDate: DateTime
+  isCompleted: Boolean
+  isStarred: Boolean
+  isImportant: Boolean
+  patientId: String
+}
+

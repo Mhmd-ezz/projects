@@ -1,0 +1,144 @@
+<div class="time-range-container" fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
+
+    <mat-icon class="mr-16 time-icon grey-600-fg">access_time</mat-icon>
+
+    <!-- SIMPLE DATE -->
+    <div class="pb-10 mb-12 simple-date-container" fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto"
+        fxLayoutGap="15px" fxLayout.xs="column" fxLayoutAlign.xs="start start" *ngIf="!timeZoneTemplate">
+
+        <div class="simple-date" style="width: 100%;">
+            <ejs-datepicker
+                name="startDate"
+                format="M/dd/yy"
+                [(ngModel)]="event.startTime"
+                (change)="onSimpleDateChange($event)"
+                [strictMode]="true"
+                required></ejs-datepicker>
+        </div>
+        <div fxLayout="row wrap" fxLayoutGap="12px" fxLayoutAlign="start center" [fxHide]="allDayActive">
+            <div class="simple-time">
+                <ejs-timepicker
+                    #startTime
+                    (change)='onEnableEndTime($event)'
+                    (open)='onOpen($event)'
+                    name="startTime"
+                    [(ngModel)]="event.startTime"
+                    [ngModelOptions]="{updateOn: 'blur'}"
+                    [strictMode]="true"
+                    required>
+                </ejs-timepicker>
+            </div>
+            <span>to</span>
+            <div class="simple-time">
+                <ejs-timepicker
+                    [value]="event.endTime"
+                    #endTime
+                    (change)='onEndTimeChange($event)'
+                    (itemRender)='itemRenderHandler($event)'
+                    (created)="onEndDateCreated($event)"
+                    cssClass='e-customStyle'
+                    name="endTime"
+                    [(ngModel)]="event.endTime"
+                    [strictMode]="true"
+                    [step]="interval"
+                    [ngModelOptions]="{updateOn: 'blur'}"
+                    required></ejs-timepicker>
+            </div>
+
+        </div>
+        <div fxLayout="row" fxLayoutGap="12px" fxLayoutAlign="start center">
+            <span class="timezone" [fxHide]="allDayActive">
+                <mat-icon class="blue-fg s-22 cursor-pointer" matTooltip="Timezone" (click)="toggleTimeZoneTemplate()">access_time</mat-icon>
+            </span>
+            <div class="ml-12">
+                <mat-checkbox class="all-day" [(ngModel)]="event.isAllDay" name="isAllDay" labelPosition="before"
+                    (change)="onAlldayChange($event)">All day</mat-checkbox>
+            </div>
+        </div>
+    </div>
+    <!-- / SIMPLE DATE -->
+
+
+    <!-- FROM TO DATE -->
+    <div class="pb-10 mb-12 full-date-container" fxLayout="row wrap" fxLayoutAlign="start start" fxFlex="1 0 auto"
+        fxLayoutGap="15px" *ngIf="timeZoneTemplate">
+
+        <!-- DATE ON LARGE SCREEN -->
+        <div fxLayout="column" fxLayoutAlign="start start" fxFlex="1 0 auto" fxHide.xs>
+
+            <div fxLayoutAlign="start center" fxLayout="row wrap" fxLayoutGap="15px" style="width: 100%">
+                <div fxFlex="1 0 auto">
+                    <ejs-datepicker
+                        name="startTime"
+                        format="M/dd/yy"
+                        [(ngModel)]="event.startTime"
+                        [strictMode]="true"
+                        required></ejs-datepicker>
+                </div>
+
+                <div style="max-width:150px;">
+                    <ejs-timepicker
+                        [fxHide]="allDayActive"
+                        name="startTime"
+                        [(ngModel)]="event.startTime"
+                        [ngModelOptions]="{updateOn: 'blur'}"
+                        [strictMode]="true"
+                        required></ejs-timepicker>
+                </div>
+            </div>
+
+            <div fxLayoutAlign="start center" fxLayout="row" fxLayoutGap="15px" style="width: 100%">
+                <div fxFlex="1 0 auto">
+                    <ejs-datepicker
+                        name="endTime"
+                        format="M/dd/yy"
+                        [(ngModel)]="event.endTime"
+                        [strictMode]="true"
+                        required></ejs-datepicker>
+                </div>
+
+                <div style="max-width:150px;">
+                    <ejs-timepicker
+                        [fxHide]="allDayActive"
+                        name="endTime"
+                        [(ngModel)]="event.endTime"
+                        [ngModelOptions]="{updateOn: 'blur'}"
+                        [strictMode]="true"
+                        required></ejs-timepicker>
+                </div>
+            </div>
+        </div>
+        <!-- / DATE ON LARGE SCREEN -->
+
+        <!-- DATE ON SMALL SCREEN -->
+        <div fxLayout="column" fxLayoutAlign="start start" fxFlex="1 0 auto" fxHide fxShow.xs>
+
+            <div fxFlex="100" class="full-width">
+                <ejs-datetimepicker
+                    name="startTime"
+                    format="M/dd/yy h:mm a"
+                    [(ngModel)]="event.startTime"
+                    [strictMode]="true"
+                    required>
+                </ejs-datetimepicker>
+            </div>
+
+            <div fxFlex="100" class="full-width">
+                <ejs-datetimepicker
+                    name="endTime"
+                    format="M/dd/yy h:mm a"
+                    [(ngModel)]="event.endTime"
+                    [strictMode]="true"
+                    required>
+                </ejs-datetimepicker>
+            </div>
+        </div>
+        <!-- / DATE ON SMALL SCREEN -->
+
+        <div class="timezone" fxFlex="0.35 0 auto">
+            <mat-icon class="blue-fg s-22 cursor-pointer" matTooltip="Timezone" (click)="toggleTimeZoneTemplate()">access_time</mat-icon>
+        </div>
+    </div>
+    <!-- FROM TO DATE -->
+
+</div>

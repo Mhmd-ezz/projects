@@ -1,0 +1,53 @@
+<div class="flex-column upload-container">
+    <div class="flex-spacebetween header accent-600">
+        <div class="text-capitalize font-weight-500">uploading items</div>
+        <div class="pr-16">
+            <mat-icon class="mat-18 box-collapse cursor-pointer" *ngIf="!isCollapsed" (click)="isCollapsed= !isCollapsed">keyboard_arrow_down</mat-icon>
+            <mat-icon class="mat-18 box-collapse cursor-pointer" *ngIf="isCollapsed" (click)="isCollapsed= !isCollapsed">keyboard_arrow_up</mat-icon>
+            <mat-icon class="mat-18 ml-12 cursor-pointer" (click)="close()">close</mat-icon>
+        </div>
+    </div>
+
+    <div class="list flex-column" [hidden]="isCollapsed">
+        <div *ngFor="let transfer of (flow.transfers$ | async).transfers; trackBy: trackTransfer" class="flex-spacebetween
+            full-width upload-item" (mouseenter)="showRemove= true" (mouseleave)="showRemove= false">
+            <div class="flex-center">
+                <mat-icon color="accent" class="mr-8">insert_drive_file</mat-icon>
+                <div> {{transfer.name}} </div>
+                <div>
+                </div>
+            </div>
+            <div>
+                <div>
+                    <span *ngIf="transfer.complete">
+                        <mat-icon style="color:#268235;">check_circle</mat-icon>
+                    </span>
+
+                    <span *ngIf="!transfer.complete && !showRemove">
+                        <mat-progress-spinner
+                            class="progress-spinner"
+                            color="primary"
+                            mode="determinate"
+                            [strokeWidth]="3"
+                            [diameter]="20"
+                            [value]="transfer.progress">
+                        </mat-progress-spinner>
+                    </span>
+
+                    <span *ngIf="!transfer.complete && showRemove">
+                        <mat-icon class="red-400-fg cursor-pointer"
+                            (click)="flow.cancelFile(transfer)">remove_circle_outline</mat-icon>
+                    </span>
+
+                </div>
+                <div>
+                    <!-- <span *ngIf="!transfer.complete">
+                        <mat-icon class="red-400-fg cursor-pointer"
+                            (click)="flow.cancelFile(transfer)">remove_circle_outline</mat-icon>
+                    </span> -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

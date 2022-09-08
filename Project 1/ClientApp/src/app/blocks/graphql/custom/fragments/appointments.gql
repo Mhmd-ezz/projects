@@ -1,0 +1,41 @@
+fragment Appointments on Appointments{
+id
+subject
+startTime
+endTime
+reason
+color
+note
+conditionId
+speciality
+recurrenceId
+recurrenceException
+recurrenceRule
+isBlock
+isReadonly
+isAllDay
+type
+status
+location{
+id
+name
+        }
+contact{
+id
+isDuplicate
+name
+gender
+telephone
+contactNumbers
+birthDate
+occupation
+partner
+country
+city
+identityNumber
+email
+createdOn
+modified
+contactType
+        }    
+}

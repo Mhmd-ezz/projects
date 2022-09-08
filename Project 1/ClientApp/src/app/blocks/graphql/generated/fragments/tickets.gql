@@ -1,0 +1,20 @@
+fragment Tickets on Tickets{
+count
+items{
+id
+ticketNumber
+tenantName
+subject
+details
+status
+attachFile
+isReadByAdmin
+isReadByClient
+ticketDate
+messages{
+message
+requestBy
+messageDate
+            }
+        }    
+}

@@ -1,0 +1,16 @@
+fragment LookupByText on LookupByText{
+id
+tenantId
+groupKey
+value
+symbol
+text
+description
+cultureName
+parentValue
+parentId
+createdDate
+modifiedDate
+order
+predefined    
+}

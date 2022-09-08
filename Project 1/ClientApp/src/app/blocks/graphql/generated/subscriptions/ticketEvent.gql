@@ -1,0 +1,28 @@
+subscription ticketEvent($tenantId: String!, $userId: String!){
+    ticketEvent(tenantId: $tenantId, userId: $userId){
+        content{
+            id
+            ticketNumber
+            tenantName
+            subject
+            details
+            status
+            attachFile
+            isReadByAdmin
+            isReadByClient
+            ticketDate
+            messages{
+                message
+                requestBy
+                messageDate
+            }
+        }
+        event
+        sentAt
+        sub
+        from{
+            id
+            displayName
+        }
+    }
+}

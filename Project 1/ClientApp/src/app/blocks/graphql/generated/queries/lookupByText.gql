@@ -1,0 +1,18 @@
+query lookupByText($text: String!, $group: String!){
+    lookupByText(text: $text, group: $group){
+        id
+        tenantId
+        groupKey
+        value
+        symbol
+        text
+        description
+        cultureName
+        parentValue
+        parentId
+        createdDate
+        modifiedDate
+        order
+        predefined
+    }
+}

@@ -1,0 +1,11 @@
+<span *ngIf="(status$ | async) === dataStatusEnum.local">
+    &nbsp;-&nbsp;local
+</span>
+
+<span *ngIf="(status$ | async) === dataStatusEnum.server">
+    &nbsp;-&nbsp;server</span>
+
+<span *ngIf="(status$ | async) === dataStatusEnum.serverNotReachable">
+        &nbsp;-&nbsp;server not reachable</span>
+
+    

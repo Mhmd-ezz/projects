@@ -1,0 +1,75 @@
+<h1 mat-dialog-title>{{ actionType == EventActionTypesEnum.edit ? 'Edit Rota': 'Create Rota'}}</h1>
+<div mat-dialog-content>
+
+    <div fxLayout="column">
+
+        <!-- HEADER -->
+        <div class="header-toolbar">
+            <div class="btn" (click)="onSave()">
+                <mat-icon class="material-icons-outlined mr-4 s-20">save</mat-icon>
+                <span>Save</span>
+            </div>
+            <div class="btn" (click)="onCancel()">
+                <mat-icon class="material-icons-outlined mr-4 s-20">undo</mat-icon>
+                <span>Cancel</span>
+            </div>
+            <div class="btn" (click)="addRecurrence()">
+                <mat-icon class="material-icons-outlined mr-4 s-20">add</mat-icon>
+                <span>Work time</span>
+            </div>
+        </div>
+        <!-- / HEADER -->
+
+        <!-- ERRORS -->
+        <mdc-form-infobox-error [dataLink]="errors"></mdc-form-infobox-error>
+        <!-- / ERRORS -->
+
+        <!-- BODY -->
+        <div>
+            <form fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto" #form="ngForm">
+
+                <!-- NAME -->
+                <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto" fxLayoutGap="15px">
+
+                    <mat-icon class="grey-600-fg material-icons-outlined">label</mat-icon>
+
+                    <mat-form-field fxFlex="1 0 auto">
+                        <mat-label>Name</mat-label>
+                        <input matInput placeholder="Name" name="name" [(ngModel)]="rota.name" required #nameCtrl="ngModel">
+                        <mat-error *ngIf="nameCtrl.hasError('required')">This field is required.</mat-error>
+                    </mat-form-field>
+
+                </div>
+                <!-- / NAME -->
+
+                <!-- LOCATION -->
+                <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto" fxLayoutGap="15px">
+                    <mat-icon class="mb-16 grey-600-fg">location_on</mat-icon>
+                    <app-location-selector fxFlex="1 0 auto" [required]="true" [location]="rota.location" (onChange)="onLocationChange($event)"></app-location-selector>
+                </div>
+                <!-- / LOCATION -->
+
+                <!-- COLOR -->
+                <div class="mt-8" fxLayout="row wrap" fxLayoutAlign="start start" fxFlex="1 0 auto" fxLayoutGap="15px">
+                    <mat-icon class="mb-16 grey-600-fg">format_color_fill</mat-icon>
+
+                    <input ejs-colorpicker name="color" [(value)]="rota.color" mode="Palette" type='color' fxFlex="1 0 auto" />
+                </div>
+                <!--/  COLOR -->
+
+                <!-- RECURRENCE -->
+                <div fxLayout="row wrap" fxLayoutAlign="start start" fxFlex="1 0 auto" fxLayoutGap="15px">
+                    <mat-icon class="mr-16 mt-16 time-icon grey-600-fg">repeat</mat-icon>
+
+                    <app-recurring-time-card fxFlex.xs="1 0 auto" fxFlex="0.6 0 auto" [recurrence]="rota.recurrence"></app-recurring-time-card>
+                </div>
+                <!--/  RECURRENCE -->
+
+
+
+            </form>
+        </div>
+        <!-- / BODY -->
+
+    </div>
+</div>

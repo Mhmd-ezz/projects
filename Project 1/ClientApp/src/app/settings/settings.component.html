@@ -1,0 +1,56 @@
+<div class="page-layout simple left-sidebar">
+
+    <!-- Ready to use settings SIDEBAR -->
+    <!-- SIDEBAR -->
+    <fuse-sidebar class="sidebar" name="settings-sidebar" position="left" lockedOpen="gt-md">
+
+        <!-- SIDEBAR CONTENT -->
+        <div class="content p-12">
+            <settings-sidebar></settings-sidebar>
+        </div>
+        <!-- / SIDEBAR CONTENT -->
+
+    </fuse-sidebar>
+    <!-- / SIDEBAR -->
+
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- HEADER -->
+        <div class="header accent p-12 h-40" fxLayout="row" fxLayoutAlign="start center">
+            <div fxLayout="column" fxLayoutAlign="center start">
+                <div class="black-fg" fxLayout="row" fxLayoutAlign="start center">
+                    
+                    <!-- SIDEBAR XS TRIGGER -->
+                    <button mat-icon-button class="sidebar-toggle mr-8" fxHide.gt-md (click)="toggleSidebar('settings-sidebar')">
+                        <mat-icon>menu</mat-icon>
+                    </button>
+                    <!-- / SIDEBAR XS TRIGGER -->
+
+                    <mat-icon class="secondary-text s-18 mr-4">home</mat-icon>
+                    <breadcrumb #parent>
+                        <span class="breadcrumb text-capitalize" *ngFor="let route of parent.breadcrumbs; let isLast = last">
+                            <a class="breadcrumb-item secondary-text" *ngIf="!route.terminal || (route.terminal && route.route.loadChildren)" href="" [routerLink]="[route.url]">{{
+                                route.displayName }}</a>
+                            <a class="breadcrumb-item fuse-white-fg" *ngIf="route.terminal  && !route.route.loadChildren">{{ route.displayName }}</a>
+                            <span [hidden]="isLast" class="secondary-text"> / </span>
+                        </span>
+                    </breadcrumb>
+                </div>
+            </div>
+        </div>
+        <!-- / HEADER -->
+
+
+        <!-- DYNAMIC CONTENT -->
+        <div class="content p-4">
+
+            <router-outlet></router-outlet>
+
+        </div>
+        <!-- / DYNAMIC CONTENT -->
+
+    </div>
+    <!-- / CENTER -->
+
+</div>

@@ -1,0 +1,33 @@
+<div fxLayout="column" fxFlex class="quick-panel-container">
+    <div class="header accent" fxLayoutAlign="start center">
+        <mat-icon class="mr-4 s-20">format_list_bulleted</mat-icon> Quick panel
+    </div>
+    <mat-tab-group class="quick-panel-tabs" color="warn" backgroundColor="accent" style="height:100%">
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <div class="flex-center flex-column pb-8">
+                    <mat-icon class="">cloud_upload</mat-icon>
+                    Uploads
+                </div>
+            </ng-template>
+            <div class="p-8">
+                <app-queue-file-uploader>
+
+                </app-queue-file-uploader>
+            </div>
+        </mat-tab>
+
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <div class="flex-center flex-column pb-8">
+                    <mat-icon class="">event</mat-icon>
+                    Events
+                </div>
+            </ng-template>
+            <div class="p-8">
+                <h3>Under construction </h3>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+
+</div>

@@ -1,0 +1,6 @@
+mutation deleteGrantor($id: String!){
+    deleteGrantor(id: $id){
+        id
+        name
+    }
+}

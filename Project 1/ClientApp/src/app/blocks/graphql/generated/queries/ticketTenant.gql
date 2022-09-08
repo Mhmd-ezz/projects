@@ -1,0 +1,3 @@
+query ticketTenant($id: String!){
+    ticketTenant(id: $id)
+}

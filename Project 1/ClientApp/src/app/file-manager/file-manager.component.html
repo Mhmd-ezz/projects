@@ -1,0 +1,137 @@
+<div id="file-manager" class="page-layout simple right-sidebar inner-scroll">
+
+    <ng-container #poolFlow="flow"
+        [flowConfig]="{
+        target: mediaEndpoint + '/files/uploads',
+        allowDuplicateUploads :true,
+        chunkSize: 1000000,
+        headers: {
+        'Authorization' : accessToken
+        }
+        }"></ng-container>
+
+    <!-- SIDEBAR -->
+    <fuse-sidebar class="sidebar main-sidebar" name="file-manager-main-sidebar" position="left">
+        <file-manager-main-sidebar></file-manager-main-sidebar>
+    </fuse-sidebar>
+    <!-- / SIDEBAR -->
+
+    <as-split direction="horizontal">
+        <as-split-area [size]="viewSize" ngStyle.lt-md="position: absolute; width: 100%;">
+
+            <!-- CENTER -->
+            <div class="center" fxFlex>
+
+                <!-- HEADER -->
+                <div class="header accent p-24" fxLayout="row" fxLayoutAlign="space-between center">
+                    <!-- 
+                    <div class="search-wrapper" fxFlex fxLayout="row" fxLayoutAlign="start center">
+
+                        <button mat-icon-button class="sidebar-toggle" fxHide.gt-md
+                            (click)="toggleSidebar('file-manager-main-sidebar')">
+                            <mat-icon style="color:#0000008a!important;">menu</mat-icon>
+                        </button>
+
+                        <div class="search" fxLayout="row" fxLayoutAlign="start center"> -->
+                    <!-- <mat-icon style="color:#0000008a!important;" class="secondary-text">search</mat-icon> -->
+                    <!-- <input placeholder="Search for patient" fxFlex> -->
+                    <!-- <mdc-search-patient  [size]="'small'" (onSelectedChanged)="onPatientChanged($event)"
+                                (onClear)="patientFilterCleared($event)"></mdc-search-patient>
+                        </div>
+
+                    </div> -->
+                    <!-- TOOLBAR -->
+                    <div class="toolbar w-100-p" fxFlex fxLayout="row" fxLayoutAlign="space-between start">
+
+                        <div class="left-side" fxLayout="row">
+                            <button mat-icon-button class="sidebar-toggle"
+                                (click)="toggleSidebar('file-manager-main-sidebar')">
+                                <mat-icon>menu</mat-icon>
+                            </button>
+                        </div>
+
+                        <div class="right-side" fxLayout="row">
+                            <mdc-search-patient [minWidth]="280" [size]="'small'" (onSelectedChanged)="onPatientChanged($event)"
+                                (onClear)="patientFilterCleared($event)"></mdc-search-patient>
+                        </div>
+                    </div>
+                    <!-- / TOOLBAR -->
+
+                    <!-- BREADCRUMB -->
+                    <!-- <div class="breadcrumb text-truncate h1 pl-72" fxLayout="row" fxLayoutAlign="start center"
+                        [@animate]="{value:'*',params:{x:'50px'}}">
+                        <div *ngFor="let path of pathArr; last as isLast" fxLayout="row" fxLayoutAlign="start center">
+                            <span>{{path}}</span>
+                            <mat-icon *ngIf="!isLast" class="separator">chevron_right</mat-icon>
+                        </div>
+                    </div> -->
+                    <!-- / BREADCRUMB -->
+
+                    <!-- ADD FILE BUTTON -->
+                    <div class="file-uploader">
+                        <input hidden
+                            type="file"
+                            #fileInput
+                            flowButton
+                            [flow]="poolFlow.flowJs"
+                            [flowAttributes]="{accept: 'image/*'}"
+                            />
+                        <!--  -->
+                        <button mat-fab
+                            (click)="fileInput.click()"
+                            color="warn"
+                            class="add-file-button"
+                            aria-label="Add file"
+                            [@animate]="{value:'*', params:{delay:'300ms',scale:'0.2'}}">
+                            <mat-icon>add</mat-icon>
+                        </button>
+                    </div>
+                    <!-- / ADD FILE BUTTON -->
+
+                </div>
+                <!-- / HEADER -->
+
+                <!-- CONTENT -->
+                <div class="content" perfectScrollbar>
+                    <file-list class="file-list-container"></file-list>
+
+                    <div class="footer">
+
+                        <media-file-list
+                            [flow]="poolFlow"
+                            [files]="poolFiles"
+                            [autoTagName]="''"
+                            [headerName]="'Pool'"
+                            (onAttachedFiles)="onAttachedFiles($event)"
+                            (onDeleteSelected)="onDeleteSelectedFiles($event)"></media-file-list>
+                    </div>
+                </div>
+                <!-- / CONTENT -->
+            </div>
+
+            <!-- / CENTER -->
+
+        </as-split-area>
+
+        <as-split-area [size]="paneSize" class="split-sidebar-area">
+
+            <div class="details-sidebar-container">
+                <!-- SIDEBAR -->
+                <fuse-sidebar class="sidebar details-sidebar" name="file-manager-details-sidebar" position="right"
+                    lockedOpen="gt-md" style="max-width: unset; width: unset;height: 100%;">
+                    <file-manager-details-sidebar></file-manager-details-sidebar>
+                </fuse-sidebar>
+                <!-- / SIDEBAR -->
+            </div>
+
+        </as-split-area>
+
+    </as-split>
+
+    <upload-side-popup
+        *ngIf="isUploadPopupOpened"
+        [flow]="poolFlow"
+        [isOpened]="isUploadPopupOpened"
+        (onClose)="isUploadPopupOpened= false">
+    </upload-side-popup>
+</div>

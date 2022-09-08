@@ -1,0 +1,8 @@
+fragment Locations on Locations{
+id
+name
+contact
+address
+type
+subLocations    
+}

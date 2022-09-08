@@ -1,0 +1,6 @@
+query settings{
+    settings{
+        id
+        specialties
+    }
+}

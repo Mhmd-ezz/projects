@@ -1,0 +1,64 @@
+<!-- <h1 style="font-weight: 700;color: #88898a;text-align: center;" fxLayout="row" fxLayoutAlign="center center">
+    <mat-icon class="s-80 mr-12">account_balance</mat-icon>
+    Under Construction
+</h1> -->
+<div fxLayout="column" class="ml-8 mt-12">
+
+    <!-- APP VERSION -->
+    <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="15px" class="mb-12">
+        <div class="flex-center label">
+            <mat-icon class="mr-8 secondary-text">donut_small</mat-icon>
+            <strong>App version: </strong>
+        </div>
+        <div>
+            0.0.75 (Beta)
+        </div>
+    </div>
+    <!-- / APP VERSION -->
+
+
+    <!-- INSTALLED VERSION -->
+    <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="15px" class="mb-12">
+
+        <div class="flex-center label">
+            <mat-icon class="mr-8 secondary-text">settings_applications</mat-icon>
+            <strong>Installed version:</strong>
+        </div>
+
+        <div>
+            <div class="flex-center" *ngIf="swUpdateAvailable;else uptodate">
+                <span class="mr-8 update-available"> New version available</span>
+                <button mat-raised-button color="primary" class="refresh-btn" (click)="updateSw()">
+                    <mat-icon class="s-18 mr-4">cached</mat-icon>
+                    Update now
+                </button>
+            </div>
+
+            <ng-template #uptodate>
+                <div class="uptodate">
+                    Uptodate
+                </div>
+            </ng-template>
+        </div>
+    </div>
+    <!-- / INSTALLED VERSION -->
+
+    <!-- APP VERSION -->
+    <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="15px" class="mb-12">
+        <div class="flex-center label">
+            <mat-icon class="mr-8 secondary-text">sd_storage</mat-icon>
+            <strong>Local data:</strong>
+        </div>
+        <div>
+            <button mat-raised-button color="primary" class="refresh-btn" (click)="cleanLocalData()">
+                <mat-icon class="s-18 mr-4">cached</mat-icon>
+                Clean Data
+            </button>
+        </div>
+    </div>
+    <!-- / APP VERSION -->
+
+
+
+
+</div>

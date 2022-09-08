@@ -1,0 +1,106 @@
+<div class="page-layout blank">
+
+    <!-- HEADER -->
+    <div class="header accent p-8" fxLayout="row" fxLayoutAlign="start center">
+        <div fxLayout="column" fxLayoutAlign="center start">
+            <div class="black-fg" fxLayout="row" fxLayoutAlign="start start">
+                <!-- <mat-icon class="secondary-text s-18 mr-4xs">home</mat-icon>
+                <span class="secondary-text">Patients</span> -->
+                <mat-icon class="secondary-text s-18 mr-4">home</mat-icon>
+                <breadcrumb #parent>
+                    <span class="breadcrumb text-capitalize" *ngFor="let route of parent.breadcrumbs; let isLast= last">
+                        <a class="breadcrumb-item secondary-text" *ngIf="!route.terminal || (route.terminal &&
+                            route.route.loadChildren)" href="" [routerLink]="[route.url]">{{
+                            route.displayName }}</a>
+                        <a mat-button class="breadcrumb-item" *ngIf="route.terminal && !route.route.loadChildren">{{
+                            route.displayName }}</a>
+                        <span [hidden]="isLast" class="secondary-text"> / </span>
+                    </span>
+                </breadcrumb>
+            </div>
+        </div>
+    </div>
+    <!-- / HEADER -->
+
+    <!-- CONTENT -->
+    <div class="content p-4 mdc-table-container">
+
+        <div class="header-tool accent mb-24">
+            <div class="flex-center">
+                <mat-icon class="mr-8 s-22" matSuffix>assignment</mat-icon>
+                <span class="h2">Today's missions</span>
+            </div>
+        </div>
+
+        <!-- TABS -->
+        <mat-tab-group>
+
+            <!-- ALL TAB -->
+            <mat-tab>
+                <!-- TAB LABEL -->
+                <ng-template mat-tab-label>
+                    All
+                </ng-template>
+                <!-- / TAB LABEL -->
+
+                <div>
+                    <dashboard-all [locations]="all"> </dashboard-all>
+                </div>
+
+            </mat-tab>
+            <!-- / ALL TAB -->
+
+
+            <!-- VISITS TAB -->
+            <mat-tab>
+                <!-- TAB LABEL -->
+                <ng-template mat-tab-label>
+                    Visits
+                </ng-template>
+                <!-- / TAB LABEL -->
+
+                <div>
+                    <dashboard-all [locations]="visits"> </dashboard-all>
+                </div>
+
+            </mat-tab>
+            <!-- / VISITS TAB -->
+
+
+            <!-- OPERATION TAB -->
+            <mat-tab>
+                <!-- TAB LABEL -->
+                <ng-template mat-tab-label>
+                    Operation
+                </ng-template>
+                <!-- / TAB LABEL -->
+
+                <div>
+                    <dashboard-all [locations]="operations"> </dashboard-all>
+                </div>
+
+            </mat-tab>
+            <!-- / OPERATION TAB -->
+
+
+            <!-- FLOOR TAB -->
+            <mat-tab>
+                <!-- TAB LABEL -->
+                <ng-template mat-tab-label>
+                    Floor
+                </ng-template>
+                <!-- / TAB LABEL -->
+
+                <div>
+                    <dashboard-all [locations]="floors"> </dashboard-all>
+                </div>
+
+            </mat-tab>
+            <!-- / FLOOR TAB -->
+
+        </mat-tab-group>
+        <!-- / TABS -->
+
+    </div>
+    <!-- / CONTENT -->
+</div>

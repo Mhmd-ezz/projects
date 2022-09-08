@@ -1,0 +1,7 @@
+mutation createTag($tag: TagInput!){
+    createTag(tag: $tag){
+        id
+        name
+        group
+    }
+}

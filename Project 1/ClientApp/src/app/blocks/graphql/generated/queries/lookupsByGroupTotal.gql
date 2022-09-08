@@ -1,0 +1,3 @@
+query lookupsByGroupTotal($group: String!, $filter: String, $page: Int, $size: Int, $filterPredefined: Boolean){
+    lookupsByGroupTotal(group: $group, filter: $filter, page: $page, size: $size, filterPredefined: $filterPredefined)
+}

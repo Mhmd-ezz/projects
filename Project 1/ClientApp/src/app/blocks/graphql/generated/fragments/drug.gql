@@ -1,0 +1,7 @@
+fragment Drug on Drug{
+id
+atcCode
+name
+dosage
+form    
+}

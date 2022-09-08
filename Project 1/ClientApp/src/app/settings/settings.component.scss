@@ -1,0 +1,12 @@
+.breadcrumb-item{
+    min-width: 85px;
+    padding: 0 8px;
+    font-weight: 400;
+    text-align: left;
+    line-height: 20px;
+    cursor: pointer;
+}
+.breadcrumb-item.active{
+    font-weight: 500;
+    color: #fff;
+}

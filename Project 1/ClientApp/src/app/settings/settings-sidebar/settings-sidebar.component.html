@@ -1,0 +1,66 @@
+<div class="demo-sidebar">
+    <mat-list>
+        <!-- <h3 matSubheader>Sidebar Demo</h3> -->
+
+        <mat-list-item
+            routerLink="/settings/general"
+            [routerLinkActive]="['active']"
+            (click)="toggleSidebar('settings-sidebar')">
+            <span>General</span>
+        </mat-list-item>
+
+        <mat-divider></mat-divider>
+
+        <mat-list-item routerLink="/settings/schedule" [routerLinkActive]="['active']" (click)="toggleSidebar('settings-sidebar')">
+            <span>Schedule</span>
+        </mat-list-item>
+
+        <mat-divider></mat-divider>
+
+        <mat-list-item routerLink="/settings/rota" [routerLinkActive]="['active']" (click)="toggleSidebar('settings-sidebar')">
+            <span>Rota</span>
+        </mat-list-item>
+
+        <mat-divider></mat-divider>
+
+        <mat-list-item routerLink="/settings/locations" [routerLinkActive]="['active']" (click)="toggleSidebar('settings-sidebar')">
+            <span>Locations</span>
+        </mat-list-item>
+
+        <mat-divider></mat-divider>
+
+        <mat-list-item routerLink="/settings/lookups" [routerLinkActive]="['active']" (click)="toggleSidebar('settings-sidebar')">
+            <span>Lookups</span>
+        </mat-list-item>
+
+        <mat-divider></mat-divider>
+
+        <mat-list-item routerLink="/settings/grantors" [routerLinkActive]="['active']" (click)="toggleSidebar('settings-sidebar')">
+            <span>Grantors</span>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item routerLink="/settings/tags" [routerLinkActive]="['active']" (click)="toggleSidebar('settings-sidebar')">
+            <span>Tags</span>
+        </mat-list-item>
+
+        <mat-divider></mat-divider>
+
+        <mat-list-item routerLink="/settings/drugs" [routerLinkActive]="['active']" (click)="toggleSidebar('settings-sidebar')">
+            <span>Drugs</span>
+        </mat-list-item>
+
+        <mat-divider></mat-divider>
+
+        <mat-list-item routerLink="/settings/subscriptions" [routerLinkActive]="['active']" (click)="toggleSidebar('settings-sidebar')">
+            <span>Subscription</span>
+        </mat-list-item>
+
+        <mat-divider></mat-divider>
+
+        <mat-list-item routerLink="/settings/users" [routerLinkActive]="['active']" (click)="toggleSidebar('settings-sidebar')">
+            <span>Users</span>
+        </mat-list-item>
+
+        <mat-divider></mat-divider>
+    </mat-list>
+</div>

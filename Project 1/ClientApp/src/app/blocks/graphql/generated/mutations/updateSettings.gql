@@ -1,0 +1,6 @@
+mutation updateSettings($settings: SettingsInput!){
+    updateSettings(settings: $settings){
+        id
+        specialties
+    }
+}

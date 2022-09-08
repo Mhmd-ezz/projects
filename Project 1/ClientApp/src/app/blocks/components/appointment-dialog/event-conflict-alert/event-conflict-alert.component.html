@@ -1,0 +1,12 @@
+<div *ngIf="conflictEvents.length" fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto" fxLayoutGap="15px">
+
+    <mat-icon class="mb-16 grey-600-fg material-icons-outlined">report</mat-icon>
+
+    <div *ngIf="conflictEvents.length" class="date-conflict-container" fxLayout="column" fxFlex.xs="100">
+        <div class="header">An appointment already exists at the same time.</div>
+        <div class="item" *ngFor="let ev of conflictEvents">
+            <span class="subject">{{ev.subject}}</span>
+            <span class="datetime"> {{ ev.startTime | date:'d/M/yy hh:mm a' }} - {{ ev.endTime | date:'d/M/yy hh:mm a' }} </span>
+        </div>
+    </div>
+</div>

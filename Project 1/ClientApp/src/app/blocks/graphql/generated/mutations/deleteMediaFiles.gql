@@ -1,0 +1,3 @@
+mutation deleteMediaFiles($id: [String]!){
+    deleteMediaFiles(id: $id)
+}

@@ -1,0 +1,40 @@
+<h1 mat-dialog-title>Medication</h1>
+<div mat-dialog-content>
+    <table class="simple clickable">
+        <thead>
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Drug</td>
+                <td class="capitalize-letter">{{ medication.drug.name }}</td>
+            </tr>
+            <tr>
+                <td>Frequency</td>
+                <td class="capitalize-letter">{{ medication.frequency }}</td>
+            </tr>
+            <tr>
+                <td>Note</td>
+                <td class="capitalize-letter">{{ medication.note }}</td>
+            </tr>
+            <tr>
+                <td>Start Date</td>
+                <td>{{ medication.startDate | date: "DD-MM-YYYY" }}</td>
+            </tr>
+            <tr>
+                <td>End Date</td>
+                <td>{{ medication.endDate | date: "DD-MM-YYYY" }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+<div mat-dialog-actions>
+    <button mat-raised-button (click)="onCloseClick()" cdkFocusInitial>Close</button>
+</div>

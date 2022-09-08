@@ -1,0 +1,64 @@
+.event-panel-title {
+    flex-direction: column;
+    box-sizing: border-box;
+    display: flex;
+
+    .event-name {
+        font-weight: 500;
+        font-size: 1.2em;
+    }
+
+    .event-sum {
+        font-size: 0.9em;
+
+        @media (max-width: 768px) {
+            // .last-visit-label{
+            // display: none;
+            // }
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .event-sum {
+        font-size: 0.8em;
+    }
+}
+
+.event-sum-xs {
+    font-size: 0.7em;
+}
+
+.event-panel-description {
+    flex-direction: column;
+    box-sizing: border-box;
+    display: flex;
+    max-width: 100%;
+    place-content: flex-end center;
+    justify-content: center;
+    align-items: flex-end;
+    font-size: 0.9em;
+}
+
+.event-range {
+    place-content: center;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    box-sizing: border-box;
+    display: flex;
+}
+
+.start-time {
+    font-weight: 800;
+}
+
+.end-time {
+    font-weight: 800;
+}
+
+:host::ng-deep {
+    .mat-expansion-panel-body {
+        padding: 0 !important;
+    }
+}

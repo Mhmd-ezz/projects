@@ -1,0 +1,40 @@
+{
+    "compileOnSave": false,
+    "compilerOptions": {
+        "baseUrl": "./src",
+        "outDir": "./dist/out-tsc",
+        "sourceMap": true,
+        "declaration": false,
+        // "importsNotUsedAsValues": "preserve",
+        "downlevelIteration": true,
+        "module": "esnext",
+        "moduleResolution": "node",
+        "importHelpers": true,
+        "allowSyntheticDefaultImports": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "paths": {
+            "@appStore/*": ["app/store/*"],
+            "@fuse": [
+                "@fuse/"
+            ],
+            "apollo-link": ["../node_modules/apollo-link"]
+        },
+        "target": "es2015",
+        "typeRoots": [
+            "node_modules/@types",
+            "src/typings.d.ts"
+        ],
+        "lib": [
+            "es2018",
+            "es2017",
+            "dom",
+            "esnext.asynciterable"
+        ]
+    },
+    "exclude": [
+        "node_modules",
+        "dist",
+        "gql-ts-classes-template"
+        ]
+}

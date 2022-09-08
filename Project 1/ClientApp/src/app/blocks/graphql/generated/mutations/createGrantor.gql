@@ -1,0 +1,6 @@
+mutation createGrantor($grantor: GrantorInput!){
+    createGrantor(grantor: $grantor){
+        id
+        name
+    }
+}

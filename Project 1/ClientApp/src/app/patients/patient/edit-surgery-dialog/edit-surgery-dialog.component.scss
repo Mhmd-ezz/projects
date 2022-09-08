@@ -1,0 +1,125 @@
+// @media (min-width: 1000px) {
+//     .mat-dialog-content {
+//         width: 950px !important;
+//     }
+// }
+
+@media(min-width: 960px) {
+    :host {
+        display: block;
+        width: 900px;
+    }
+}
+
+// @media(max-width: 959px) {
+//     :host {
+//         display: block;
+//         width: calc(75vw - 24px);
+//     }
+// }
+
+.sh-table {
+    mat-form-field {
+        font-size: 14px;
+        padding-right: 10px;
+    }
+}
+
+.mat-dialog-content {
+    padding: 15px 10px;
+}
+
+
+.patient-surgeries {
+    .mat-header-cell {
+        // background-color: #f0f0f0 !important;
+        background-color: #ececec !important;
+    }
+
+    .mat-form-field {
+        padding-top: 5px;
+    }
+
+    td.mat-cell,
+    td.mat-footer-cell,
+    th.mat-header-cell {
+        border-right: 1px solid #ddd;
+        padding-left: 15px;
+        padding-right: 10px;
+    }
+}
+
+/* Flash class and keyframe animation */
+.flashit {
+    -webkit-animation: flash linear 1s 2 forwards;
+    animation: flash linear 1s 2 forwards;
+}
+
+@-webkit-keyframes flash {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.1;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes flash {
+    0% {
+        opacity: 1;
+        background-color: rgba(156, 196, 248, 0);
+    }
+
+    50% {
+        opacity: 0.1;
+        background-color: rgba(156, 196, 248, 0.986);
+    }
+
+    100% {
+        opacity: 1;
+        background-color: rgba(156, 196, 248, 0);
+    }
+}
+
+/* Pulse class and keyframe animation */
+.pulseit {
+    -webkit-animation: pulse linear 0.5s infinite;
+    animation: pulse linear 0.5s infinite;
+}
+
+@-webkit-keyframes pulse {
+    0% {
+        width: 200px;
+    }
+
+    50% {
+        width: 240px;
+    }
+
+    100% {
+        width: 200px;
+    }
+}
+
+@keyframes pulse {
+    0% {
+        width: 200px;
+    }
+
+    50% {
+        width: 240px;
+    }
+
+    100% {
+        width: 200px;
+    }
+}
+
+.alert-white {
+    background-color: rgba(255, 255, 255, 0);
+}

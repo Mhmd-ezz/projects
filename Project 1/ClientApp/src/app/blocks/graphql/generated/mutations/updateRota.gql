@@ -1,0 +1,16 @@
+mutation updateRota($rota: RotaInput!){
+    updateRota(rota: $rota){
+        id
+        name
+        color
+        location{
+            id
+            name
+        }
+        recurrence{
+            startTime
+            endTime
+            rule
+        }
+    }
+}

@@ -1,0 +1,34 @@
+query activityMediaFiles($patientId: String!, $speciality: String, $conditionId: String, $activitType: String, $activityId: String, $filter: String, $page: Int, $size: Int){
+    activityMediaFiles(patientId: $patientId, speciality: $speciality, conditionId: $conditionId, activitType: $activitType, activityId: $activityId, filter: $filter, page: $page, size: $size){
+        id
+        name
+        path
+        type
+        size
+        tenantId
+        patientId
+        patientName
+        speciality
+        conditionId
+        activityType
+        activityId
+        ticketNumber
+        isDeleted
+        modified
+        deletedOn
+        systemTagging
+        tags{
+            text{
+                group
+                value
+                text
+            }
+            media{
+                text
+                tags
+                date
+            }
+            tags
+        }
+    }
+}

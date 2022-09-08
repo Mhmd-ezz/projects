@@ -1,0 +1,40 @@
+<div id="element_within_div" >
+  <h1 mat-dialog-title>Edit Medical History</h1>
+  <div mat-dialog-content class="mat-dialog-content">
+  <!-- fxLayout="row wrap" fxLayoutAlign="start start" -->
+  <ng-template #noMedications>
+    <div class="noMedications">
+      <div><mat-icon class="font-size-52 w-100-p h-100-p blue-200-fg">vaccines</mat-icon></div>
+      <div class="secondary-text font-size-16 mb-20">No medications</div>
+      
+    </div>
+  </ng-template>
+  <div class="flex-end">
+  <button  mat-stroked-button color="accent" class="mt-12" (click)="newMedication()"> 
+    <mat-icon >add</mat-icon>
+    Add Medication
+  </button></div>
+  <mat-tab-group *ngIf="medication?.length; else noMedications">
+    <!--  Active TAB -->
+    <mat-tab label="Active">
+      <div class="p-12" fxLayout="row wrap" fxLayoutAlign="start start" fusePerfectScrollbar>
+        <ng-container *ngFor="let item of medication">
+          <app-medication-card-medical-history *ngIf="item.isActive" [conditionId]="conditionId" [followupId]="followupId"
+            [medications]="item" fxFlex="100%" fxFlex.gt-sm="50%"></app-medication-card-medical-history>
+        </ng-container>
+      </div>
+    </mat-tab>
+    <!-- INActive TAB -->
+    <mat-tab label="InActive">
+      <div fxLayout="row wrap" fxLayoutAlign="start start" fusePerfectScrollbar>
+        <ng-container *ngFor="let item of medication">
+          <app-medication-card-medical-history *ngIf="!item.isActive" [conditionId]="conditionId" [followupId]="followupId"
+            [medications]="item" fxFlex="100%" fxFlex.gt-sm="50%"></app-medication-card-medical-history>
+        </ng-container>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+
+
+</div>
+</div>

@@ -1,0 +1,20 @@
+fragment AllTickets on AllTickets{
+count
+items{
+id
+ticketNumber
+tenantName
+subject
+details
+status
+attachFile
+isReadByAdmin
+isReadByClient
+ticketDate
+messages{
+message
+requestBy
+messageDate
+            }
+        }    
+}

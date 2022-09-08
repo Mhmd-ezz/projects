@@ -1,0 +1,20 @@
+query contact($id: String!){
+    contact(id: $id){
+        id
+        isDuplicate
+        name
+        gender
+        telephone
+        contactNumbers
+        birthDate
+        occupation
+        partner
+        country
+        city
+        identityNumber
+        email
+        createdOn
+        modified
+        contactType
+    }
+}

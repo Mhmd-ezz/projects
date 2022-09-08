@@ -1,0 +1,30 @@
+fragment LightPatient on Patient {
+    id
+    name
+    birthDate
+    telephone
+    city
+    country
+    createdOn
+    modified
+    email
+    isDuplicate
+    gender
+    patientInfo{
+        totalDigitizedData
+        bloodType
+        emergancyContact
+        entryDate
+        fileNumber
+        flags
+        createdOn
+        modified
+        lastSeen
+        maritalStatus
+        referral
+        grantors{
+            id
+            name
+        }
+    }
+}

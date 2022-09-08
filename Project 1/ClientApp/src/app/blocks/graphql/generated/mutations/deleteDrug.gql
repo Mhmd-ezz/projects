@@ -1,0 +1,9 @@
+mutation deleteDrug($id: String!){
+    deleteDrug(id: $id){
+        id
+        atcCode
+        name
+        dosage
+        form
+    }
+}

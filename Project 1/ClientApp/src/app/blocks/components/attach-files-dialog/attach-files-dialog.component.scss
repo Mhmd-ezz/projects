@@ -1,0 +1,11 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    mat-form-field {
+        margin-bottom: 5x;
+    }
+    .attach-content {
+        padding: 20px 40px;
+    }
+}

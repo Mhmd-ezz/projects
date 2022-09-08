@@ -1,0 +1,44 @@
+.table-responsive{
+    border: 2px solid #ddd;
+    overflow-x: auto;
+}
+.surgery-tbl-header{
+    font-weight: 900;
+    font-size: 14px;
+}
+
+.additional-selection {
+    opacity: 0.75;
+    font-size: 0.75em;
+  }
+
+// @ Form Group requirments
+:host{
+    .extra-container{
+        > .mdc-form-box{
+            flex-basis: 270px;
+        }
+    }
+    
+}
+
+
+
+.patient-surgeries {
+    .mat-header-cell {
+        // background-color: #f0f0f0 !important;
+        background-color: #ececec!important;
+    }
+    .mat-form-field {
+        padding-top: 10px;
+    }
+    td.mat-cell,
+    td.mat-footer-cell,
+    th.mat-header-cell {
+        border-right: 1px solid #ddd;
+        padding-left: 15px;
+        padding-right: 10px;
+    }
+}
+
+  

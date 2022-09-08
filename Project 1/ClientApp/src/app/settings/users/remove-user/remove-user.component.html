@@ -1,0 +1,49 @@
+<div class="content">
+    <div class="header-tool accent mb-24">
+        <div class="flex-center">
+            <mat-icon class="mr-8 s-22" matSuffix>lock_open</mat-icon>
+            <span class="h2">Remove User</span>
+        </div>
+        <div class="flex-center">
+            <span class="flex-center" *ngIf="formStatus === 'saved'">
+                <mat-icon class="mr-8 s-22" matSuffix>check_circle</mat-icon>
+                AutoSaved
+            </span>
+            <span class="flex-center" *ngIf="formStatus === 'savedLocally'">
+                <mat-icon class="mr-8 s-22" matSuffix>check_circle</mat-icon>
+                No internet access, Saved locally
+            </span>
+            <span class="flex-center" *ngIf="formStatus === 'pending'">
+                <mat-icon class="mr-8 s-22" matSuffix>keyboard</mat-icon>
+                Pending...
+            </span>
+            <span class="flex-center deep-orange-100-fg" *ngIf="formStatus === 'invalid'">
+                <mat-icon class="mr-8 s-22" matSuffix>error_outline</mat-icon>
+                Missing Required Fields...
+            </span>
+            <span class="flex-center deep-orange-100-fg" *ngIf="formStatus === 'error'">
+                <mat-icon class="mr-8 s-22" matSuffix>error_outline</mat-icon>
+                An Error Occurred ( couldn't save changes ). Please, contact support...
+            </span>
+            <span class="flex-center" *ngIf="formStatus === 'saving'">
+                <div class="mr-8 loader-dual-ring--22"></div>
+                Saving...
+            </span>
+
+        </div>
+       
+    </div>
+
+    <form #form="ngForm" autocomplete="off" fxLayout="column">
+
+        <div class="content p-24">
+            Are you sure you want to remove this <mark> {{ user.firstName + ' ' +  user.lastName }} </mark>
+            ?
+        </div>
+
+        <div>
+            <button mat-flat-button type="button" color="accent" (click)="onSave()" class="mr-12">Remove</button>
+            <button mat-flat-button type="button" (click)="onBack()">Cancel</button>
+        </div>
+    </form>
+</div>

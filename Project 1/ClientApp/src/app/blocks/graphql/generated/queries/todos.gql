@@ -1,0 +1,13 @@
+query todos($filter: String, $page: Int, $size: Int, $patientId: String){
+    todos(filter: $filter, page: $page, size: $size, patientId: $patientId){
+        id
+        title
+        notes
+        startDate
+        dueDate
+        isCompleted
+        isStarred
+        isImportant
+        patientId
+    }
+}

@@ -1,0 +1,30 @@
+﻿@using Auth.Resources
+@inject LocService SharedLocalizer
+@{
+    ViewData["Title"] = @SharedLocalizer.GetLocalizedHtmlString("CONFIRM_EMAIL");
+}
+@*<h2>@ViewData["Title"].</h2>
+<div>
+    <p>
+        @SharedLocalizer.GetLocalizedHtmlString("CONFIRM_EMAIL_TEXT")
+    </p>
+</div>*@
+
+<div class="content-wrapper">
+    <div class="content custom-scrollbar">
+        <div id="forgot-password" class="p-8">
+            <div class="form-wrapper md-elevation-8 p-8">
+                <div class="logo bg-secondary">
+                    <span>M</span>
+                </div>
+                <div class="title mt-4 mb-8">@ViewData["Title"]</div>
+                <div class="description pt-2">
+                    @SharedLocalizer.GetLocalizedHtmlString("CONFIRM_EMAIL_TEXT")
+                </div>
+                @*<a asp-action="Login" class="submit-button btn btn-block btn-secondary mt-8 mb-4 mx-auto" aria-label="LOGIN">
+                    Ok
+                </a>*@
+            </div>
+        </div>
+    </div>
+</div>

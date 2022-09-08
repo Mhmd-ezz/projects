@@ -1,0 +1,67 @@
+<h1 style="font-weight: 700;color: #88898a;text-align: center;" fxLayout="row" fxLayoutAlign="center center">
+    <mat-icon class="s-80 mr-12">account_balance</mat-icon>
+    Under Construction
+</h1>
+
+<div class="content" fxHide>
+    <mat-tab-group>
+        <mat-tab label="Information">
+
+            <!-- WIDGET GROUP -->
+            <div class="widget-group p-12" fxLayout="row wrap" fxFlex="100" >
+
+                <!-- WIDGET 6 -->
+                <fuse-widget *fuseIfOnDom
+                    [@animate]="{value:'*',params:{y:'10%'}}" class="widget" fxLayout="column" fxFlex="100"
+                    fxFlex.gt-sm="50">
+
+                    <!-- Front -->
+                    <div class="fuse-widget-front mat-elevation-z2">
+
+                        <div class="px-16 py-8 border-bottom" fxLayout="row" fxLayoutAlign="space-between center">
+                            <div class="h3">Title</div>
+                            <mat-form-field>
+                                <mat-select class="simplified" [(ngModel)]="widget6" aria-label="Change range">
+                                    <mat-option *ngFor="let range of [1,2,3] | keys" [value]="range">
+                                        {{range}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="h-400">
+                            Details here
+                        </div>
+
+                        <div class="py-8 mh-16 border-top" fxLayout="row wrap" fxLayoutAlign="start center">
+
+                            <div class="py-8 border-right" fxLayout="column" fxLayoutAlign="center center" fxFlex="100"
+                                fxFlex.gt-sm="50">
+                                <span class="mat-display-1 mb-0">
+                                    111
+                                </span>
+                                <span class="h4">title</span>
+                            </div>
+
+                            <div class="py-8" fxLayout="column" fxLayoutAlign="center center" fxFlex="100" fxFlex.gt-sm="50">
+                                <span class="mat-display-1 mb-0">
+                                    222
+
+                                </span>
+                                <span class="h4">title</span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- / Front -->
+
+                </fuse-widget>
+                <!-- / WIDGET 6 -->
+
+            </div>
+            <!-- /WIDGET GROUP -->
+
+        </mat-tab>
+        <mat-tab label="Payment History"> Content 2 </mat-tab>
+    </mat-tab-group>
+</div>

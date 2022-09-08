@@ -1,0 +1,73 @@
+<h1 mat-dialog-title>Attach files</h1>
+
+<div mat-dialog-content class="attach-content">
+
+  <h4>{{data.files?.length}} Selected files</h4>
+
+  <div class="flex-column">
+    <mat-form-field class="full-width">
+      <mat-chip-list #chipList>
+        <mat-chip *ngFor="let tag of tags" [selectable]="selectable"
+          [removable]="removable" (removed)="remove(tag)">
+          {{tag}}
+          <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+        </mat-chip>
+        <input placeholder="Tags"
+          [matChipInputFor]="chipList"
+          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+          [matChipInputAddOnBlur]="addOnBlur"
+          (matChipInputTokenEnd)="add($event)">
+      </mat-chip-list>
+    </mat-form-field>
+
+    <mdc-search-patient (onSelectedChanged)="onPatientChanged($event)"></mdc-search-patient>
+
+    <mat-form-field *ngIf="patient">
+      <mat-select [(ngModel)]="selectedSpeciality" placeholder="Select Speciality"
+        (selectionChange)="onSpecialityChanged($event)">
+        <mat-option>-- None --</mat-option>
+        <mat-option value="general">General</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="selectedSpeciality">
+      <mat-select [(ngModel)]="condition" placeholder="Select Condition" (selectionChange)="onConditionChanged($event)">
+        <mat-option>-- None --</mat-option>
+        <mat-option *ngFor="let condition of conditionsList" [value]="condition">
+          {{condition.name}} {{condition.diagnosis?.text[0]?.text ? ' / ' + condition.diagnosis?.text[0]?.text : ''}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- <mat-form-field *ngIf="condition">
+      <mat-select placeholder="Select Activity">
+        <mat-option value="f1">Followup 1</mat-option>
+        <mat-option value="op 1">Operation 1</mat-option>
+      </mat-select>
+    </mat-form-field> -->
+    <mat-form-field *ngIf="condition">
+      <mat-select placeholder="Select Activity">
+        <mat-option>-- None --</mat-option>
+        <mat-optgroup *ngFor="let group of activitiesList" [label]="group.name">
+          <mat-option *ngFor="let activity of group.list" [value]="activity">
+            {{activity.name}}
+          </mat-option>
+        </mat-optgroup>
+      </mat-select>
+    </mat-form-field>
+
+  </div>
+
+
+</div>
+
+<div mat-dialog-actions>
+  <div class="flex-spacebetween full-width pl-8 pr-8">
+    <div class="flex-row">
+      <button mat-button [mat-dialog-close]="true">Attach</button>
+    </div>
+
+    <button mat-button [mat-dialog-close]="true">Close</button>
+  </div>
+
+</div>

@@ -1,0 +1,96 @@
+<div *ngIf="recurrence.length == 0" class="font-weight-500 mt-16 red-400-fg">No work time is set.</div>
+<div class="card mat-elevation-z1" *ngFor="let item of recurrence; let i = index">
+
+    <!-- CARD DETAILS -->
+    <div class="list-card-details">
+
+        <!-- CARD NAME -->
+        <div class="list-card-name">
+            <app-recurrence-selector [data]="item.rule" (change)="onRruleChange($event,i)"></app-recurrence-selector>
+        </div>
+
+        <!-- / CARD NAME -->
+
+    </div>
+    <!-- / CARD DETAILS -->
+
+    <!-- CARD FOOTER -->
+    <div class="list-card-footer" fxLayout="row" fxLayoutAlign="space-between center">
+
+        <div fxLayout="row" fxLayoutAlign="start center">
+            <span
+                class="list-card-footer-item time-range"
+                fxLayout="row" fxLayoutAlign="start center">
+                <span>
+                    <ejs-inplaceeditor #timePickerEle mode="Popup" (actionSuccess)="onStartTimeChange($event,i)" name="startTime" [model]="timePickerModel" type="Time" [value]='item.startTime'></ejs-inplaceeditor>
+                </span>
+                <span>
+                    <mat-icon class="mr-16">arrow_right_alt</mat-icon>
+                </span>
+                <span>
+                    <ejs-inplaceeditor #timePickerEle mode="Popup" (actionSuccess)="onEndTimeChange($event,i)" name="endTime" [model]="timePickerModel" type="Time" [value]='item.endTime'></ejs-inplaceeditor>
+                </span>
+            </span>
+
+        </div>
+
+        <div fxLayout="row" fxLayoutAlign="end center">
+
+            <span
+                class="list-card-footer-item"
+                fxLayout="row" fxLayoutAlign="start center"
+                matRipple
+                [matRippleUnbounded]="true"
+                [matRippleCentered]="true"
+                [matRippleRadius]="20">
+                <mat-icon class="s-18" (click)="deleteRule(i)">delete</mat-icon>
+            </span>
+
+        </div>
+    </div>
+</div>
+<!-- CARD FOOTER -->
+
+<!-- 
+<div class="list-card-footer" fxLayout="row" fxLayoutAlign="space-between center">
+
+    <div fxLayout="row" fxLayoutAlign="start center">
+        <span
+            class="list-card-footer-item time-range"
+            fxLayout="row" fxLayoutAlign="start center">
+            <span>08:00 AM</span>
+            <span> - 12:00 AM</span>
+        </span>
+
+    </div>
+
+    <div fxLayout="row" fxLayoutAlign="end center">
+
+        <span
+            class="list-card-footer-item"
+            fxLayout="row" fxLayoutAlign="start center">
+            <mat-icon class="s-18">edit</mat-icon>
+        </span>
+
+    </div>
+</div>
+
+<div fxLayout="row wrap" fxLayoutGap="12px" fxLayoutAlign="start center">
+    <div class="simple-time">
+        <ejs-timepicker
+            name="startTime"
+            [(ngModel)]="recurrence[0].startTime"
+            [ngModelOptions]="{updateOn: 'blur'}"
+            required>
+        </ejs-timepicker>
+    </div>
+    <span>to</span>
+    <div class="simple-time">
+        <ejs-timepicker
+            name="endTime"
+            [(ngModel)]="recurrence[0].endTime"
+            [ngModelOptions]="{updateOn: 'blur'}"
+            required></ejs-timepicker>
+    </div>
+
+</div> -->

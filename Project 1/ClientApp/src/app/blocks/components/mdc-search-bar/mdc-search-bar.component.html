@@ -1,0 +1,88 @@
+<div class="fuse-search-bar" [ngClass]="{'expanded':!collapsed}">
+
+    <div class="fuse-search-bar-content">
+
+        <label for="fuse-search-bar-input">
+            <button mat-icon-button class="fuse-search-bar-expander" aria-label="Expand Search Bar" (click)="expand()"
+                [hidden]="!collapsed">
+                <mat-icon class="s-24 secondary-text">search</mat-icon>
+            </button>
+        </label>
+
+        <!-- <input id="fuse-search-bar-input" class="ml-24" type="text" placeholder="Search" (input)="search($event)"
+               fxFlex> -->
+        <mat-form-field class="example-full-width" id="fuse-search-bar-input" [floatLabel]="'never'">
+            <span matPrefix>
+                <mat-icon matPrefix class="s-20 mr-8 secondary-text" style="vertical-align: bottom;">search</mat-icon>
+            </span>
+            <input type="text" placeholder="Search For Patient" aria-label="Number"
+                [formControl]="searchControl" matInput id="fuse-search-bar-input" [matAutocomplete]="auto" #searchInput
+                (keydown.esc)="collapse()" (input)="search($event.target.value)">
+
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayLookupFn">
+                <!-- LOADING -->
+                <mat-option *ngIf="loading$ | async" style="height: 25px; background: #e1e3ea;" disabled="true">
+                    <div style="display: flex; align-items: center;">
+                        <ng-container *ngIf="errorSubject.value == false">
+                            <span style="height:20px;font-size:12px;" class="flex-center mr-8"> Loading...</span>
+                            <mat-spinner
+                                [strokeWidth]="2"
+                                [diameter]="16">
+                            </mat-spinner>
+                        </ng-container>
+
+                        <ng-container *ngIf="errorSubject.value == true">
+                            <span style="height:20px;font-size:12px;" class="flex-center mr-8">Server unreachable</span>
+                        </ng-container>
+                    </div>
+                </mat-option>
+                <!-- / LOADING -->
+
+                <!-- NO RECORDS FOUND MESSAGE -->
+                <mat-option *ngIf="(loading$ | async) == false && patients?.length == 0" style="height: 25px; background: #e1e3ea;" disabled="true">
+                    <div style="display: flex; align-items: center;">
+                        <ng-container>
+                            <span style="height:20px;font-size:12px;" class="flex-center mr-8">No patients found.</span>
+                        </ng-container>
+                    </div>
+                </mat-option>
+                <!-- NO RECORDS FOUND MESSAGE -->
+
+                <mat-option *ngFor="let option of patients"
+                    [value]="option" (onSelectionChange)="searchInput.value !=undefined && MatOptionSelectionChange($event)">
+                    <div class="flex-row">
+
+                        <div class="text-capitalize" style="min-width: 180px;" [innerHTML]="option.highlights?.name ?
+                            option.highlights.name : option.name"></div>
+                        <!-- <div class="text-capitalize" style="min-width: 180px;">
+                            {{ option.name}}
+                        </div> -->
+                        <div class="ml-12" style="min-width: 110px;" *ngIf="option.highlights?.telephone || option.telephone">
+                            <mat-icon class="s-16 mr-4 accent-500-fg">local_phone</mat-icon>
+                            <span class="secondary-text" [innerHTML]="option.highlights?.telephone ?
+                                option.highlights.telephone :
+                                option.telephone">
+                            </span>
+                        </div>
+
+                        <div class="ml-12" style="min-width: 110px;" *ngIf="option.highlights?.birthDate || option.birthDate">
+                            <mat-icon class="s-16 mr-4 accent-500-fg">cake</mat-icon>
+                            <span class="secondary-text">
+                                {{ option.birthDate |  date:'shortDate'}}
+                            </span>
+                        </div>
+
+                    </div>
+
+                </mat-option>
+            </mat-autocomplete>
+
+        </mat-form-field>
+
+        <button mat-icon-button class="fuse-search-bar-collapser" (click)="collapse()" aria-label="Collapse Search Bar">
+            <mat-icon class="s-24 secondary-text">close</mat-icon>
+        </button>
+
+    </div>
+
+</div>

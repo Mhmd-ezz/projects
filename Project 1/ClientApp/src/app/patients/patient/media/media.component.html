@@ -1,0 +1,33 @@
+<ng-container #mediaFlow="flow"
+    [flowConfig]="{target: mediaEndpoint+ '/files/uploads' ,
+    allowDuplicateUploads :true,
+    chunkSize: 1000000,
+    headers: {
+    'Authorization' : accessToken
+    }}"></ng-container>
+
+<div class="content p-12">
+    <div fxLayout="column">
+
+        <div class="header-tool accent mb-24">
+            <div class="flex-center">
+                <fa-icon icon="photo-video" class="fuse-white-fg mr-20" size="lg"></fa-icon>
+                <span class="h2">
+                    Patient media pool
+                </span>
+            </div>
+        </div>
+
+        <div>
+            <media-file-list
+                [flow]="mediaFlow"
+                [files]="mediaFiles"
+                [autoTagName]="''"
+                [headerName]="'Media pool'"
+                (onDeleteSelected)="onDeleteSelectedFiles($event)"
+                (onAttachedFiles)="onAttachedFiles($event)"></media-file-list>
+
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,37 @@
+<h1 mat-dialog-title class="mb-0">
+    <span>File Viewer</span>
+</h1>
+<div mat-dialog-content class="dialog-content">
+
+    <div class="main-container">
+
+        <div class="header-toolbar">
+            <div class="btn" (click)="closeDialog()">
+                <mat-icon class="material-icons-outlined mr-4 s-20">undo</mat-icon>
+                <span>Close</span>
+            </div>
+            <div class="btn" (click)="reloadViewer()">
+                <mat-icon class="material-icons-outlined mr-4 s-20">refresh</mat-icon>
+                <span>Refresh</span>
+            </div>
+        </div>
+
+        <div class="spinner-box" *ngIf="!viewerLoaded" >
+            <mat-spinner
+                [color]="'accent'"
+                [strokeWidth]="2"
+                [diameter]="40"></mat-spinner>
+        </div>
+
+        <div class="iframe-container" *ngIf="viewerEnabled">
+            <iframe
+                [src]="src"
+                frameBorder="0"
+                (load)="onload()"
+                (error)="onerror()"
+                scrolling="auto"
+                height="100%"
+                width="100%"></iframe>
+        </div>
+    </div>
+</div>

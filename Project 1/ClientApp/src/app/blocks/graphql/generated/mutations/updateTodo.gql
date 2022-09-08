@@ -1,0 +1,13 @@
+mutation updateTodo($todo: TodoInput!){
+    updateTodo(todo: $todo){
+        id
+        title
+        notes
+        startDate
+        dueDate
+        isCompleted
+        isStarred
+        isImportant
+        patientId
+    }
+}

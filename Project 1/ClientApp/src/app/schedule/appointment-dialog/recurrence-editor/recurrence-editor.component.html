@@ -1,0 +1,10 @@
+<div fxLayout="row wrap" fxLayoutAlign="start end" fxFlex="1 0 auto">
+    
+    <mat-icon class="mr-16 time-icon grey-600-fg">repeat</mat-icon>
+
+    <div class="recurrence-container" fxLayout="row">
+        <div class="recurrence-label">Repeat: </div>
+        <div class="recurrence-value capitalize-letter" [rruleToText]="value" (click)="onEditClick()"></div>
+    </div>
+
+</div>

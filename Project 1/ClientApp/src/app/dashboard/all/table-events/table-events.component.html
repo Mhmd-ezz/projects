@@ -1,0 +1,123 @@
+<div class="content mdc-table-container" style="height: 100%;">
+
+    <!-- <mat-form-field>
+
+            <input matInput placeholder="Search event" #input [formControl]="search">
+
+        </mat-form-field> -->
+    <div class="mat-elevation-z8 responsive-table" style="position:relative;">
+
+        <mat-table class="text-capitalize" [dataSource]="dataSource"
+            matSort matSortDisableClear>
+
+            <!-- INDEX -->
+            <ng-container matColumnDef="index">
+
+                <mat-header-cell *matHeaderCellDef>#</mat-header-cell>
+                <mat-cell *matCellDef="let event; let i= index">
+                    {{ paginator?.pageIndex > 0 ? (i + 1) + paginator?.pageIndex * paginator?.pageSize
+                    : i + 1 }}
+                </mat-cell>
+
+            </ng-container>
+            <!-- / INDEX -->
+
+            <!-- TIME -->
+            <ng-container matColumnDef="dateTime">
+
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Time</mat-header-cell>
+                <mat-cell class="name-cell" *matCellDef="let event">{{event.dateTime | date: "hh:mm a"}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="name">
+
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+                <mat-cell class="name-cell" *matCellDef="let event">{{event.name}}</mat-cell>
+
+            </ng-container>
+            <!-- / TIME -->
+
+
+            <!-- ARRIVED -->
+            <ng-container matColumnDef="arrived">
+
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Arrived</mat-header-cell>
+                <mat-cell class="name-cell" *matCellDef="let event">
+                    <ng-container
+                        *ngIf="event.arrived == 'delayed' || event.arrived == 'canceled' ; else
+                        elseTemplate">
+                        {{event.arrived }}
+                    </ng-container>
+                    <ng-template #elseTemplate>
+                        {{event.arrived | date: "hh:mm a"}}
+                    </ng-template>
+                </mat-cell>
+
+            </ng-container>
+            <!-- / ARRIVED -->
+
+
+            <!-- STATUS -->
+            <ng-container matColumnDef="status">
+
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
+                <mat-cell class="name-cell" *matCellDef="let event"> {{event.status }} </mat-cell>
+
+            </ng-container>
+            <!-- / STATUS -->
+
+            <!-- ACTIVITY -->
+            <ng-container matColumnDef="activity">
+
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Activity</mat-header-cell>
+                <mat-cell class="name-cell" *matCellDef="let event"> {{event.activity }} </mat-cell>
+
+            </ng-container>
+            <!-- / ACTIVITY -->
+
+            <!-- REASON -->
+            <ng-container matColumnDef="reason">
+
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Reason</mat-header-cell>
+                <mat-cell class="name-cell" *matCellDef="let event"> {{event.reason }} </mat-cell>
+
+            </ng-container>
+            <!-- / REASON -->
+
+
+            <!-- NEW -->
+            <ng-container matColumnDef="new">
+
+                <mat-header-cell *matHeaderCellDef mat-sort-header>New Patient</mat-header-cell>
+                <mat-cell class="name-cell" *matCellDef="let event"> {{event.new }} </mat-cell>
+
+            </ng-container>
+            <!-- / NEW -->
+
+            <!-- REFERRAL -->
+            <ng-container matColumnDef="referral">
+
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Referral</mat-header-cell>
+                <mat-cell class="name-cell" *matCellDef="let event"> {{event.referral }} </mat-cell>
+
+            </ng-container>
+            <!-- / REFERRAL -->
+
+            <!-- 
+                <ng-container matColumnDef="type">
+
+                    <mat-header-cell *matHeaderCellDef>Type</mat-header-cell>
+                    <mat-cell class="" *matCellDef="let location">{{location.type}}</mat-cell>
+
+                </ng-container> -->
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+
+        </mat-table>
+
+
+        <mat-paginator [length]="dataSource.data.length" [pageSize]="pageSizeOptions[0]"
+            [pageSizeOptions]="pageSizeOptions"></mat-paginator>
+
+    </div>
+</div>

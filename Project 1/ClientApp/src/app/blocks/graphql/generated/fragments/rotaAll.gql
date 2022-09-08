@@ -1,0 +1,14 @@
+fragment RotaAll on RotaAll{
+id
+name
+color
+location{
+id
+name
+        }
+recurrence{
+startTime
+endTime
+rule
+        }    
+}

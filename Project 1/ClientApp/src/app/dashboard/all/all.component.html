@@ -1,0 +1,65 @@
+<!-- ACCORDION -->
+<mat-accordion>
+
+    <ng-container *ngFor="let location of locations">
+
+        <mat-expansion-panel>
+            <mat-expansion-panel-header [collapsedHeight]="'80px'" [expandedHeight]="'100px'">
+                <mat-panel-title class="event-panel-title comma-delimited">
+                    <div class="event-name cyan-700-fg"> {{location.location}} </div>
+                    <div class="event-sum secondary-text">
+                        <span>
+                            {{ location.eventsCount }} Patients :
+                        </span>
+                        <span *ngIf="location.operationsCount" class="comma">
+                            {{ location.operationsCount }} Operation
+                        </span>
+                        <span *ngIf="location.visitsCount" class="comma">
+                            {{ location.visitsCount }} Visit
+                        </span>
+                        <span *ngIf="location.floorsCount" class="comma">
+                            {{ location.floorsCount }} Floor
+                        </span>
+                    </div>
+                    <div class="event-sum-xs" fxHide fxShow.xs fxLayout="row" fxLayoutAlign="start center">
+                        <div class="event-range secondary-text">
+                            <span class="start-time cyan-700-fg">{{location.startDate | date: 'h:mm a'}}</span>
+                            <mat-icon class="">arrow_right_alt</mat-icon>
+                            <span class="end-time cyan-700-fg">{{location.endDate | date: 'h:mm a'}}</span>
+                        </div>
+                        <div class="mr-8 ml-8">|</div>
+                        <div>
+                            <span class="text-capitalize">
+                                {{location.address}}
+                            </span>
+                        </div>
+                    </div>
+                </mat-panel-title>
+                <mat-panel-description fxLayout="row" fxLayoutAlign="end center">
+                    <div class="event-panel-description" fxHide.xs>
+                        <div class="event-range">
+                            <span class="start-time cyan-700-fg">{{location.startDate | date: 'h:mm a'}}</span>
+                            <mat-icon class="">arrow_right_alt</mat-icon>
+                            <span class="end-time cyan-700-fg">{{location.endDate | date: 'h:mm a'}}</span>
+                        </div>
+                        <div class="event-status text-right">
+                            <span class="text-capitalize">
+                                {{location.address}}
+                            </span>
+                        </div>
+                    </div>
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <!-- BODY -->
+            <div>
+                <app-table-events [events]="location.events"></app-table-events>
+            </div>
+            <!-- / BODY -->
+
+        </mat-expansion-panel>
+
+    </ng-container>
+
+</mat-accordion>
+<!-- / ACCORDION -->

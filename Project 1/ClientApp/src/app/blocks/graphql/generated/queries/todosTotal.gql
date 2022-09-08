@@ -1,0 +1,3 @@
+query todosTotal($filter: String, $page: Int, $size: Int, $patientId: String){
+    todosTotal(filter: $filter, page: $page, size: $size, patientId: $patientId)
+}

@@ -1,0 +1,3 @@
+mutation deleteRota($id: String!){
+    deleteRota(id: $id)
+}

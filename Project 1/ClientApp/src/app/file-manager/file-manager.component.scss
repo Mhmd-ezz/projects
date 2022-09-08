@@ -1,0 +1,287 @@
+@import "src/@fuse/scss/fuse";
+
+:host ::ng-deep {
+    .pool-box {
+        .drag-scroll-content {
+            height: 130px !important;
+        }
+    }
+}
+
+.right-side {
+    margin-top: -9px;
+}
+
+.search-wrapper {
+    border-radius: 28px;
+    overflow: hidden;
+    @include mat-elevation(1);
+
+    .sidebar-toggle {
+        margin: 0 0 0 6px;
+        width: 56px;
+        height: 56px;
+        border-radius: 0;
+        border-right: 1px solid;
+    }
+
+    .search {
+        width: 100%;
+        height: 56px;
+        line-height: 56px;
+        padding: 0 18px;
+
+        input {
+            height: 56px;
+            min-height: 56px;
+            max-height: 56px;
+            padding: 0 16px;
+            border: none;
+            outline: none;
+        }
+    }
+}
+
+$headerHeight: 110px;
+
+#file-manager {
+    .file-list-container {
+        // height: calc(100vh - 320px);
+        min-height: 500px;
+        overflow: auto;
+        height: 100%;
+    }
+
+    .details-sidebar-container {
+        height: 100%;
+    }
+
+    @media (max-width:960px) {
+        .split-sidebar-area {
+            overflow: unset;
+        }
+
+        .details-sidebar-container {
+            max-width: 80%;
+            width: 200px !important;
+        }
+
+        .sidebar {
+            width: 500px !important;
+            min-width: 500px !important;
+            max-width: 500px !important;
+        }
+    }
+
+    @media (max-width:768px) {
+        .sidebar {
+            width: 400px !important;
+            min-width: 400px !important;
+            max-width: 400px !important;
+        }
+    }
+
+    @media (max-width:500px) {
+        .sidebar {
+            width: 300px !important;
+            min-width: 300px !important;
+            max-width: 300px !important;
+        }
+    }
+
+    .sidebar {
+        // width: 320px !important;
+        // min-width: 320px !important;
+        // max-width: 320px !important; // &.main-sidebar {}
+
+        &.details-sidebar {
+            @include media-breakpoint('gt-md') {
+                z-index: 0;
+            }
+        }
+    }
+
+    .center {
+        overflow: hidden;
+
+        .header {
+            position: relative;
+            height: 160px;
+            min-height: $headerHeight;
+            max-height: $headerHeight;
+
+            @include media-breakpoint('sm') {
+                height: 120px;
+                min-height: 120px;
+                max-height: 120px;
+            }
+
+            .add-file-button {
+                position: absolute;
+                bottom: -28px;
+                left: 16px;
+                z-index: 999;
+            }
+        }
+
+        .content {
+            flex: 1 1 auto;
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+            display: flex;
+            flex-direction: column;
+            height: calc(100% - #{$headerHeight});
+
+            .footer {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                // margin-top: auto;
+                // min-height: 180px;
+                min-height: 150px;
+
+                // .pool-header {
+                //     display: flex;
+                //     flex-direction: column;
+                //     .title {
+                //         display: flex;
+                //         justify-content: space-between;
+                //         align-items: center;
+                //         min-height: 30px;
+                //         width: 100px;
+                //         padding-left: 12px;
+                //         background-color: #fff;
+                //         border: 1px solid #ddd;
+                //         border-bottom: none;
+                //         border-radius: 0px 6px 0px 0px;
+                //         cursor: pointer;
+                //     }
+                //     .action-btns {
+                //         display: flex;
+                //         align-items: end;
+                //         min-height: 30px;
+                //         width: 100%;
+                //         background-color: #fff;
+                //         padding-left: 10px;
+                //         cursor: pointer;
+                //         .flex-center {
+                //             margin-right: 10px;
+                //             color: rgb(64, 141, 228);
+                //             font-size: 12px;
+                //             text-decoration: underline;
+                //         }
+                //     }
+                // }
+                // .pool-files-container {
+                //     display: flex;
+                //     overflow: hidden;
+                //     height: 105px;
+                //     width: 100%;
+                //     background-color: #fff;
+                //     border-top: 1px solid #d5d4d4;
+                //     padding: 5px 0px;
+                //     &.select-mode {
+                //         // height: 120px;
+                //         height: 150px;
+                //         drag-scroll {
+                //             height: 115px;
+                //         }
+                //         .item-box {
+                //             display: flex;
+                //             flex-direction: column;
+                //             align-items: center;
+                //         }
+                //     }
+                //     .pool-box {
+                //         display: flex;
+                //         align-items: center;
+                //         width: 100%;
+                //         .item-box {
+                //             margin: 0 5px;
+                //             width: 80px;
+                //             .file-name {
+                //                 font-size: 11px;
+                //                 width: 75px;
+                //                 text-align: center;
+                //             }
+                //         }
+                //         .pdf-logo {
+                //             width: 60px;
+                //             height: 63px;
+                //             display: inline-block;
+                //             box-shadow: none;
+                //         }
+                //         .holder {
+                //             display: inline-block;
+                //         }
+                //     }
+                //     drag-scroll {
+                //         // height: 80px;
+                //         height: 105px;
+                //         width: 100%;
+                //     }
+                //     img {
+                //         height: 80px;
+                //         width: 80px;
+                //         margin: 0px 3px;
+                //         box-shadow: 1px 1px 3px #999;
+                //         object-fit: cover; // todo:Temporarly added: get rezied images via url from server 
+                //     }
+                // }
+                .overall-summary {
+                    display: flex;
+                    align-items: center;
+                    flex-wrap: wrap;
+                    height: 45px;
+                    width: 100%;
+                    padding: 0 10px; // margin-top: auto;
+                    background-color: #ffffff;
+                    border-top: 1px solid #d5d4d4;
+
+                    .summary-box {
+                        display: flex;
+                        padding: 3px 30px 3px 10px;
+                        background-color: #fff;
+                        border: 1px solid #d3d3d3;
+                        margin-right: 20px;
+                        min-width: 100px;
+
+                        .summary-count {
+                            padding: 1px 6px;
+                            border-radius: 3px;
+                            margin-right: 5px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .scroll-btn-disabled {
+        cursor: default;
+        opacity: 0.5;
+    }
+
+    .type-icon {
+        &.folder {
+            &:before {
+                content: 'folder';
+                color: #FFB300;
+            }
+        }
+
+        &.document {
+            &:before {
+                content: 'insert_drive_file';
+                color: #1565C0;
+            }
+        }
+
+        &.spreadsheet {
+            &:before {
+                content: 'insert_chart';
+                color: #4CAF50;
+            }
+        }
+    }
+}

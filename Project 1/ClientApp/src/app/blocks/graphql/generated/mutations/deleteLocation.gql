@@ -1,0 +1,10 @@
+mutation deleteLocation($id: String!){
+    deleteLocation(id: $id){
+        id
+        name
+        contact
+        address
+        type
+        subLocations
+    }
+}

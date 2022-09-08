@@ -1,0 +1,23 @@
+quick-panel {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    // width: 280px;
+    // min-width: 280px;
+    // max-width: 280px;
+    z-index: 99;
+
+    .mat-slide-toggle-content {
+        flex: 1;
+    }
+
+    .header {
+        padding: 15px 23px;
+        font-size: 16px;
+        font-family: "Roboto";
+    }
+
+    .quick-panel-container {
+        overflow: hidden;
+    }
+}

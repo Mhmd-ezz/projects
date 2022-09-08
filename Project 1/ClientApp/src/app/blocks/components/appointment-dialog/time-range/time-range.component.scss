@@ -1,0 +1,27 @@
+  .time-range-container {
+
+      .simple-date-container {
+          .simple-date {
+              flex: 1;
+          }
+
+          .simple-time {
+              max-width: 98px;
+              width: 100%;
+
+
+          }
+
+          .all-day {
+              font-size: 14px;
+          }
+      }
+
+      .e-input {
+          padding-left: 10px !important;
+      }
+
+      .time-icon {
+          align-self: flex-start;
+      }
+  }

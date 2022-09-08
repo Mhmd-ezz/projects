@@ -1,0 +1,11 @@
+fragment Todos on Todos{
+id
+title
+notes
+startDate
+dueDate
+isCompleted
+isStarred
+isImportant
+patientId    
+}

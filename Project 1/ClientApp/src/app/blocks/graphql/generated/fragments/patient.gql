@@ -1,0 +1,1248 @@
+fragment Patient on Patient{
+id
+name
+gender
+telephone
+contactNumbers
+birthDate
+occupation
+partner
+country
+city
+identityNumber
+email
+createdOn
+modified
+isDuplicate
+patientInfo{
+bloodType
+maritalStatus
+emergancyContact
+entryDate
+fileNumber
+referral
+lastSeen
+totalDigitizedData
+flags
+grantors{
+id
+name
+            }
+tags{
+id
+name
+group
+            }
+createdOn
+modified
+specialities{
+general{
+conditions{
+id
+name
+type
+status
+subLocation
+opened
+closed
+location{
+id
+name
+                        }
+cheifComplaint{
+text{
+group
+value
+text
+                            }
+media{
+text
+tags
+date
+                            }
+tags
+                        }
+presentHistory{
+text{
+group
+value
+text
+                            }
+media{
+text
+tags
+date
+                            }
+tags
+                        }
+diagnosis{
+text{
+group
+value
+text
+                            }
+media{
+text
+tags
+date
+                            }
+tags
+                        }
+differentialDiagnosis{
+text{
+group
+value
+text
+                            }
+media{
+text
+tags
+date
+                            }
+tags
+                        }
+consultation{
+text{
+group
+value
+text
+                            }
+media{
+text
+tags
+date
+                            }
+tags
+                        }
+otherTreatments{
+text{
+group
+value
+text
+                            }
+media{
+text
+tags
+date
+                            }
+tags
+                        }
+physicalExam{
+text{
+group
+value
+text
+                            }
+media{
+text
+tags
+date
+                            }
+tags
+                        }
+laboratory{
+text{
+group
+value
+text
+                            }
+media{
+text
+tags
+date
+                            }
+tags
+                        }
+radio{
+text{
+group
+value
+text
+                            }
+media{
+text
+tags
+date
+                            }
+tags
+                        }
+note{
+text{
+group
+value
+text
+                            }
+media{
+text
+tags
+date
+                            }
+tags
+                        }
+isDuplicate
+isHidden
+medications{
+frequency
+note
+isActive
+usageType
+noSubstitutes
+startDate
+endDate
+describedBy
+drug{
+id
+name
+dosage
+                            }
+                        }
+activities{
+followups{
+id
+name
+type
+status
+subLocation
+isDuplicate
+opened
+closed
+location{
+id
+name
+                                }
+subjective{
+text{
+group
+value
+text
+                                    }
+media{
+text
+tags
+date
+                                    }
+tags
+                                }
+diagnosis{
+text{
+group
+value
+text
+                                    }
+media{
+text
+tags
+date
+                                    }
+tags
+                                }
+medication{
+text{
+group
+value
+text
+                                    }
+media{
+text
+tags
+date
+                                    }
+tags
+                                }
+otherTreatments{
+text{
+group
+value
+text
+                                    }
+media{
+text
+tags
+date
+                                    }
+tags
+                                }
+assessment{
+text{
+group
+value
+text
+                                    }
+media{
+text
+tags
+date
+                                    }
+tags
+                                }
+consultation{
+text{
+group
+value
+text
+                                    }
+media{
+text
+tags
+date
+                                    }
+tags
+                                }
+physicalExam{
+text{
+group
+value
+text
+                                    }
+media{
+text
+tags
+date
+                                    }
+tags
+                                }
+laboratory{
+text{
+group
+value
+text
+                                    }
+media{
+text
+tags
+date
+                                    }
+tags
+                                }
+note{
+text{
+group
+value
+text
+                                    }
+media{
+text
+tags
+date
+                                    }
+tags
+                                }
+radio{
+text{
+group
+value
+text
+                                    }
+media{
+text
+tags
+date
+                                    }
+tags
+                                }
+isHidden
+medications{
+frequency
+note
+isActive
+usageType
+noSubstitutes
+startDate
+endDate
+describedBy
+drug{
+id
+name
+dosage
+                                    }
+                                }
+                            }
+operations{
+id
+name
+type
+status
+subLocation
+isDuplicate
+opened
+closed
+location{
+id
+name
+                                }
+department
+anesthesia{
+text{
+group
+value
+text
+                                    }
+media{
+text
+tags
+date
+                                    }
+tags
+                                }
+code
+operationType{
+text{
+group
+value
+text
+                                    }
+media{
+text
+tags
+date
+                                    }
+tags
+                                }
+operationPerformed{
+text{
+group
+value
+text
+                                    }
+media{
+text
+tags
+date
+                                    }
+tags
+                                }
+operationDiagnosis{
+text{
+group
+value
+text
+                                    }
+media{
+text
+tags
+date
+                                    }
+tags
+                                }
+operationPostDiagnosis{
+text{
+group
+value
+text
+                                    }
+media{
+text
+tags
+date
+                                    }
+tags
+                                }
+operationPreFindings{
+text{
+group
+value
+text
+                                    }
+media{
+text
+tags
+date
+                                    }
+tags
+                                }
+operationCategory{
+text{
+group
+value
+text
+                                    }
+media{
+text
+tags
+date
+                                    }
+tags
+                                }
+physicalExam{
+text{
+group
+value
+text
+                                    }
+media{
+text
+tags
+date
+                                    }
+tags
+                                }
+surgeons{
+text{
+group
+value
+text
+                                    }
+media{
+text
+tags
+date
+                                    }
+tags
+                                }
+operationDetails
+                            }
+                        }
+                    }
+medicalHistory{
+alerts{
+alert
+lastUpdate
+data{
+group
+value
+text
+                            }
+                        }
+allergies{
+alert
+lastUpdate
+data{
+group
+value
+text
+                            }
+                        }
+familyHistory{
+alert
+lastUpdate
+data{
+group
+value
+text
+                            }
+                        }
+medicalIssues{
+alert
+lastUpdate
+data{
+group
+value
+text
+                            }
+                        }
+pastMedication{
+alert
+lastUpdate
+data{
+frequency
+note
+isActive
+usageType
+noSubstitutes
+startDate
+endDate
+describedBy
+drug{
+id
+name
+dosage
+                                }
+                            }
+                        }
+presentMedication{
+alert
+lastUpdate
+data{
+frequency
+note
+isActive
+usageType
+noSubstitutes
+startDate
+endDate
+describedBy
+drug{
+id
+name
+dosage
+                                }
+                            }
+                        }
+surgicalHistory{
+alert
+lastUpdate
+data{
+note
+what
+when
+                            }
+                        }
+                    }
+                }
+cardiology{
+conditions{
+id
+name
+type
+status
+subLocation
+opened
+closed
+location{
+id
+name
+                        }
+cheifComplaint{
+text{
+group
+value
+text
+                            }
+media{
+text
+tags
+date
+                            }
+tags
+                        }
+presentHistory{
+text{
+group
+value
+text
+                            }
+media{
+text
+tags
+date
+                            }
+tags
+                        }
+diagnosis{
+text{
+group
+value
+text
+                            }
+media{
+text
+tags
+date
+                            }
+tags
+                        }
+differentialDiagnosis{
+text{
+group
+value
+text
+                            }
+media{
+text
+tags
+date
+                            }
+tags
+                        }
+consultation{
+text{
+group
+value
+text
+                            }
+media{
+text
+tags
+date
+                            }
+tags
+                        }
+otherTreatments{
+text{
+group
+value
+text
+                            }
+media{
+text
+tags
+date
+                            }
+tags
+                        }
+physicalExam{
+text{
+group
+value
+text
+                            }
+media{
+text
+tags
+date
+                            }
+tags
+                        }
+laboratory{
+text{
+group
+value
+text
+                            }
+media{
+text
+tags
+date
+                            }
+tags
+                        }
+radio{
+text{
+group
+value
+text
+                            }
+media{
+text
+tags
+date
+                            }
+tags
+                        }
+note{
+text{
+group
+value
+text
+                            }
+media{
+text
+tags
+date
+                            }
+tags
+                        }
+isDuplicate
+isHidden
+medications{
+frequency
+note
+isActive
+usageType
+noSubstitutes
+startDate
+endDate
+describedBy
+drug{
+id
+name
+dosage
+                            }
+                        }
+activities{
+followups{
+id
+name
+type
+status
+subLocation
+isDuplicate
+opened
+closed
+location{
+id
+name
+                                }
+subjective{
+text{
+group
+value
+text
+                                    }
+media{
+text
+tags
+date
+                                    }
+tags
+                                }
+diagnosis{
+text{
+group
+value
+text
+                                    }
+media{
+text
+tags
+date
+                                    }
+tags
+                                }
+medication{
+text{
+group
+value
+text
+                                    }
+media{
+text
+tags
+date
+                                    }
+tags
+                                }
+otherTreatments{
+text{
+group
+value
+text
+                                    }
+media{
+text
+tags
+date
+                                    }
+tags
+                                }
+assessment{
+text{
+group
+value
+text
+                                    }
+media{
+text
+tags
+date
+                                    }
+tags
+                                }
+consultation{
+text{
+group
+value
+text
+                                    }
+media{
+text
+tags
+date
+                                    }
+tags
+                                }
+physicalExam{
+text{
+group
+value
+text
+                                    }
+media{
+text
+tags
+date
+                                    }
+tags
+                                }
+laboratory{
+text{
+group
+value
+text
+                                    }
+media{
+text
+tags
+date
+                                    }
+tags
+                                }
+note{
+text{
+group
+value
+text
+                                    }
+media{
+text
+tags
+date
+                                    }
+tags
+                                }
+radio{
+text{
+group
+value
+text
+                                    }
+media{
+text
+tags
+date
+                                    }
+tags
+                                }
+isHidden
+medications{
+frequency
+note
+isActive
+usageType
+noSubstitutes
+startDate
+endDate
+describedBy
+drug{
+id
+name
+dosage
+                                    }
+                                }
+cardiologyClinicalExamination{
+bp
+hr
+pulse
+pulseClassification
+sound
+value
+intensity
+pericardialFriction
+lungAuscultation
+aspect
+puls
+rightSuperior
+rightTransverse
+rightInferior
+leftSuperior
+leftTransverse
+leftInferior
+hepatoJugularReflux
+neckCarotidMurmur
+soft
+tender
+hepatomegaly
+ascites
+                                }
+                            }
+operations{
+id
+name
+type
+status
+subLocation
+isDuplicate
+opened
+closed
+location{
+id
+name
+                                }
+department
+anesthesia{
+text{
+group
+value
+text
+                                    }
+media{
+text
+tags
+date
+                                    }
+tags
+                                }
+code
+operationType{
+text{
+group
+value
+text
+                                    }
+media{
+text
+tags
+date
+                                    }
+tags
+                                }
+operationPerformed{
+text{
+group
+value
+text
+                                    }
+media{
+text
+tags
+date
+                                    }
+tags
+                                }
+operationDiagnosis{
+text{
+group
+value
+text
+                                    }
+media{
+text
+tags
+date
+                                    }
+tags
+                                }
+operationPostDiagnosis{
+text{
+group
+value
+text
+                                    }
+media{
+text
+tags
+date
+                                    }
+tags
+                                }
+operationPreFindings{
+text{
+group
+value
+text
+                                    }
+media{
+text
+tags
+date
+                                    }
+tags
+                                }
+operationCategory{
+text{
+group
+value
+text
+                                    }
+media{
+text
+tags
+date
+                                    }
+tags
+                                }
+physicalExam{
+text{
+group
+value
+text
+                                    }
+media{
+text
+tags
+date
+                                    }
+tags
+                                }
+surgeons{
+text{
+group
+value
+text
+                                    }
+media{
+text
+tags
+date
+                                    }
+tags
+                                }
+operationDetails
+                            }
+                        }
+height
+weight
+bmi
+cardiologyClinicalExamination{
+bp
+hr
+pulse
+pulseClassification
+sound
+value
+intensity
+pericardialFriction
+lungAuscultation
+aspect
+puls
+rightSuperior
+rightTransverse
+rightInferior
+leftSuperior
+leftTransverse
+leftInferior
+hepatoJugularReflux
+neckCarotidMurmur
+soft
+tender
+hepatomegaly
+ascites
+                        }
+                    }
+medicalHistory{
+alerts{
+alert
+lastUpdate
+data{
+group
+value
+text
+                            }
+                        }
+allergies{
+alert
+lastUpdate
+data{
+group
+value
+text
+                            }
+                        }
+familyHistory{
+alert
+lastUpdate
+data{
+group
+value
+text
+                            }
+                        }
+medicalIssues{
+alert
+lastUpdate
+data{
+group
+value
+text
+                            }
+                        }
+cardioVascular{
+alert
+lastUpdate
+data{
+group
+value
+text
+                            }
+                        }
+gi{
+alert
+lastUpdate
+data{
+group
+value
+text
+                            }
+                        }
+endocrinology{
+alert
+lastUpdate
+data{
+group
+value
+text
+                            }
+                        }
+lungDiseases{
+alert
+lastUpdate
+data{
+group
+value
+text
+                            }
+                        }
+neurology{
+alert
+lastUpdate
+data{
+group
+value
+text
+                            }
+                        }
+physiomaticDisorder{
+alert
+lastUpdate
+data{
+group
+value
+text
+                            }
+                        }
+riskFactors{
+alert
+lastUpdate
+data{
+group
+value
+text
+                            }
+                        }
+pastMedication{
+alert
+lastUpdate
+data{
+frequency
+note
+isActive
+usageType
+noSubstitutes
+startDate
+endDate
+describedBy
+drug{
+id
+name
+dosage
+                                }
+                            }
+                        }
+presentMedication{
+alert
+lastUpdate
+data{
+frequency
+note
+isActive
+usageType
+noSubstitutes
+startDate
+endDate
+describedBy
+drug{
+id
+name
+dosage
+                                }
+                            }
+                        }
+surgicalHistory{
+alert
+lastUpdate
+data{
+note
+what{
+group
+value
+text
+                                }
+type
+when
+                            }
+                        }
+                    }
+                }
+            }
+        }    
+}

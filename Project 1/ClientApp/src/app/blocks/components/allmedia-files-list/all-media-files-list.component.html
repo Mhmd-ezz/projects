@@ -1,0 +1,42 @@
+<div class="media-container no-selection">
+
+    <div fxLayout="column">
+        <div class="widget-group p-10" fxLayout="row wrap" fxFlex="100"  >
+            <div class="widget"  fxLayoutGap="20px" fxFlex="100" fxFlex.gt-sm="15" *ngFor="let item of allMediaFiles">
+    
+                <!-- WIDGET 1 -->
+                <!-- <fuse-widget  class="widget" fxLayout="column" fxFlex="100%" fxLayoutGap="20px"
+                    fxLayout.gt-md="row">
+     -->
+ 
+                 
+    
+                        <div class="pt-8 pb-32" fxLayout="column"  fxLayoutAlign="center center" style="padding-right: 10px;">
+    
+                                <img src="{{mediaEndpoint}}/photos/{{tenantId}}/{{item.name.toLowerCase()}}?preset=small"
+                                (click)="previewImage(item,'other')" class="image"
+                                src-fallback="{{imageFallback}}" />
+    
+                            
+                            
+   
+                        </div>
+    
+             
+                <!-- </fuse-widget> -->
+                <!-- / Widget -->
+            </div>
+        </div>
+   
+    </div>
+
+    <div class="list-paginator ">
+        <mat-paginator #paginator [length]="length" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
+            >
+        </mat-paginator>
+    </div>
+</div>
+
+
+
+    

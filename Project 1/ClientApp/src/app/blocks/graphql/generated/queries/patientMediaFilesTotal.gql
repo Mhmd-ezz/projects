@@ -1,0 +1,3 @@
+query patientMediaFilesTotal($page: Int, $size: Int, $filter: String, $patientId: String){
+    patientMediaFilesTotal(page: $page, size: $size, filter: $filter, patientId: $patientId)
+}

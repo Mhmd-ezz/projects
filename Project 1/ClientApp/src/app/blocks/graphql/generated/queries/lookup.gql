@@ -1,0 +1,18 @@
+query lookup($id: String!){
+    lookup(id: $id){
+        id
+        tenantId
+        groupKey
+        value
+        symbol
+        text
+        description
+        cultureName
+        parentValue
+        parentId
+        createdDate
+        modifiedDate
+        order
+        predefined
+    }
+}

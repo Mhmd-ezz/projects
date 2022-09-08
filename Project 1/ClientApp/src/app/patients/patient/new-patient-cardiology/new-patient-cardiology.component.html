@@ -1,0 +1,661 @@
+<div class="content p-12">
+    <div fxLayout="column">
+
+        <div class="header-tool accent mb-24" stickybits>
+            <div class="flex-center">
+                <mat-icon class="mr-8 s-22" (click)="$event.stopPropagation()" matSuffix>add_box</mat-icon>
+                <span class="h2">
+                    New Patient
+                    <small [hidden]="!contact.name" style="color: #98f677;"> -
+                        <span class="text-capitalize">{{contact.name}}</span>
+                    </small>
+                </span>
+            </div>
+            <div class="flex-center">
+
+                <mdc-form-status [formStatus]="formStatus"></mdc-form-status>
+
+            </div>
+            <span>
+                <!-- <button mat-flat-button type="button" (click)="saveChanges()">Save</button> -->
+                <!-- <button mat-flat-button type="button" class="ml-8" (click)="onNewPatientClick()">New Patient</button> -->
+                <button mat-flat-button type="button" class="ml-8" (click)="onDone()">Done</button>
+            </span>
+        </div>
+
+        <app-contact-duplicate-checker #dupChecker (duplicateCleanChange)="onDuplicateIdentityCheckerChanged($event)"></app-contact-duplicate-checker>
+
+        <mdc-form-infobox-error [dataLink]="errors"></mdc-form-infobox-error>
+
+        <form #form="ngForm" class="mdc-form" autocomplete="off">
+            <div fxLayout="row" fxLayout.xs="column">
+
+                <!-- MAIN REQUIRED -->
+                <mdc-form-group class="mdc-form-group" [ngClass.sm]="'mr-20'" [ngClass.gt-sm]="'mr-20'">
+                    <!-- HEADER -->
+                    <ng-container class="form-group-header-selector">
+                        <span class="m-0 h3">Identity</span>
+                        <span class="mdc-card-mark">
+                            <span class="ml-8 mr-8 blue-grey-100-fg"> | </span>
+                            <small class="orange-300-fg"> Required</small>
+                        </span>
+                    </ng-container>
+                    <!-- / HEADER -->
+
+
+                    <!-- FRONT -->
+                    <div class="form-group-front-selector">
+                        <div class="mdc-form-body" fxLayout="column" style="min-width: 300px;">
+                            <div class="mdc-form-box full-width">
+
+                                <mat-form-field class="mdc-smart-input">
+                                    <input
+                                        matInput
+                                        placeholder="Name"
+                                        #nameModel="ngModel"
+                                        name="name"
+                                        [(ngModel)]="contact.name"
+                                        [ngModelOptions]="{updateOn:'blur'}"
+                                        autofocus
+                                        required>
+                                    <mat-error *ngIf="nameModel.hasError('required')">
+                                        This field is required
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="mdc-form-box full-width">
+
+                                <mat-form-field class="mdc-smart-input">
+                                    <ngx-mat-intl-tel-input
+                                        [enablePlaceholder]="true"
+                                        [inputPlaceholder]=""
+                                        [enableSearch]="true"
+                                        [preferredCountries]="['lb']"
+                                        [format]="'national'"
+                                        name="phone"
+                                        required
+                                        [(ngModel)]="contact.telephone"
+                                        #phoneModel></ngx-mat-intl-tel-input>
+                                    <mat-error *ngIf="form.form.controls['phone']?.errors?.required || form.form.controls['phone']?.errors?.validatePhoneNumber">A valid phone number is required.</mat-error>
+                                    <!-- <mat-error *ngIf="form.form.controls['phone']?.errors?.validatePhoneNumber">Invalid Number</mat-error> -->
+                                </mat-form-field>
+<!--                                 
+                                <mat-form-field class="mdc-smart-input">
+                                    <input matInput
+                                        [ngModelOptions]="{updateOn:'blur'}"
+                                        placeholder="Telephone"
+                                        #telephoneModel="ngModel"
+                                        name="telephone"
+                                        [(ngModel)]="contact.telephone"
+                                        [showMaskTyped]="true"
+                                        prefix="+ (961)"
+                                        mask="00-000-000"
+                                        required>
+                                    <mat-error *ngIf="telephoneModel.hasError('required')">
+                                        This field is required
+                                    </mat-error>
+                                </mat-form-field> -->
+                            </div>
+                            <div class="mdc-form-box full-width">
+                                <mat-form-field>
+                                    <input
+                                        appMaskDate
+                                        matInput
+                                        [matDatepicker]="picker"
+                                        #birthDateModel="ngModel"
+                                        name="Birthday"
+                                        placeholder="Birthday"
+                                        [(ngModel)]="contact.birthDate"
+
+                                        required>
+                                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                    <mat-datepicker #picker></mat-datepicker>
+                                    <mat-error *ngIf="birthDateModel.hasError('required')">
+                                        This field is required
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="mdc-form-box full-width">
+                                <mat-form-field>
+                                    <mat-select placeholder="Choose Gender" name="gender" [(ngModel)]="contact.gender"
+                                        #genderModel="ngModel" required>
+                                        <mat-option>--</mat-option>
+                                        <mat-option value="male">Male</mat-option>
+                                        <mat-option value="female">Female</mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="genderModel.hasError('required')">Please choose gender</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+
+                </mdc-form-group>
+                <!-- / MAIN REQUIRED -->
+
+                <!-- EXTRA DETAILS -->
+                <mdc-form-group class="mdc-form-group">
+                    <!-- HEADER -->
+                    <ng-container class="form-group-header-selector">
+                        <span class="m-0 h3">Details</span>
+                        <span class="mdc-card-mark">
+                            <span class="ml-8 mr-8 blue-grey-100-fg"> | </span>
+                            <small class="blue-100-fg"> Optional</small>
+                        </span>
+                    </ng-container>
+                    <!-- / HEADER -->
+
+                    <!-- FRONT -->
+                    <div class="form-group-front-selector" style="min-height: 262px;">
+                        <div class="mdc-form-body extra-container">
+                            <div class="mdc-form-box">
+                                <mat-form-field>
+                                    <mat-select placeholder="Grantors" name="grantors" [(ngModel)]="contact.patientInfo.grantors"
+                                        [compareWith]="matSelectCompare" multiple>
+                                        <mat-select-trigger class="text-capitalize">
+                                            {{contact.patientInfo.grantors ? contact.patientInfo.grantors[0]?.name : ''}}
+                                            <span *ngIf="contact.patientInfo.grantors?.length> 1" class="additional-selection">
+                                                (+{{contact.patientInfo.grantors?.length - 1}}
+                                                {{contact.patientInfo.grantors?.length === 2 ?
+                                                'other'
+                                                : 'others'}})
+                                            </span>
+                                        </mat-select-trigger>
+                                        <mat-option class="text-capitalize" *ngFor="let grantor of grantors" [value]="grantor">{{grantor?.name}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="mdc-form-box">
+                                <mat-form-field class="mdc-smart-input">
+                                    <input matInput
+                                        placeholder="Country" name="country"
+                                        [(ngModel)]="contact.country">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="mdc-form-box">
+                                <mat-form-field class="mdc-smart-input">
+                                    <input matInput
+                                        placeholder="City" name="city"
+                                        [(ngModel)]="contact.city">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="mdc-form-box">
+                                <mat-form-field>
+                                    <mat-select placeholder="Choose Marital Status" name="maritalStatus"
+                                        [(ngModel)]="contact.patientInfo.maritalStatus">
+                                        <mat-option>--</mat-option>
+                                        <mat-option value="single">Single</mat-option>
+                                        <mat-option value="married">Married</mat-option>
+                                        <mat-option value="widowed">Widowed</mat-option>
+                                        <mat-option value="divorced">Divorced</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="mdc-form-box" [fxHide]="contact.patientInfo.maritalStatus != 'married'">
+                                <mat-form-field class="mdc-smart-input">
+                                    <input matInput placeholder="Spouse Name"
+                                        name="partnerName"
+                                        [(ngModel)]="contact.partner">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="mdc-form-box">
+                                <mat-form-field>
+                                    <mat-select placeholder="Choose Blood Type" name="bloodType"
+                                        [(ngModel)]="contact.patientInfo.bloodType">
+                                        <mat-option>--</mat-option>
+                                        <mat-option value="a+">A+</mat-option>
+                                        <mat-option value="a-">A-</mat-option>
+                                        <mat-option value="b+">B+</mat-option>
+                                        <mat-option value="b-">B-</mat-option>
+                                        <mat-option value="ab+">AB-</mat-option>
+                                        <mat-option value="ab-">AB-</mat-option>
+                                        <mat-option value="o+">O+</mat-option>
+                                        <mat-option value="o-">O-</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="mdc-form-box">
+                                <mat-form-field class="mdc-smart-input">
+                                    <input
+                                        matInput
+                                        placeholder="Email"
+                                        name="email"
+                                        [(ngModel)]="contact.email">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="mdc-form-box">
+                                <mat-form-field class="mdc-smart-input">
+                                    <input matInput placeholder="Emergancy Contact"
+                                        name="emergancyContact"
+                                        [(ngModel)]="contact.patientInfo.emergancyContact">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="mdc-form-box">
+                                <mat-form-field class="mdc-smart-input">
+                                    <input matInput placeholder="Identity Number"
+                                        name="identityNumber"
+                                        [(ngModel)]="contact.identityNumber">
+                                    <!-- <mat-hint align="end">
+                                        <mat-icon class="s-18 help-tool" matSuffix matTooltip="Identity card or passport number."
+                                            [matTooltipPosition]="'above'" [matTooltipClass]="'help-tooltip'">help</mat-icon>
+                                    </mat-hint> -->
+                                </mat-form-field>
+                            </div>
+
+                            <div class="mdc-form-box">
+                                <mat-form-field class="mdc-smart-input">
+                                    <input matInput placeholder="File Number"
+                                        name="fileNumber"
+                                        [(ngModel)]="contact.patientInfo.fileNumber">
+                                    <mat-hint align="end">
+                                        <mat-icon class="s-18 help-tool" matSuffix matTooltip="Reference to the physical file
+                                            number
+                                            in your clinic."
+                                            [matTooltipPosition]="'above'" [matTooltipClass]="'help-tooltip'">help</mat-icon>
+                                    </mat-hint>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="mdc-form-box">
+                                <mat-form-field class="mdc-smart-input">
+                                    <input matInput placeholder="Occupation"
+                                        name="occupation"
+                                        [(ngModel)]="contact.occupation">
+                                </mat-form-field>
+                            </div>
+                          
+                            <div class="mdc-form-box">
+                                <mat-form-field>
+                                    <input appMaskDate matInput [matDatepicker]="entryDatePicker" #entryDateModel="ngModel"
+                                        name="entryDate"
+                                        placeholder="Entry Date"
+                                        [(ngModel)]="contact.patientInfo.entryDate">
+                                    <mat-datepicker-toggle matSuffix [for]="entryDatePicker"></mat-datepicker-toggle>
+                                    <mat-datepicker #entryDatePicker></mat-datepicker>
+                                    <mat-error *ngIf="entryDateModel.hasError('required')">
+                                        This field is required
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="mdc-form-box">
+                                <mat-form-field class="example-chip-list">
+                                    <mat-chip-list #referralsList>
+                                        <mat-chip *ngFor="let name of contact.patientInfo.referral"
+                                            [selectable]="referralChipssSlectable"
+                                            [removable]="referralChipsRemovable" (removed)="removeReferral(name)">
+                                            {{name}}
+                                            <mat-icon matChipRemove *ngIf="referralChipsRemovable">cancel</mat-icon>
+                                        </mat-chip>
+                                        <input placeholder="Referrals" [matChipInputFor]="referralsList"
+                                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                            [matChipInputAddOnBlur]="referralChipsAddOnBlur"
+                                            (matChipInputTokenEnd)="addReferral($event)">
+                                    </mat-chip-list>
+                                </mat-form-field>
+
+                                <!-- <mat-form-field class="mdc-smart-input">
+                                    <input matInput [ngModelOptions]="{updateOn:'blur'}" placeholder="Refferal" name="refferal" [(ngModel)]="patient.referral"
+                                       >
+                                </mat-form-field> -->
+                            </div>
+                            <div class="mdc-form-box">
+                                <mdc-telephone-input  name="contactNumbers"
+                                [dataLink]="contact.contactNumbers"                                  
+                                (notifyTelephone)="notifyTelephoneHandler($event)"                                       
+                                ></mdc-telephone-input></div>
+                                <div class="mdc-form-box">
+                                    <tag-input  [group]="'patient'"
+                                                [dataLink]="contact.patientInfo.tags"
+                                                [tagsCollection]="tags"
+                                                (add)="notifyTagHandler($event)"></tag-input>
+                                    </div>
+                            <!-- Fill flexbox -->
+                            <div class="mdc-form-box">
+                            </div>
+                            
+
+                        </div>
+                    </div>
+
+                </mdc-form-group>
+                <!-- / EXTRA DETAILS -->
+
+            </div>
+
+            <!-- PRESENT MEDICATIONS & PAST MEDICATIONS-->
+            <div class="" fxLayout="row" fxLayoutGap="15px">
+
+
+
+                <div class="" fxFlex="33" [fxShow]="tenant?.speciality.key == SpecialityEnum.cardiology">
+
+                    <!--PRESENT MEDICATIONS -->
+                    <mdc-form-group class="mdc-form-group">
+                        <!-- HEADER -->
+                        <ng-container class="form-group-header-selector">
+                            <span class="m-0 h3">Present Medications</span>
+                            <span class="mdc-card-mark">
+                            </span>
+                        </ng-container>
+                        <!-- / HEADER -->
+
+                        <!-- FRONT -->
+                        <div class="form-group-front-selector">
+                            <div class="mdc-form-body">
+                                <div class="mdc-form-box">
+                                    <mdc-medication-input
+                                        [dataLink]="contact.patientInfo.specialities.cardiology.medicalHistory.presentMedication.data"
+                                        [placeholder]="'Present Medications'" [modelName]="'presentMedication'"
+                                        (notifyMedication)="notifyMedicationHandler($event)"></mdc-medication-input>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- / FRONT -->
+
+                        <!-- BACK -->
+                        <div class="form-group-back-selector">
+                            <div class="flex-container">
+                                <div class="flex-box">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- / BACK -->
+
+                    </mdc-form-group>
+                    <!-- / PRESENT MEDICATIONS -->
+
+                </div>
+
+                <div class="" fxFlex="33" [fxShow]="tenant?.speciality.key == SpecialityEnum.cardiology">
+
+                    <!-- PAST MEDICATIONS-->
+                    <mdc-form-group class="mdc-form-group">
+                        <!-- HEADER -->
+                        <ng-container class="form-group-header-selector">
+                            <span class="m-0 h3">Past Medications</span>
+                        </ng-container>
+                        <!-- / HEADER -->
+
+                        <!-- FRONT -->
+                        <div class="form-group-front-selector">
+                            <div class="mdc-form-body">
+                                <div class="mdc-form-box">
+                                    <mdc-medication-input
+                                        [dataLink]="contact.patientInfo.specialities.cardiology.medicalHistory.pastMedication.data"
+                                        [placeholder]="'Past Medications'" [modelName]="'pastMedication'"
+                                        (notifyMedication)="notifyMedicationHandler($event)"></mdc-medication-input>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- / FRONT -->
+
+                        <!-- BACK -->
+                        <div class="form-group-back-selector">
+                        </div>
+                        <!-- / BACK -->
+
+                    </mdc-form-group>
+                    <!-- / PAST MEDICATIONS-->
+
+                </div>
+
+                <!-- TEMP -->
+                <div class="" fxFlex="33" [fxShow]="tenant?.speciality.key == SpecialityEnum.cardiology">
+
+                    <!-- PAST MEDICATIONS-->
+                    <mdc-form-group class="mdc-form-group">
+                        <!-- HEADER -->
+                        <ng-container class="form-group-header-selector">
+                            <span class="m-0 h3">Risk Factors</span>
+                        </ng-container>
+                        <!-- / HEADER -->
+
+                        <!-- FRONT -->
+                        <div class="form-group-front-selector">
+                            <div class="mdc-form-body">
+                                <div class="mdc-form-box">
+                                    <mdc-lookup-input-advanced-predefined                                    
+                                        [lookupsCollection]="lookups.riskFactors || []"
+                                        [dataLink1]="contact.patientInfo.specialities.cardiology.medicalHistory.riskFactors"
+                                        [groupkey]="'risk_factors'"
+                                        [modelName]="'riskFactors'"
+                                        [placeholder]="'Risk Factors'"
+                                        [showrisk]="true"
+                                        [predefinedActive]="true"
+                                        [list]="contact.patientInfo.specialities.cardiology.medicalHistory.riskFactors.data"
+                                        (notifyRisk)="lookupNotifyHandlerRisk($event)"                                        
+                                        #riskFactorsElRef>
+                                    </mdc-lookup-input-advanced-predefined>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- / FRONT -->
+
+                        <!-- BACK -->
+                        <div class="form-group-back-selector">
+                        </div>
+                        <!-- / BACK -->
+
+                    </mdc-form-group>
+                    <!-- / PAST MEDICATIONS-->
+
+                </div>
+
+            </div>
+
+            <!-- / PRESENT MEDICATIONS & PAST MEDICATIONS-->
+         
+
+            <div [fxShow]="tenant?.speciality?.key == SpecialityEnum.cardiology">
+
+                <!-- MEDICAL HISTORY -->
+                <mdc-form-group class="mdc-form-group">
+                    <!-- HEADER -->
+                    <ng-container class="form-group-header-selector">
+                        <span class="m-0 h3">Past Medical History</span>
+                        <span class="mdc-card-mark">
+                            <span class="ml-8 mr-8 blue-grey-100-fg"> | </span>
+                            <small class="blue-100-fg"> Optional</small>
+                        </span>
+                    </ng-container>
+                    <!-- / HEADER -->
+
+                    <!-- FRONT -->
+                    <div class="form-group-front-selector">
+
+                        <div class="mdc-form-body">
+                            <div class="mdc-form-box">
+                                <mdc-lookup-input-advanced-predefined
+                                    [lookupsCollection]="lookups.allergies || []"
+                                    [dataLink]="contact.patientInfo.specialities.cardiology.medicalHistory.allergies"
+                                    [groupkey]="'allergies'"
+                                    [modelName]="'allergies'"
+                                    [placeholder]="'Allergies'"
+                                    (notify)="lookupNotifyHandler($event)"
+                                    (notifyRisk)="lookupNotifyHandlerRisk($event)"
+                                    [list]="contact.patientInfo.specialities.cardiology.medicalHistory.riskFactors.data"
+                                    [risk]="true"
+                                    [predefinedActive]="true"
+                                    #allergiesElRef>
+                                </mdc-lookup-input-advanced-predefined>
+                            </div>
+                            <div class="mdc-form-box">
+                                <mdc-lookup-input-advanced-predefined
+                                    [lookupsCollection]="lookups.family_history || []"
+                                    [dataLink]="contact.patientInfo.specialities.cardiology.medicalHistory.familyHistory"
+                                    [groupkey]="'family_history'"
+                                    [modelName]="'familyHistory'"
+                                    [placeholder]="'Family History'"
+                                    (notify)="lookupNotifyHandler($event)"
+                                    (notifyRisk)="lookupNotifyHandlerRisk($event)"
+                                    [list]="contact.patientInfo.specialities.cardiology.medicalHistory.riskFactors.data"
+                                    [risk]="true"
+                                    [predefinedActive]="true"
+                                    #familyHistorysElRef>
+                                </mdc-lookup-input-advanced-predefined>
+                            </div>
+
+                            <div class="mdc-form-box">
+                                <mdc-lookup-input-advanced-predefined
+                                    [lookupsCollection]="lookups.medical_issues || []"
+                                    [dataLink]="contact.patientInfo.specialities.cardiology.medicalHistory.medicalIssues"
+                                    [groupkey]="'medical_issues'"
+                                    [modelName]="'medicalIssues'"
+                                    [placeholder]="'Medical Issues'"
+                                    (notify)="lookupNotifyHandler($event)"
+                                    (notifyRisk)="lookupNotifyHandlerRisk($event)"
+                                    [list]="contact.patientInfo.specialities.cardiology.medicalHistory.riskFactors.data"
+                                    [risk]="true"
+                                    [predefinedActive]="true"
+                                    #medicalIssuesElRef>
+                                </mdc-lookup-input-advanced-predefined>
+                            </div>
+
+
+                        </div>
+
+                        <div class="mdc-form-body">
+
+                            <!-- <div class="mdc-form-box">
+                                <mdc-lookup-input-advanced-predefined
+                                    [lookupsCollection]="lookups.cardiovascular || []"
+                                    [dataLink]="contact.patientInfo.specialities.cardiology.medicalHistory.cardioVascular"
+                                    [groupkey]="'cardiovascular'"
+                                    [modelName]="'cardioVascular'"
+                                    [placeholder]="'Cardiovascular'"
+                                    (notify)="lookupNotifyHandler($event)"
+                                    (notifyRisk)="lookupNotifyHandlerRisk($event)"
+                                    [list]="contact.patientInfo.specialities.cardiology.medicalHistory.riskFactors.data"
+                                    [risk]="true"
+                                    [predefinedActive]="true"
+                                    #cardioVascularElRef>
+                                </mdc-lookup-input-advanced-predefined>
+                            </div> -->
+
+                            <div class="mdc-form-box">
+                                <mdc-lookup-input-advanced-predefined
+                                    [lookupsCollection]="lookups.gi || []"
+                                    [dataLink]="contact.patientInfo.specialities.cardiology.medicalHistory.gi"
+                                    [groupkey]="'gi'"
+                                    [modelName]="'gi'"
+                                    [placeholder]="'GI'"
+                                    (notify)="lookupNotifyHandler($event)"
+                                    (notifyRisk)="lookupNotifyHandlerRisk($event)"
+                                    [risk]="true"
+                                    [predefinedActive]="true"
+                                    [list]="contact.patientInfo.specialities.cardiology.medicalHistory.riskFactors.data"
+                                    #giElRef>
+                                </mdc-lookup-input-advanced-predefined>
+                            </div>
+
+                            <div class="mdc-form-box">
+                                <mdc-lookup-input-advanced-predefined
+                                    [lookupsCollection]="lookups.endocrinology || []"
+                                    [dataLink]="contact.patientInfo.specialities.cardiology.medicalHistory.endocrinology"
+                                    [groupkey]="'endocrinology'"
+                                    [modelName]="'endocrinology'"
+                                    [placeholder]="'Endocrinology'"
+                                    (notify)="lookupNotifyHandler($event)"
+                                    (notifyRisk)="lookupNotifyHandlerRisk($event)"
+                                    [list]="contact.patientInfo.specialities.cardiology.medicalHistory.riskFactors.data"
+                                    [risk]="true"
+                                    [predefinedActive]="true"
+                                    #endocrinologyElRef>
+                                </mdc-lookup-input-advanced-predefined>
+                            </div>
+                            <div class="mdc-form-box">
+                                <mdc-lookup-input-advanced-predefined
+                                [lookupsCollection]="lookups.lung_diseases || []"
+                                [dataLink]="contact.patientInfo.specialities.cardiology.medicalHistory.lungDiseases"
+                                    [groupkey]="'lung_diseases'"
+                                    [modelName]="'lungDiseases'"
+                                    [placeholder]="'Lung Diseases'"
+                                    (notify)="lookupNotifyHandler($event)"
+                                    (notifyRisk)="lookupNotifyHandlerRisk($event)"
+                                    [list]="contact.patientInfo.specialities.cardiology.medicalHistory.riskFactors.data"
+                                    [risk]="true"
+                                    [predefinedActive]="true"
+                                    #lungDiseasesElRef>
+                                </mdc-lookup-input-advanced-predefined>
+                            </div>
+
+                        </div>
+
+                        <div class="mdc-form-body">
+                            
+                            <!-- <div class="mdc-form-box">
+                                <mdc-lookup-input-advanced-predefined
+                                [lookupsCollection]="lookups.lung_diseases || []"
+                                [dataLink]="contact.patientInfo.specialities.cardiology.medicalHistory.lungDiseases"
+                                    [groupkey]="'lung_diseases'"
+                                    [modelName]="'lungDiseases'"
+                                    [placeholder]="'Lung Diseases'"
+                                    (notify)="lookupNotifyHandler($event)"
+                                    (notifyRisk)="lookupNotifyHandlerRisk($event)"
+                                    [list]="contact.patientInfo.specialities.cardiology.medicalHistory.riskFactors.data"
+                                    [risk]="true"
+                                    [predefinedActive]="true"
+                                    #lungDiseasesElRef>
+                                </mdc-lookup-input-advanced-predefined>
+                            </div> -->
+
+                            <div class="mdc-form-box">
+                                <mdc-lookup-input-advanced-predefined
+                                [lookupsCollection]="lookups.neurology || []"
+                                [dataLink]="contact.patientInfo.specialities.cardiology.medicalHistory.neurology"
+                                    [groupkey]="'neurology'"
+                                    [modelName]="'neurology'"
+                                    [placeholder]="'Neurology'"
+                                    (notify)="lookupNotifyHandler($event)"
+                                    (notifyRisk)="lookupNotifyHandlerRisk($event)"
+                                    [list]="contact.patientInfo.specialities.cardiology.medicalHistory.riskFactors.data"
+                                    [risk]="true"
+                                    [predefinedActive]="true"
+                                    #neurologyElRef>
+                                </mdc-lookup-input-advanced-predefined>
+                            </div>
+
+                            <div class="mdc-form-box">
+                                <mdc-lookup-input-advanced-predefined
+                                [lookupsCollection]="lookups.physiomatic_disorder || []"
+                                [dataLink]="contact.patientInfo.specialities.cardiology.medicalHistory.physiomaticDisorder"
+                                    [groupkey]="'physiomatic_disorder'"
+                                    [modelName]="'physiomaticDisorder'"
+                                    [placeholder]="'Physiomatic Disorder'"
+                                    (notify)="lookupNotifyHandler($event)"
+                                    (notifyRisk)="lookupNotifyHandlerRisk($event)"
+                                    [predefinedActive]="true"
+                                    [list]="contact.patientInfo.specialities.cardiology.medicalHistory.riskFactors.data"
+                                    [risk]="true"
+                                    #physiomaticDisorderElRef>
+                                </mdc-lookup-input-advanced-predefined>
+                            </div>
+                            <div class="mdc-form-box">
+                                </div>
+
+                        </div>
+
+                        <div class="mdc-form-body">
+                           
+                          <div class="mdc-form-box" style="overflow-x: auto;">
+                                    <surgery-table [dataLink]="contact.patientInfo.specialities.cardiology.medicalHistory.surgicalHistory.data"
+                                    (surgeryTable)="notifySurgeryHandler($event)"></surgery-table>
+                             </div>
+                        </div>
+                    </div>
+
+                </mdc-form-group>
+                <!-- / MEDICAL HISTORY -->
+            </div>
+
+        </form>
+    </div>
+</div>

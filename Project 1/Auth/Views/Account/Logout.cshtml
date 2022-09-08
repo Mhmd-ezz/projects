@@ -1,0 +1,28 @@
+﻿@inject LocService SharedLocalizer
+@using Auth.Resources
+@model Auth.Models.AccountViewModels.LogoutViewModel
+
+
+<div class="content-wrapper">
+    <div class="content custom-scrollbar">
+        <div id="forgot-password" class="p-8">
+            <div class="form-wrapper md-elevation-8 p-8">
+                <div class="logo bg-secondary">
+                    <span>M</span>
+                </div>
+                <div class="title mt-4 mb-8">@SharedLocalizer.GetLocalizedHtmlString("LOGOUT")</div>
+                <div class="description pt-2">
+                    @SharedLocalizer.GetLocalizedHtmlString("WOULD_YOU_LIKE_TO_LOGOUT")
+                </div>
+                <form asp-action="Logout">
+                    <input type="hidden" name="logoutId" value="@Model.LogoutId" />
+                    <button type="submit"
+                            class="submit-button btn btn-block btn-secondary mt-8 mb-4 mx-auto"
+                            aria-label="LOGOUT">
+                        @SharedLocalizer.GetLocalizedHtmlString("YES")
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,66 @@
+<h1 mat-dialog-title>Creating new drug <strong>{{drug.name}}</strong></h1>
+<div mat-dialog-content style="background: #f0f0f0;">
+    <div class="header-toolbar">
+        <div class="btn" (click)="onOkClick()">
+            <mat-icon class="material-icons-outlined mr-4 s-20">save</mat-icon>
+            <span>Save</span>
+        </div>
+        <div class="btn" (click)="onNoClick()">
+            <mat-icon class="material-icons-outlined mr-4 s-20">undo</mat-icon>
+            <span>Cancel</span>
+        </div>
+    </div>
+    
+    <form #form="ngForm" class="flex-column" (keydown)="onKeyPress($event)"  autocomplete="off">
+
+        <!-- NAME -->
+        <mat-form-field appearance="outline" fxFlex="1 0 auto">
+            <input matInput placeholder="Drug name" name="name" [(ngModel)]="drug.name" #nameControl="ngModel" autofocus
+                required>
+            <mat-error *ngIf="nameControl.hasError('required')">This field is required</mat-error>
+        </mat-form-field>
+        <!-- / NAME -->
+
+        <!-- DOSAGE -->
+        <mat-form-field appearance="outline" fxFlex="1 0 auto">
+            <input matInput placeholder="Dosage" name="dosage" [(ngModel)]="drug.dosage">
+        </mat-form-field>
+        <!-- / DOSAGE -->
+
+        <!-- PRESENTAION -->
+        <!-- <mat-form-field appearance="outline" fxFlex="1 0 auto">
+            <input matInput placeholder="Presentation" name="presentation" [(ngModel)]="drug.presentation">
+        </mat-form-field> -->
+        <!-- / PRESENTAION -->
+
+        <!-- ROUTE -->
+        <mat-form-field appearance="outline" fxFlex="1 0 auto">
+            <!-- <input matInput placeholder="Route" name="route" [(ngModel)]="drug.route"> -->
+            <mat-select placeholder="Choose Route" name="route" [(ngModel)]="drug.route">
+                <mat-option>--</mat-option>
+                <mat-option *ngFor="let route of drugRoutes" [value]="route">
+                    {{route}}
+                </mat-option>
+            </mat-select>
+            
+        </mat-form-field>
+        <!-- / ROUTE -->
+
+        <!-- FORM -->
+        <mat-form-field appearance="outline" fxFlex="1 0 auto">
+            <mat-select placeholder="Choose Form" name="form" [(ngModel)]="drug.form">
+                <mat-option>--</mat-option>
+                <mat-option *ngFor="let form of drugForms" [value]="form">
+                    {{form}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <!-- / FORM -->
+
+
+    </form>
+</div>
+<!-- <div mat-dialog-actions>
+    <button mat-raised-button (click)="onNoClick()">Don't save</button>
+    <button mat-raised-button color="accent" (click)="onOkClick()">Save</button>
+</div> -->

@@ -1,0 +1,51 @@
+<div class="demo-sidebar">
+    <mat-list>
+        <div class="sidebar-title">Actions</div>
+
+        <mat-list-item
+            *ngIf="activeSpeciality == SpecialityEnum.general"
+            [routerLink]="['/patients', patientId ,'general']"
+            [routerLinkActive]="['active']"
+            (click)="toggleSidebar('patient-sidebar')">
+            <span>
+                <fa-icon icon="laptop-medical" class="blue-grey-700-fg mr-20" size="lg"></fa-icon>
+            </span>
+            <span class="nav-title">General</span>
+        </mat-list-item>
+
+        <mat-list-item
+            *ngIf="activeSpeciality == SpecialityEnum.cardiology"
+            [routerLink]="['/patients', patientId ,'cardiology']"
+            [routerLinkActive]="['active']"
+            (click)="toggleSidebar('patient-sidebar')">
+            <span>
+                <fa-icon icon="laptop-medical" class="blue-grey-700-fg mr-20" size="lg"></fa-icon>
+            </span>
+            <span class="nav-title">Cardiology</span>
+        </mat-list-item>
+
+        <!-- <mat-divider></mat-divider> -->
+
+        <mat-list-item [routerLink]="['/patients',patientId ,'media']" [routerLinkActive]="['active']" (click)="toggleSidebar('patient-sidebar')">
+            <span>
+                <fa-icon icon="photo-video" class="blue-grey-700-fg mr-20" size="lg"></fa-icon>
+            </span>
+            <span class="nav-title">Media</span>
+            <span [hidden]="!mediaPoolCount" class="media-count" [matBadge]="mediaPoolCount" matBadgeColor="accent"></span>
+        </mat-list-item>
+
+        <mat-list-item [routerLink]="['/patients',patientId ,'todos']" [routerLinkActive]="['active']" (click)="toggleSidebar('patient-sidebar')">
+            <span>
+                <mat-icon class="blue-grey-700-fg mr-20">check_box</mat-icon>
+            </span>
+            <span class="nav-title">Todos</span>
+        </mat-list-item>
+        <mat-list-item [routerLink]="['/patients',patientId ,'all-media']" (click)="toggleSidebar('patient-sidebar')">
+            <span>
+                <mat-icon  class="blue-grey-700-fg mr-20" size="lg">photo_library</mat-icon>
+            </span>
+            <span class="nav-title">All Media Files</span>
+        </mat-list-item>
+
+    </mat-list>
+</div>

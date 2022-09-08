@@ -1,0 +1,6 @@
+query grantor($id: String!){
+    grantor(id: $id){
+        id
+        name
+    }
+}

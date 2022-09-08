@@ -1,0 +1,73 @@
+<div class="mdc-table-container">
+    
+    <div class="table-layout" *ngIf="_patientsMediaFilesDataSource.loading$ | async">
+        <div class="spinner-container">
+
+            <mat-spinner></mat-spinner>
+
+        </div>
+    </div>
+
+    <mat-table #table [dataSource]="dataSource" [@animateStagger]="{value:'50'}">
+
+        <!-- Type Column -->
+        <!-- <ng-container matColumnDef="icon">
+        <mat-header-cell *matHeaderCellDef fxFlex="64px"></mat-header-cell>
+        <mat-cell *matCellDef="let row" fxFlex="64px">
+            <mat-icon class="type-icon" [ngClass]="row.type"></mat-icon>
+        </mat-cell>
+    </ng-container> -->
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+            <mat-header-cell *matHeaderCellDef style="flex-grow: 2;">Name</mat-header-cell>
+            <mat-cell *matCellDef="let row" class="text-capitalize" style="flex-grow: 2;"> {{row.patientName}}</mat-cell>
+        </ng-container>
+
+        <!-- Images Column -->
+        <ng-container matColumnDef="images">
+            <mat-header-cell *matHeaderCellDef style="flex-grow:1;">Images</mat-header-cell>
+            <mat-cell *matCellDef="let row" style="flex-grow: 1;"> {{row.imagesCount}}</mat-cell>
+        </ng-container>
+
+        <!-- Pdf Column -->
+        <ng-container matColumnDef="pdf">
+            <mat-header-cell *matHeaderCellDef style="flex-grow: 1;">PDF</mat-header-cell>
+            <mat-cell *matCellDef="let row" style="flex-grow: 1;"> {{row.pdfCount}}</mat-cell>
+        </ng-container>
+
+
+        <!-- Modified Column -->
+        <!-- <ng-container matColumnDef="modified">
+        <mat-header-cell *matHeaderCellDef fxHide fxShow.gt-md>Modified</mat-header-cell>
+        <mat-cell *matCellDef="let row" fxHide fxShow.gt-md>{{row.modified}}</mat-cell>
+    </ng-container> -->
+        <!-- Detail Button Column -->
+        <ng-container matColumnDef="detail-button">
+            <mat-header-cell *matHeaderCellDef fxFlex="48px" fxHide.gt-sm></mat-header-cell>
+            <mat-cell *matCellDef="let row" fxFlex="48px" fxHide.gt-sm>
+                <button mat-icon-button class="sidebar-toggle" fxHide.gt-sm
+                    (click)="toggleSidebar('file-manager-details-sidebar');onSelect(row)">
+                    <mat-icon class="secondary-text">info</mat-icon>
+                </button>
+            </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"
+            (click)="onSelect(row)"
+            [ngClass]="{'selected' : row == selected}"
+            matRipple [@animate]="{value:'*',params:{y:'100%'}}">
+        </mat-row>
+    </mat-table>
+
+    <div *ngIf="noData | async" class="no-records">
+        No <span *ngIf="_patientsMediaFilesDataSource.noMoreRecords$ | async">&nbsp; more &nbsp;</span> records found
+    </div>
+
+    <mat-paginator 
+        class="mat-paginator-sticky"
+        [length]="_patientsMediaFilesDataSource.total$ | async" 
+        [pageSize]="pageSizeOptions[0]"
+        [pageSizeOptions]="pageSizeOptions">
+    </mat-paginator>
+</div>

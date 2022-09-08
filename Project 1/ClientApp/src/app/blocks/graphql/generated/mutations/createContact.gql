@@ -1,0 +1,20 @@
+mutation createContact($contact: ContactInput!){
+    createContact(contact: $contact){
+        id
+        isDuplicate
+        name
+        gender
+        telephone
+        contactNumbers
+        birthDate
+        occupation
+        partner
+        country
+        city
+        identityNumber
+        email
+        createdOn
+        modified
+        contactType
+    }
+}

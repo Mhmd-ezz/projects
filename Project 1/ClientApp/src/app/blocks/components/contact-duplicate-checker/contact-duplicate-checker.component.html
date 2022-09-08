@@ -1,0 +1,62 @@
+<div *ngIf="duplicates.length && isDuplicateClean$.value == false"
+    [@animate]="{value:'*',params:{delay:'300ms',x:'100%'}}" id="timeline" class="" fxLayout="row wrap">
+    <div class="timeline-sidebar" fxLayout="column" fxFlex="100" fxFlex.gt-sm="45" fxFlex.gt-md="65">
+
+        <div class="profile-box latest-activity" fxLayout="column">
+
+            <header class="warn" fxLayout="row" fxLayoutAlign="space-between center">
+                <div class="title">System warning</div>
+                <div class="more secondary-text"></div>
+            </header>
+
+            <div class="content" fxLayout="column wrap">
+                <div class="font-size-18">System has discovered that this patient is available. </div>
+                <div class="font-size-16 mb-16">If you are sure that patient is not listed below then press continue, or
+                    press cancel to skip creation. </div>
+                <div class="activities">
+                    <div class="activity" fxLayout="row" fxLayoutAlign="start start"
+                        *ngFor="let contact of duplicates">
+                        <img src="../../../../assets/images/avatars/profile.jpg" class="avatar"
+                            alt="{{contact?.name}}" />
+                        <div fxLayout="column">
+                            <div>
+                                <span class="text-capitalize">
+                                    <span class="teal-800-fg font-weight-500">{{contact?._item?.contactType}}</span>:
+                                </span>
+
+                                <span class="username text-capitalize cursor-pointer"
+                                    [routerLink]="contact?._item?.contactType == 'Patient' ? ['/patients', contact?._item.id,'general'] : []">
+                                    {{contact?._item.name}}
+                                </span>
+                                <span class="message"> - {{contact?._item.birthDate | date: 'mediumDate'}}</span>
+                            </div>
+
+                            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+                                <span class="time secondary-text"><small>Created on: </small>{{contact?._item.createdOn | timeAgo}}</span>
+
+                                <div class="font-size-12 cursor-pointer" fxLayout="row" fxLayoutAlign="start center"
+                                    [fxShow]="contact?._item?.contactType != 'Patient'"
+                                    [routerLink]="['/patients', contact?._item.id,'edit']">
+                                    <mat-icon class="blue-grey-600-fg mr-4 s-14" matSuffix>open_in_new</mat-icon>
+                                    <span class="blue-400-fg">Create patient file.</span>
+                                </div>
+
+                                <div class="font-size-12 cursor-pointer" fxLayout="row" fxLayoutAlign="start center"
+                                    [fxShow]="contact?._item?.contactType == 'Patient'"
+                                    [routerLink]="['/patients', contact?._item.id,'edit']">
+                                    <mat-icon class=" blue-grey-600-fg mr-4 s-14" matSuffix>open_in_new</mat-icon>
+                                    <span class="blue-400-fg">Edit profile.</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-12" fxLayoutAlign="end">
+                    <button mat-raised-button color="accent" type="button" (click)="onDone()">Cancel</button>
+                    <button mat-raised-button color="warn" class="ml-12" (click)="skipDupicateCheck()">Continue</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

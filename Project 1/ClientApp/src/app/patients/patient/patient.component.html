@@ -1,0 +1,247 @@
+<div class="page-layout section-patient">
+
+    <!-- Ready to use Patient SIDEBAR -->
+    <!-- SIDEBAR -->
+    <!-- <fuse-sidebar class="sidebar" name="simple-left-sidebar-1" position="left" lockedOpen="gt-md"> -->
+
+    <!-- SIDEBAR CONTENT -->
+    <!-- <div class="content p-24"> -->
+    <!-- <patient-sidebar></patient-sidebar> -->
+    <!-- </div> -->
+    <!-- / SIDEBAR CONTENT -->
+
+    <!-- </fuse-sidebar> -->
+    <!-- / SIDEBAR -->
+
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- HEADER -->
+        <!-- <div class="header accent p-12 h-40" fxLayout="row" fxLayoutAlign="start center"> -->
+        <!-- <div fxLayout="column" fxLayoutAlign="center start"> -->
+        <!-- <div class="black-fg" fxLayout="row" fxLayoutAlign="start center"> -->
+        <!-- SIDEBAR XS TRIGGER -->
+        <!-- <button mat-icon-button class="sidebar-toggle mr-8" fxHide.gt-md
+                            (click)="toggleSidebar('simple-left-sidebar-1')">
+                        <mat-icon>menu</mat-icon>
+                    </button> -->
+        <!-- <mat-icon class="secondary-text s-18">home</mat-icon> -->
+        <!-- <span class="secondary-text">Patients</span> -->
+        <!-- </div> -->
+        <!-- </div> -->
+        <!-- </div> -->
+        <!-- / HEADER -->
+
+        <!-- PATIENT INFO CONTENT -->
+        <div class="content p-4 section-patient-details">
+            <switch-panel [toggle]="isInfoExpanded" >
+                
+                <!-- HEADER -->
+                <ng-container class="switch-panel-header">
+                   
+                    <mat-icon class="mr-12">account_circle</mat-icon>
+                    <span class="text-bold m-0 h2">{{patient.name}}</span>
+                 
+                    <span [hidden]="!patient?.isDuplicate" class="duplicate-label ml-12">
+                        <span>DUPLICATE</span>
+                    </span>
+                    <span *ngIf="serverNotReachable">server not reachable</span>
+                   <!-- <mdc-data-status></mdc-data-status> -->
+                </ng-container>
+                <!-- / HEADER -->
+
+                <!-- HEADER TOOL -->
+                <ng-container class="switch-panel-header-tool">
+                    <span class="mr-12 cursor-pointer" *ngIf="patient.isDuplicate" (click)="onDelete()">Delete</span>
+                    <span class="mr-12 cursor-pointer" (click)="onEdit()">Edit</span>
+                    <span class="mr-12 cursor-pointer" (click)="toggle()">{{ isInfoExpanded ? 'Collapse' : 'Expand' }}</span>
+                </ng-container>
+                <!-- / HEADER TOOL -->
+
+                <!-- FRONT -->
+                <div class="switch-panel-front">
+                    <div class="flex-container" style="position: relative" >
+
+                        <div class="flex-item">
+                            <span class="title secondary-text">Tel</span>
+                            <span class="text">{{patient?.telephone}}</span>
+                        </div>
+
+                        <div class="flex-item">
+                            <span class="title secondary-text">Last Seen</span>
+                            <span class="text">{{patient?.patientInfo?.lastSeen | date:'d MMM y'}}</span>
+                        </div>
+
+                        <div class="flex-item">
+                            <span class="title secondary-text">Entry date</span>
+                            <span class="text">{{patient?.patientInfo?.entryDate | date:'d MMM y'}}</span>
+                        </div>
+
+                        <div class="flex-item">
+                            <span class="title secondary-text">Age</span>
+                            <span class="text">{{patient?.birthDate | mdAgeCalculator}}</span>
+                        </div>
+
+
+                        <div class="flex-item">
+                            <span class="title secondary-text">Gender</span>
+                            <span class="text">{{patient?.gender}}</span>
+                        </div>
+
+                        <div class="flex-item">
+                            <span class="title secondary-text">Referral</span>
+                            <span class="text">{{patient?.patientInfo?.referral}}</span>
+                        </div>
+
+                        
+
+                        <div class="flex-item">
+                            <span class="title secondary-text">Address</span>
+                            <span class="text">
+                                {{patient?.country}}
+                                <span [hidden]="!patient?.city">/</span>
+                                {{patient?.city}}</span>
+                        </div>
+
+                        <div class="flex-item">
+                            <span class="title secondary-text">Grantor</span>
+                            <span class="text list-splitter">
+                                <span *ngFor="let grantor of patient?.patientInfo?.grantors">
+                                    {{grantor.name}}
+                                </span>
+                            </span>
+                        </div>
+
+                        <div class="flex-item">
+                            <span class="title secondary-text">IsDupliate</span>
+                            <span class="text is-duplicate" (click)="openDuplicateDialog()">
+                                <span class="text-capitalize mr-4">{{patient?.isDuplicate ? 'Duplicate' : 'Not Duplicate'}}</span>
+                                <mat-icon class="s-16">edit</mat-icon>
+                            </span>
+                        </div>
+                     
+                        <div class="flex-item">
+                            <span class="title secondary-text">Contact Numbers</span>
+                            <span class="text"> {{patient?.contactNumbers}}</span>                            
+                        </div>
+                        
+                        
+                        <div class="flex-item1" >                          
+                                                    
+                         
+                            <tag-input
+                            [group]="'patient'"
+                            [dataLink]="patient?.patientInfo?.tags"
+                            [tagsCollection]="tags"
+                            (add)="onTagChange($event)"></tag-input>
+                          
+                       
+                            <!-- <span class="text list-splitter">
+                                <span *ngFor="let tag of patient?.patientInfo?.tags">
+                                
+                                   {{tag.name}}
+                                </span>
+                            </span> -->
+                        </div>
+                        <!-- <div class="flex-item" *ngIf="!readonlyTag">
+                            
+                            <tag-input
+                            [dataLink]="patient.patientInfo.tags"
+                            [tagsCollection]="tags"
+                            (add)="onTagChange($event)"></tag-input>
+                            </div> -->
+
+                        <ngx-ui-loader [loaderId]="'loader-01'" text="Loading patient..."></ngx-ui-loader>
+                    </div>
+                </div>
+                <!-- / FRONT -->
+
+                <!-- BACK -->
+                <span class="switch-panel-back">
+                    <div class="flex-container">
+
+                        <div class="flex-item">
+                            <span class="title secondary-text">Email</span>
+                            <span class="text">{{patient?.email}}</span>
+                        </div>
+
+                        <div class="flex-item">
+                            <span class="title secondary-text">Blood Type</span>
+                            <span class="text">{{patient?.patientInfo?.bloodType}}</span>
+                        </div>
+
+                        <div class="flex-item">
+                            <span class="title secondary-text">File Number</span>
+                            <span class="text">{{patient?.patientInfo?.fileNumber}}</span>
+                        </div>
+
+                        <div class="flex-item">
+                            <span class="title secondary-text">Digitized Data</span>
+                            <span class="text">{{patient?.patientInfo?.totalDigitizedData}}</span>
+                        </div>
+                        <div class="flex-item">
+                            <span class="title secondary-text">Marital Status</span>
+                            <span class="text">{{patient?.patientInfo?.maritalStatus}}</span>
+                        </div>
+
+                        <div class="flex-item">
+                            <span class="title secondary-text">Occupation</span>
+                            <span class="text">{{patient?.occupation}}</span>
+                        </div>
+
+                        <div class="flex-item">
+                            <span class="title secondary-text">Spouse</span>
+                            <span class="text">{{patient?.partner}}</span>
+                        </div>
+
+                        <div class="flex-item">
+                            <span class="title secondary-text">Emergency Contact</span>
+                            <span class="text">{{patient?.patientInfo?.emergancyContact}}</span>
+                        </div>
+
+                        <div class="flex-item">
+                            <span class="title secondary-text">Identity number</span>
+                            <span class="text">{{patient?.identityNumber}}</span>
+                        </div>
+                        <!-- <div class="flex-item">
+                            <span class="title secondary-text">Scanned Sheets</span>
+                            <span class="text">{{patient?.scannedSheets}}</span>
+                        </div> -->
+                    </div>
+                </span>
+                <!-- / BACK -->
+
+            </switch-panel>
+        </div>
+        <!-- / PATIENT INFO CONTENT -->
+
+        <!-- DYNAMIC CONTENT -->
+        <div class="content p-4 section-patient-content">
+
+            <!-- SIDEBAR -->
+            <fuse-sidebar class="sidebar patient-sidebar" [ngClass]="{'sidebar-folded': sideBarFolded}" name="patient-sidebar" position="left" lockedOpen="gt-md">
+
+                <div class="menu-container" fxLayout="row" fxLayoutAlign="end center">
+                    <mat-icon class="menu-icon cursor-pointer" (click)="onToggleSidebar()">menu</mat-icon>
+                </div>
+
+                <!-- SIDEBAR CONTENT -->
+                <div class="content sidebar-content">
+                    <app-patient-sidebar [patientId]="patientId"></app-patient-sidebar>
+                </div>
+                <!-- / SIDEBAR CONTENT -->
+
+            </fuse-sidebar>
+            <!-- / SIDEBAR -->
+
+            <div class="router-outlet">
+                <router-outlet></router-outlet>
+            </div>
+
+        </div>
+        <!-- / DYNAMIC CONTENT -->
+
+    </div>
+    <!-- / CENTER -->
+
+</div>

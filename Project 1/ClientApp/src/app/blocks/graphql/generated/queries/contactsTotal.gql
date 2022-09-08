@@ -1,0 +1,3 @@
+query contactsTotal($sortBy: String, $page: Int, $size: Int, $filter: String, $descending: Boolean){
+    contactsTotal(sortBy: $sortBy, page: $page, size: $size, filter: $filter, descending: $descending)
+}

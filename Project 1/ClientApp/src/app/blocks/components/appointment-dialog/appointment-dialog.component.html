@@ -1,0 +1,90 @@
+<h1 mat-dialog-title class="mb-0">{{ actionType == EventActionTypesEnum.edit ? 'Edit Event': 'Create Event'}}</h1>
+<div mat-dialog-content>
+
+    <div fxLayout="column">
+
+        <div class="header-toolbar">
+            <div class="btn" (click)="onSave()">
+                <mat-icon class="material-icons-outlined mr-4 s-20">save</mat-icon>
+                <span>Save</span>
+            </div>
+            <div class="btn" (click)="onCancelClick()">
+                <mat-icon class="material-icons-outlined mr-4 s-20">undo</mat-icon>
+                <span>Cancel</span>
+            </div>
+            <div class="btn" (click)="createNewContact()"
+                [hidden]="event.type == EventTypesEnum.conference || !event.type">
+                <mat-icon class="material-icons-outlined mr-4 s-20">add</mat-icon>
+                <span>New Contact</span>
+            </div>
+            <div class="btn" (click)="onDelete()"
+                *ngIf="actionType == EventActionTypesEnum.edit">
+                <mat-icon class="material-icons-outlined mr-4 s-20">delete</mat-icon>
+                <span>Delete</span>
+            </div>
+        </div>
+
+        <mdc-form-infobox-error [dataLink]="errors"></mdc-form-infobox-error>
+
+        <form class="event-form" fxLayout="column" fxLayoutAlign="start"
+            fxFlex="1 0 auto" #form="ngForm">
+
+            <!-- TYPE -->
+            <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto" fxLayoutGap="15px">
+
+                <mat-icon class="mb-16 grey-600-fg material-icons-outlined">label</mat-icon>
+
+                <mat-form-field appearance="outline" fxFlex="1 0 auto">
+                    <mat-label>Choose a type</mat-label>
+                    <mat-select [(ngModel)]="event.type" name="type" [compareWith]="matSelectCompareString" required #typeCtrl="ngModel">
+                        <mat-option *ngFor="let type of eventTypes" [value]="type">
+                            <span class="text-capitalize">{{type}}</span>
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="typeCtrl.hasError('required')">Please choose type.</mat-error>
+                </mat-form-field>
+
+            </div>
+            <!-- / TYPE -->
+
+            <app-event-conflict-alert [data]="{startTime: event.startTime,endTime: event.endTime, id: event.id}"></app-event-conflict-alert>
+
+            <app-time-range class="mb-12" [event]="event"></app-time-range>
+
+            <!-- TODO : WAITING UNTIL THE SERVER CAN HANDLE RECURRENCE EVENTS -->
+            <!-- <app-recurrence-editor class="mb-24" [data]="event.recurrenceRule" (change)="onRecurrenceChange($event)"></app-recurrence-editor> -->
+
+            <!-- OPERATIONS TEMPALTE -->
+            <ng-container *ngIf="event.type === EventTypesEnum.operation">
+                <app-operation-event-template [event]="event" (onChange)="onModelChange($event)"></app-operation-event-template>
+            </ng-container>
+            <!-- / OPERATIONS TEMPALTE -->
+
+            <!-- VISITS TEMPALTE -->
+            <ng-container *ngIf="event.type === EventTypesEnum.visit">
+                <app-visits-event-template [event]="event" [actionType]="actionType" (onChange)="onModelChange($event)"></app-visits-event-template>
+            </ng-container>
+            <!-- / VISITS TEMPALTE -->
+
+            <!-- FLOOR TEMPALTE -->
+            <ng-container *ngIf="event.type === EventTypesEnum.floor">
+                <app-floor-event-template [event]="event" [actionType]="actionType" (onChange)="onModelChange($event)"></app-floor-event-template>
+            </ng-container>
+            <!-- / FLOOR TEMPALTE -->
+
+            <!-- CONFERENCE TEMPALTE -->
+            <ng-container *ngIf="event.type === EventTypesEnum.conference">
+                <app-conference-event-template [event]="event" [actionType]="actionType" (onChange)="onModelChange($event)"></app-conference-event-template>
+            </ng-container>
+            <!-- / CONFERENCE TEMPALTE -->
+
+            <!-- EVENT TEMPALTE -->
+            <ng-container *ngIf="event.type === EventTypesEnum.event">
+                <app-general-event-template [event]="event" [actionType]="actionType" (onChange)="onModelChange($event)"></app-general-event-template>
+            </ng-container>
+            <!-- / EVENT TEMPALTE -->
+
+        </form>
+
+    </div>
+</div>

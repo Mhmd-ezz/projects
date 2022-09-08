@@ -1,0 +1,191 @@
+<h1 mat-dialog-title class="mb-0">
+    <span [fxShow]="action == 'new'">New medication</span>
+    <span [fxShow]="action == 'stop'">Stop medication</span>
+    <span [fxShow]="action == 'replace'">Replace medication</span>
+    <span [fxShow]="action == 'renew'">Renew medication</span>
+</h1>
+<div mat-dialog-content>
+
+    <div fxLayout="column">
+
+        <div class="header-toolbar">
+            <div class="btn" (click)="onSave()">
+                <mat-icon class="material-icons-outlined mr-4 s-20">save</mat-icon>
+                <span>Save</span>
+            </div>
+            <div class="btn" (click)="onCancelClick()">
+                <mat-icon class="material-icons-outlined mr-4 s-20">undo</mat-icon>
+                <span>Cancel</span>
+            </div>
+            <div class="btn" (click)="openNewDrugDialog()"  *ngIf="action == 'new'">
+                <mat-icon class="material-icons-outlined mr-4 s-20">add</mat-icon>
+                <span>New Drug</span>
+            </div>
+        </div>
+
+        <!-- <mdc-form-infobox-error [dataLink]="errors"></mdc-form-infobox-error> -->
+
+        <form class="event-form" fxLayout="column" fxLayoutAlign="start"
+            fxFlex="1 0 auto" #form="ngForm">
+
+            <ng-container *ngIf="action == 'new' || action == 'replace' || action == 'renew' ">
+
+                <!-- Add/Update DRUG -->
+                <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto" fxLayoutGap="15px" *ngIf="action != 'renew'">
+
+                    <fa-icon class="mb-16 grey-600-fg fa-default" [icon]="faPrescriptionBottleAlt"></fa-icon>
+
+                     <mat-form-field appearance="outline" fxFlex="1 0 auto">
+                        <mat-label>Drug</mat-label>
+                        <input matInput type="text" aria-label="Number"
+                        placeholder="Drug" [formControl]="drugNameInput"                       
+                        name="drug" [matAutocomplete]="auto">                        
+                        <mat-autocomplete #auto="matAutocomplete">                            
+                            <mat-option *ngFor="let drug of filteredDrugs | async" [value]="drug.name">
+                                {{drug.name}}
+                              </mat-option>
+                          </mat-autocomplete>
+                    </mat-form-field>             
+
+                </div>
+               <!-- Add/Update DRUG -->
+
+               <!-- Renew DRUG -->
+                <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto" fxLayoutGap="15px" *ngIf="action == 'renew'">
+
+                    <fa-icon class="mb-16 grey-600-fg fa-default" [icon]="faPrescriptionBottleAlt"></fa-icon>
+
+                    <mat-form-field appearance="outline" fxFlex="1 0 auto">
+                        <mat-label>Drug</mat-label>
+                        <input matInput 
+                        placeholder="Drug"
+                        [(ngModel)]="medication.drug.name"
+                        [ngModelOptions]="{standalone: true}"                        
+                        disabled>
+
+                    </mat-form-field>
+
+                </div>
+               <!--Renew DRUG -->
+
+                <!-- DURATION -->
+                <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto" fxLayoutGap="15px">
+                    <mat-icon class="mb-16 grey-600-fg material-icons-outlined">date_range</mat-icon>
+
+                    <mat-form-field appearance="outline" fxFlex="1 0 auto">
+                        <mat-label>Start Date</mat-label>
+                        <input matInput [matDatepicker]="startDatePicker"
+                        [formControl]="startDate" min="{{today | date:'yyyy-MM-dd'}}"
+                        (ngModelChange)="startDateChanged($event)" 
+                        >
+                        <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+                        <mat-datepicker #startDatePicker></mat-datepicker>
+                    </mat-form-field>
+    
+                    <mat-form-field appearance="outline" fxFlex="1 0 auto">
+                        <mat-label>Stop Date</mat-label>
+                        <input matInput [matDatepicker]="stopDatePicker" placeholder="Stop Date"  (ngModelChange)="stopDateChanged($event)" 
+                        [formControl]="stopDate" min="{{today | date:'yyyy-MM-dd'}}"
+                       >
+                        <mat-datepicker-toggle matSuffix [for]="stopDatePicker"></mat-datepicker-toggle>
+                        <mat-datepicker #stopDatePicker></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto" fxLayoutGap="15px">
+                    <mat-icon class="mb-16 grey-600-fg material-icons-outlined">update</mat-icon>
+                    <mat-form-field appearance="outline" fxFlex="1 1 10%">
+                        <mat-label>Interval</mat-label>
+                        <input matInput  (ngModelChange)="intervalChanged($event)" 
+                        placeholder="Interval"
+                        [formControl]="interval"
+                        name="interval"
+                        >
+
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" fxFlex="1 1 auto">
+                        <mat-label>Interval Type</mat-label>
+                        <mat-select placeholder="intervalType" name="interval_type"  (ngModelChange)="intervalTypeChanged($event)"   
+                         [formControl]="intervalType">                            
+                            <mat-option *ngFor="let type of intervalTypes" [value]="type.value">
+                                {{type.value}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" fxFlex="2 1 auto">
+                        <mat-label>Duration</mat-label>
+                        <input matInput
+                        placeholder="Duration"
+                        [(ngModel)]="History.duration"
+                        name="duration" [disabled]="true"
+                        >
+
+                    </mat-form-field>
+
+                </div>
+                <!-- / DURATION -->
+
+                <!-- FREQUENCY -->
+                <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto" fxLayoutGap="15px">
+
+                    <mat-icon class="mb-16 grey-600-fg material-icons-outlined">assignment</mat-icon>
+
+
+                    <mat-form-field appearance="outline" fxFlex="1 0 auto">
+                        <mat-label>Frequency</mat-label>
+                        <input matInput
+                        placeholder="Frequency"
+                        name="frequency"
+                        [(ngModel)]="History.frequency"
+                        >
+
+                    </mat-form-field>
+
+                </div>
+                <!-- / FREQUENCY -->
+
+                <!-- NOTE -->
+                <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto" fxLayoutGap="15px">
+
+                    <!-- <mat-icon class="mb-16 grey-600-fg material-icons-outlined">assignment</mat-icon> -->
+                    <fa-icon class="mb-16 grey-600-fg fa-default" [icon]="faQuoteRight"></fa-icon>
+
+
+                    <mat-form-field appearance="outline" fxFlex="1 0 auto">
+                        <mat-label>Note</mat-label>
+                        <textarea matInput placeholder="Note"
+                        #nameModel="ngModel"
+                        name="note"
+                        [(ngModel)]="History.note"></textarea>
+                    </mat-form-field>
+
+                </div>
+                <!-- / NOTE -->
+            </ng-container>
+
+            <ng-container *ngIf="action == 'stop'">
+                <!-- REASON -->
+                <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto" fxLayoutGap="15px">
+
+                    <!-- <mat-icon class="mb-16 grey-600-fg material-icons-outlined">assignment</mat-icon> -->
+                    <fa-icon class="mb-16 grey-600-fg fa-default" [icon]="faQuoteRight"></fa-icon>
+
+
+                    <mat-form-field appearance="outline" fxFlex="1 0 auto">
+                        <mat-label>Reason</mat-label>
+                        <textarea matInput
+                         placeholder="Reason"
+                         [(ngModel)]="medication.reason"
+                         name="reason"                        
+                        ></textarea>
+                    </mat-form-field>
+
+                </div>
+                <!-- / REASON -->
+            </ng-container>
+
+          
+
+        </form>
+
+    </div>
+</div>

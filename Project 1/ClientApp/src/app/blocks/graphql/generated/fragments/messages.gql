@@ -1,0 +1,9 @@
+fragment Messages on Messages{
+content
+sentAt
+sub
+from{
+id
+displayName
+        }    
+}

@@ -1,0 +1,11 @@
+fragment Todo on Todo{
+id
+title
+notes
+startDate
+dueDate
+isCompleted
+isStarred
+isImportant
+patientId    
+}

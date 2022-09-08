@@ -1,0 +1,86 @@
+<h1 mat-dialog-title>Attach files</h1>
+
+<div mat-dialog-content class="attach-content">
+
+    <h4>{{data.files?.length}} Selected files</h4>
+    <div class="flex-column">
+
+        <!-- @ TODO REPLACE WITH input-advanced -->
+        <!-- <mdc-lookup-input [dataLink]="tags" [groupkey]="'media_tags'"
+            [modelName]="'tags'" (notify)="notifyHandler($event)"
+            #tagsElRef>
+            <mat-form-field class="mdc-smart-input">
+                <input matInput #input placeholder="Tags" name="tags" 
+                    matInput [formControl]="tagsControl" [matAutocomplete]="autoTags">
+                <mat-icon class="cursor-pointer" (click)="$event.stopPropagation()" matSuffix matTooltip="Click here or press enter to store this record"  [matTooltipClass]="'font-size-12'" #save>add_box</mat-icon>
+                <mat-autocomplete #autoTags="matAutocomplete"
+                    [displayWith]="tagsElRef.displayLookupFn">
+                    <mat-option *ngFor="let option of (lookups.media_tags | fuzzysearch:
+                    tagsControl.value : ['text'])"
+                        [value]="option" (onSelectionChange)="input.value !=undefined &&
+                        tagsElRef.MatOptionSelectionChange($event)">
+                        <div class="flex-spacebetween">
+                            <div [innerHTML]="option.highlights?.text"> </div>
+                        </div>
+                    </mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+        </mdc-lookup-input> -->
+
+        <mdc-search-patient [patientId]="selectedPatientId" (onSelectedChanged)="onPatientChanged($event)"></mdc-search-patient>
+
+        <mat-slide-toggle class="mb-20" [disabled]="!patient" [(ngModel)]="attachToActivity" (change)="onAttachToActivityChange($event)">Attach to activity</mat-slide-toggle>
+
+        <!-- <mat-form-field>
+            <mat-select [(ngModel)]="mediaFile.speciality" placeholder="Select Speciality"
+                (selectionChange)="onSpecialityChanged($event)" [disabled]="!patient">
+                <mat-option>-- None --</mat-option>
+                <mat-option value="general">General</mat-option>
+            </mat-select>
+        </mat-form-field> -->
+
+        <!-- SELECT CONDITION -->
+        <mat-form-field *ngIf="attachToActivity">
+            <mat-select [(ngModel)]="selectedCondition" placeholder="Select Condition"
+                (selectionChange)="onConditionChanged($event)" [disabled]="!mediaFile.speciality">
+                <mat-option>-- None --</mat-option>
+                <mat-option *ngFor="let condition of conditionsList" [value]="condition">
+                    {{condition.name}} {{condition.diagnosis?.text[0]?.text ? ' / ' + condition.diagnosis?.text[0]?.text : ''}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <!-- / SELECT CONDITION -->
+
+
+        <!-- SELECT ACTIVITY -->
+        <mat-form-field *ngIf="attachToActivity">
+            <mat-select [(ngModel)]="selectedActivity" placeholder="Select Activity"
+                (selectionChange)="onActivityChanged($event)" [disabled]="!mediaFile.conditionId">
+                <mat-option>-- None --</mat-option>
+                <mat-option disabled="true" [fxShow]="noGeneralOperatons">No operations found.</mat-option>
+                <mat-option disabled="true" [fxShow]="noGeneralFollowups">No Followups found.</mat-option>
+
+                <mat-optgroup *ngFor="let group of activitiesList" [label]="group.name" [fxShow]="group.list.length">
+                    <mat-option *ngFor="let activity of group.list" [value]="activity">
+                        {{activity.name}}
+                    </mat-option>
+                </mat-optgroup>
+            </mat-select>
+        </mat-form-field>
+        <!-- / SELECT ACTIVITY -->
+
+    </div>
+
+
+</div>
+
+<div mat-dialog-actions>
+    <div class="flex-spacebetween full-width pl-8 pr-8">
+        <div class="flex-row">
+            <button mat-raised-button color="accent" (click)="attach()">Attach</button>
+        </div>
+
+        <button mat-raised-button [mat-dialog-close]="true">Close</button>
+    </div>
+
+</div>

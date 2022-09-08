@@ -1,0 +1,25 @@
+query patientMedications($startTime: DateTime, $endTime: DateTime, $sortBy: String, $page: Int, $size: Int, $descending: Boolean){
+    patientMedications(startTime: $startTime, endTime: $endTime, sortBy: $sortBy, page: $page, size: $size, descending: $descending){
+        medicationId
+        patientId
+        conditionId
+        followupId
+        startTime
+        endTime
+        drug{
+            id
+            name
+            dosage
+        }
+        isActive
+        reason
+        history{
+            startDate
+            endDate
+            duration
+            frequency
+            note
+            status
+        }
+    }
+}

@@ -1,0 +1,29 @@
+<div style="width:100%;" fxLayout="row wrap" fxLayoutGap="20px">
+
+    <mat-form-field class="mdc-smart-input" fxFlex="1 0 100%">
+        <input matInput #input
+            name="telephone"
+            placeholder="Contact Numbers"
+            matInput [formControl]="telephoneNameInput">
+
+        <mat-icon class="cursor-pointer" (click)="EnterNewRecord();$event.stopPropagation()" matSuffix matTooltip="Click
+            here or press enter to store this record" [matTooltipClass]="'font-size-12'" #save>add_box</mat-icon>
+
+    </mat-form-field>
+
+</div>
+
+<div *ngFor="let telephone of list; index as index" [class.accent-100]="index === editIndex">
+    <div class="text-container" (click)="viewTelephone(telephone)">
+        <mat-icon class="cursor-pointer s-16" matSuffix>keyboard_arrow_right</mat-icon>
+        <span class="action blue-grey-500">
+            <!-- <mat-icon [fxHide]="editIndex >= 0" class="cursor-pointer s-16" (click)="edit(index);$event.stopPropagation()"
+                matSuffix>edit</mat-icon> -->
+            <mat-icon [fxHide]="editIndex >= 0" class="cursor-pointer s-16" (click)="delete(index);$event.stopPropagation()"
+                matSuffix>delete_forever</mat-icon>
+            <mat-icon fxHide [fxShow]="editIndex >= 0" class="cursor-pointer s-16" matTooltip="This field is in edit mode"
+                (click)="$event.stopPropagation()" matSuffix>lock</mat-icon>
+        </span>
+        <span class="text"> {{ telephone }} </span>
+    </div>
+</div>

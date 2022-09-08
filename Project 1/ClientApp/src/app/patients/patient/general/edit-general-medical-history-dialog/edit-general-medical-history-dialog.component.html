@@ -1,0 +1,259 @@
+<div id="element_within_div">
+    <h1 mat-dialog-title>Edit Medical History</h1>
+    <div mat-dialog-content class="mat-dialog-content">
+        <form #form="ngForm" autocomplete="off">
+
+            <!-- PRESENT MEDICATIONS-->
+            <div class="flex-container">
+
+                <div class="flex-box m-0">
+
+                    <!--PRESENT MEDICATIONS -->
+                    <mdc-form-group class="mdc-form-group">
+                        <!-- HEADER -->
+                        <ng-container class="form-group-header-selector">
+                            <span class="m-0 h3">Present Medications</span>
+                            <span class="mdc-card-mark">
+                            </span>
+                        </ng-container>
+                        <!-- / HEADER -->
+
+                        <!-- FRONT -->
+                        <div class="form-group-front-selector">
+                            <div class="mdc-form-body">
+                                <div class="mdc-form-box" [class.flashit]="focusTo == 'presentMedication'">
+                                    <mdc-medication-input
+                                        [focus]="focusTo == 'presentMedication'"
+                                        [dataLink]="patient.patientInfo.specialities.general.medicalHistory.presentMedication.data"
+                                        [placeholder]="'Present Medications'" [modelName]="'presentMedication'"
+                                        (notifyMedication)="notifyMedicationHandler($event)"></mdc-medication-input>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- / FRONT -->
+
+                    </mdc-form-group>
+                    <!-- / PRESENT MEDICATIONS -->
+
+                </div>
+
+            </div>
+            <!-- / PRESENT MEDICATIONS -->
+
+            <!-- PAST MEDICATIONS-->
+            <div class="flex-container">
+
+                <div class="flex-box m-0">
+
+                    <!-- PAST MEDICATIONS-->
+                    <mdc-form-group class="mdc-form-group">
+                        <!-- HEADER -->
+                        <ng-container class="form-group-header-selector">
+                            <span class="m-0 h3">Past Medications</span>
+                        </ng-container>
+                        <!-- / HEADER -->
+
+                        <!-- FRONT -->
+                        <div class="form-group-front-selector">
+                            <div class="mdc-form-body">
+                                <div class="mdc-form-box" [class.flashit]="focusTo == 'pastMedication'">
+                                    <mdc-medication-input
+                                        [focus]="focusTo == 'pastMedication'"
+                                        [dataLink]="patient.patientInfo.specialities.general.medicalHistory.pastMedication.data"
+                                        [placeholder]="'Past Medications'" [modelName]="'pastMedication'"
+                                        (notifyMedication)="notifyMedicationHandler($event)"></mdc-medication-input>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- / FRONT -->
+
+                    </mdc-form-group>
+                    <!-- / PAST MEDICATIONS-->
+
+                </div>
+
+            </div>
+            <!-- /  PAST MEDICATIONS-->
+
+            <div>
+                <!-- MEDICAL HISTORY -->
+                <mdc-form-group class="mdc-form-group">
+                    <!-- HEADER -->
+                    <ng-container class="form-group-header-selector">
+                        <span class="m-0 h3">Medical History</span>
+                        <span class="mdc-card-mark">
+                            <span class="ml-8 mr-8 blue-grey-100-fg"> | </span>
+                            <small class="blue-100-fg"> Optional</small>
+                        </span>
+                    </ng-container>
+                    <!-- / HEADER -->
+
+                    <!-- FRONT -->
+                    <div class="form-group-front-selector">
+                        <div class="mdc-form-body mb-20" style="flex-direction: column">
+                            <div class="mdc-form-box w-per-100">
+
+                                <mdc-lookup-input-advanced  [class.flashit]="focusTo ==
+                                'allergies'"
+                                    [lookupsCollection]="lookups.allergies || []"
+                                    [dataLink]="patient.patientInfo.specialities.general.medicalHistory.allergies"
+                                    [groupkey]="'allergies'"
+                                    [modelName]="'allergies'"
+                                    [placeholder]="'Allergies'"
+                                    (notify)="lookupNotifyHandler($event)"
+                                    #inputAllergies>
+                                </mdc-lookup-input-advanced>
+
+                            </div>
+                            <div class="mdc-form-box w-per-100">
+
+                                <mdc-lookup-input-advanced [class.flashit]="focusTo ==
+                                'familyHistory'"
+                                    [lookupsCollection]="lookups.family_history || []"
+                                    [dataLink]="patient.patientInfo.specialities.general.medicalHistory.familyHistory"
+                                    [groupkey]="'family_history'"
+                                    [modelName]="'familyHistory'"
+                                    [placeholder]="'Family History'"
+                                    (notify)="lookupNotifyHandler($event)"
+                                    #inputFamilyHistory>
+                                </mdc-lookup-input-advanced>
+
+                            </div>
+
+                            <div class="mdc-form-box w-per-100">
+
+                                <mdc-lookup-input-advanced [class.flashit]="focusTo ==
+                                'medicalIssues'"
+                                    [lookupsCollection]="lookups.family_history || []"
+                                    [dataLink]="patient.patientInfo.specialities.general.medicalHistory.medicalIssues"
+                                    [groupkey]="'medical_issues'"
+                                    [modelName]="'medicalIssues'"
+                                    [placeholder]="'Medical Issues'"
+                                    (notify)="lookupNotifyHandler($event)"
+                                    #inputMedicalIssues>
+                                </mdc-lookup-input-advanced>
+                            </div>
+                        </div>
+                        <div class="mdc-form-body" #surgicalHistoryContainer>
+                            <div class="mdc-form-box" style="overflow-x: auto;">
+                                <h3>Surgical History</h3>
+                                <div class="table-responsive patient-surgeries">
+                                    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 sh-table">
+
+                                        <!-- index Column -->
+                                        <ng-container matColumnDef="index">
+                                            <th mat-header-cell *matHeaderCellDef class="surgery-tbl-header"> # </th>
+                                            <td mat-cell *matCellDef="let element; let i= index;"> {{i + 1}} </td>
+                                            <td mat-footer-cell *matFooterCellDef></td>
+                                        </ng-container>
+
+
+                                        <!-- what Column -->
+                                        <ng-container matColumnDef="what">
+                                            <th mat-header-cell *matHeaderCellDef class="surgery-tbl-header"> What </th>
+                                            <td mat-cell *matCellDef="let element"> {{element.what}} </td>
+                                            <td mat-footer-cell *matFooterCellDef>
+                                                <mat-form-field class="" style="width: 100%;" [class.flashit]="focusTo ==
+                                                    'surgicalHistory'">
+                                                    <input
+                                                        matInput
+                                                        placeholder="What"
+                                                        [ngModelOptions]="{updateOn:'blur'}"
+                                                        name="what"
+                                                        [(ngModel)]="surgery.what"
+                                                        (keyup.enter)="onAddSurgery()"
+                                                        #surgeryWhatInput>
+                                                </mat-form-field>
+                                            </td>
+                                        </ng-container>
+
+                                        <!-- when Column -->
+                                        <ng-container matColumnDef="when">
+                                            <th mat-header-cell *matHeaderCellDef class="surgery-tbl-header"> When </th>
+                                            <td mat-cell *matCellDef="let element"> {{element.when | date: 'dd MMM, yyyy'}}
+                                            </td>
+                                            <td mat-footer-cell *matFooterCellDef>
+                                                <div fxLayout="row" fxLayoutGap="10px">
+                                                    <mat-form-field fxFlex class="">
+                                                        <input matInput placeholder="When" [ngModelOptions]="{updateOn:'blur'}"
+                                                            name="when" [(ngModel)]="surgery.when" [matDatepicker]="dp"
+                                                            (dateChange)="onSurgeryDateChange($event)"
+                                                            (keyup.enter)="onAddSurgery()"
+                                                            (input)="onSurgeryDateChange($event.target.value)">
+                                                        <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+                                                        <mat-datepicker #dp>
+                                                        </mat-datepicker>
+                                                    </mat-form-field>
+                                                    <mat-form-field fxFlex class="" style="width: 85px;">
+                                                        <input matInput placeholder="Years ago" name="age"
+                                                            [(ngModel)]="surgeryAgo"
+                                                            (input)="onSurgeryAgoChange($event.target.value)"
+                                                            (keyup.enter)="onAddSurgery()">
+                                                    </mat-form-field>
+                                                </div>
+                                            </td>
+                                        </ng-container>
+
+                                        <!-- since Column -->
+                                        <!-- <ng-container matColumnDef="since">
+                                                <th mat-header-cell *matHeaderCellDef class="surgery-tbl-header"> Since </th>
+                                                <td mat-cell *matCellDef="let element"> {{element.since}} </td>
+                                                <td mat-footer-cell *matFooterCellDef>
+                                                    <mat-form-field class="" style="width: 100%;">
+                                                        <input matInput placeholder="Since" name="since" [(ngModel)]="surgery.since"
+                                                            (keyup.enter)="onAddSurgery()">
+                                                    </mat-form-field>
+                                                </td>
+                                            </ng-container> -->
+                                        <!-- note Column -->
+                                        <ng-container matColumnDef="note">
+                                            <th mat-header-cell *matHeaderCellDef class="surgery-tbl-header"> Note </th>
+                                            <td mat-cell *matCellDef="let element"> {{element.note}} </td>
+                                            <td mat-footer-cell *matFooterCellDef>
+                                                <mat-form-field class="" style="width: 100%;">
+                                                    <input matInput placeholder="Note" #first="ngModel" name="note"
+                                                        [ngModelOptions]="{updateOn:'blur'}" [(ngModel)]="surgery.note"
+                                                        (keyup.enter)="onAddSurgery()">
+                                                </mat-form-field>
+                                            </td>
+                                        </ng-container>
+
+                                        <!-- action Column -->
+                                        <ng-container matColumnDef="action">
+                                            <th mat-header-cell *matHeaderCellDef></th>
+                                            <td mat-cell *matCellDef="let row; let i= index;" class="text-center">
+                                                <!-- <mat-icon class="cursor-pointer blue-500-fg s-18 mr-8" (click)="$event.stopPropagation()"
+                                                        matSuffix>edit</mat-icon> -->
+                                                <mat-icon class="cursor-pointer red-400-fg s-20"
+                                                    (click)="onRemoveSurgery(i);$event.stopPropagation()"
+                                                    matSuffix matTooltip="Click here or press enter to store this record"
+                                                    [matTooltipClass]="'font-size-12'" #save>remove</mat-icon>
+                                            </td>
+                                            <td mat-footer-cell *matFooterCellDef class="text-center">
+                                                <mat-icon class="cursor-pointer blue-600-fg"
+                                                    (click)="onAddSurgery();$event.stopPropagation()"
+                                                    matSuffix>add</mat-icon>
+                                            </td>
+                                        </ng-container>
+
+                                        <tr mat-header-row *matHeaderRowDef="surgeryDisplayedColumns"></tr>
+                                        <tr mat-row *matRowDef="let row; columns: surgeryDisplayedColumns;"></tr>
+                                        <tr mat-footer-row *matFooterRowDef="surgeryDisplayedColumns"></tr>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </mdc-form-group>
+                <!-- / MEDICAL HISTORY -->
+            </div>
+
+        </form>
+    </div>
+    <div mat-dialog-actions>
+        <button mat-raised-button (click)="cancel()">Cancel</button>
+        <button mat-raised-button color="accent" (click)="saveChanges()" cdkFocusInitial>Save</button>
+    </div>
+</div>

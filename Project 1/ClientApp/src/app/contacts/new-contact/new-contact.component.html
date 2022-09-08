@@ -1,0 +1,146 @@
+<div class="content content-body">
+
+    <div class="header-tool accent mb-24">
+        <div class="flex-center">
+            <mat-icon class="mr-8 s-22" matSuffix>add_box</mat-icon>
+            <span class="h2">New contact</span>
+        </div>
+        <div class="flex-center">
+
+            <mdc-form-status></mdc-form-status>
+
+        </div>
+        <div>
+            <button mat-flat-button type="button" (click)="onDone()" class="ml-8">Done</button>
+        </div>
+
+    </div>
+
+    <mdc-form-infobox-error [dataLink]="errors"></mdc-form-infobox-error>
+
+    <form #form="ngForm" fxLayout="column" autocomplete="off">
+
+        <!-- NAME & PHONE -->
+        <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto" fxLayoutGap="15px">
+
+            <!-- NAME -->
+            <mat-form-field appearance="outline" fxFlex="calc(50% )" fxFlex.xs="calc(100%)" class="">
+                <mat-label>Name</mat-label>
+                <input matInput placeholder="Name" #nameControl="ngModel" name="name" [(ngModel)]="contact.name"
+                    type="text"
+                    autofocus
+                    required>
+                <mat-error *ngIf="nameControl.hasError('required')">
+                    This field is required
+                </mat-error>
+            </mat-form-field>
+            <!-- / NAME -->
+
+            <!-- TELEPHONE -->
+            <mat-form-field appearance="outline" fxFlex="calc(50% - 15px)" fxFlex.xs="calc(100% - 15px)" class="">
+                <mat-label>Contact number</mat-label>
+                <input matInput placeholder="Contact number" #telephoneControl="ngModel" name="telephone"
+                    [(ngModel)]="contact.telephone"
+                    type="text"
+                    required>
+                <mat-error *ngIf="telephoneControl.hasError('required')">
+                    This field is required
+                </mat-error>
+            </mat-form-field>
+            <!-- / TELEPHONE -->
+
+        </div>
+        <!-- / NAME & PHONE -->
+
+        <!-- GENDER & BIRTHDATE -->
+        <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto" fxLayoutGap="15px">
+
+            <!-- BIRTHDATE -->
+            <mat-form-field appearance="outline" fxFlex="calc(50%)" fxFlex.xs="calc(100%)" class="">
+                <mat-label>Birthdate</mat-label>
+                <input
+                    appMaskDate
+                    matInput
+                    [matDatepicker]="picker"
+                    #birthDateModel="ngModel"
+                    name="birthdate"
+                    placeholder="Birthdate"
+                    [(ngModel)]="contact.birthDate">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+                <mat-error *ngIf="birthDateModel.hasError('required')">
+                    This field is required
+                </mat-error>
+            </mat-form-field>
+            <!-- / BIRTHDATE -->
+
+            <!-- GENDER -->
+            <mat-form-field appearance="outline" fxFlex="calc(50% - 15px)" fxFlex.xs="calc(100% - 15px)">
+                <mat-select placeholder="Choose Gender" name="gender" [(ngModel)]="contact.gender"
+                    #genderModel="ngModel">
+                    <mat-option>--</mat-option>
+                    <mat-option value="male">Male</mat-option>
+                    <mat-option value="female">Female</mat-option>
+                </mat-select>
+                <mat-error *ngIf="genderModel.hasError('required')">Please choose gender</mat-error>
+            </mat-form-field>
+            <!-- / GENDER -->
+
+
+
+
+        </div>
+        <!-- / GENDER & BIRTHDATE -->
+
+
+        <!-- COUNTRY & CITY -->
+        <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto" fxLayoutGap="15px">
+
+            <mat-form-field appearance="outline" fxFlex="calc(50%)" fxFlex.xs="calc(100%)" class="">
+                <mat-label>Country</mat-label>
+                <input matInput placeholder="Country" name="Country" [(ngModel)]="contact.country"
+                    type="text">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" fxFlex="calc(50% - 15px)" fxFlex.xs="calc(100% - 15px)" class="">
+                <mat-label>City</mat-label>
+                <input matInput placeholder="City" name="City" [(ngModel)]="contact.city"
+                    type="text">
+            </mat-form-field>
+        </div>
+        <!-- / COUNTRY & CITY -->
+
+        <!-- OCCUPATION & PARTNER-->
+        <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto" fxLayoutGap="15px">
+
+            <mat-form-field appearance="outline" fxFlex="calc(50%)" fxFlex.xs="calc(100%)" class="">
+                <mat-label>Spouse name</mat-label>
+                <input matInput placeholder="Spouse name" name="partner" [(ngModel)]="contact.partner"
+                    type="text">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" fxFlex="calc(50% - 15px)" fxFlex.xs="calc(100% - 15px)" class="">
+                <mat-label>Occupation</mat-label>
+                <input matInput placeholder="Occupation" #occupationControl="ngModel" name="occupation"
+                    [(ngModel)]="contact.occupation"
+                    type="text">
+            </mat-form-field>
+        </div>
+        <!-- / OCCUPATION & PARTNER -->
+
+        <!-- EMAIL -->
+        <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto" fxLayoutGap="15px">
+
+            <mat-form-field appearance="outline" fxFlex="0 0 calc(50%)" fxFlex.xs="calc(100%)" class="">
+                <mat-label>Email</mat-label>
+                <input matInput placeholder="Email" #emailControl="ngModel" name="email" [(ngModel)]="contact.email"
+                    type="text">
+            </mat-form-field>
+
+        </div>
+        <!-- / EMAIL -->
+
+
+    </form>
+
+</div>

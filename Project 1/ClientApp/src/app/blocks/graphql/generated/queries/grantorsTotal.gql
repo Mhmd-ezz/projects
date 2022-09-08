@@ -1,0 +1,3 @@
+query grantorsTotal($filter: String, $page: Int, $size: Int){
+    grantorsTotal(filter: $filter, page: $page, size: $size)
+}

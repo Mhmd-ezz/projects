@@ -1,0 +1,100 @@
+
+.w-per-100 {
+    min-width: 100%;
+}
+
+.full-width {
+    min-width: 100%;
+}
+
+.font-8em {
+    font-size: 0.8em;
+}
+
+.font-size-12 {
+    font-size: 12px;
+}
+.flex{
+    display: flex;
+}
+
+.m-sides-8{
+    margin-left: 8px;
+    margin-right: 8px;
+}
+
+.mdc-form .mat-form-field-flex {
+    /* min-width: 300px; */
+}
+
+.no-selection {
+    -webkit-user-select: none;
+    /* webkit (safari, chrome) browsers */
+    -moz-user-select: none;
+    /* mozilla browsers */
+    -khtml-user-select: none;
+    /* webkit (konqueror) browsers */
+    -ms-user-select: none;
+    /* IE10+ */
+}
+
+#container-3::-webkit-scrollbar {
+    width: 0 !important;
+}
+
+.page-layout {
+    overflow: unset !important;
+    touch-action: auto;
+}
+
+.btn-disabled {
+    cursor: default;
+    opacity: 0.5;
+    text-decoration: none;
+}
+
+h1,
+.uk-h1,
+h2,
+.uk-h2,
+h3,
+.uk-h3,
+h4,
+.uk-h4,
+h5,
+.uk-h5,
+h6,
+.uk-h6 {
+    color: unset
+}
+
+.comma:not(:empty)~.comma:not(:empty):before {
+    content: ", ";
+}
+
+.breadcrumb-item {
+    min-width: 85px;
+    padding: 0 8px;
+    font-weight: 400;
+    text-align: left;
+    line-height: 20px;
+}
+
+.breadcrumb-item.active {
+    font-weight: 500;
+}
+
+body.theme-default .page-layout.simple.left-sidebar > .center > .content, body.theme-default .page-layout.simple.right-sidebar > .center > .content {
+    background: #fafafa;
+}
+
+/* https://github.com/angular/components/issues/10242#issuecomment-470726829 */
+.mat-sort-header-sorted .mat-sort-header-arrow {
+    opacity: 1 !important;
+}
+.mdc-form .medication {
+    margin-bottom: 30px;
+}
+.mdc-form .media-file-list-container {
+    margin-bottom: 20px;
+}

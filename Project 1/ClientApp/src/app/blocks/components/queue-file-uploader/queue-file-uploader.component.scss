@@ -1,0 +1,56 @@
+.transfer-container {
+
+
+    .transfer {
+        // box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+        margin-top: 10px;
+        background: white;
+        border-color: rgba(0, 0, 0, 0.12);
+        border-radius: 8px;
+        border: 1px solid rgba(0, 0, 0, 0.18);
+        padding: 5px 5px;
+
+        .tools {
+            padding-left: 5px;
+
+            .action-btn {
+                color: #26a69a !important;
+                cursor: pointer;
+
+                &:hover {
+                    color: #009688 !important;
+                }
+            }
+
+            .status {
+                font-size: 13px;
+                color: #6b6b6b;
+            }
+        }
+
+
+        .progress {
+            width: 100%;
+            padding-top: 4px;
+        }
+    }
+
+    .stats {
+        font-family: 'Ubuntu', sans-serif;
+        font-size: 15px;
+    }
+
+    .no-files {
+        font-family: 'Ubuntu', sans-serif;
+        font-size: 16px;
+    }
+
+    .main-action-btn {
+        color: #1e88e5 !important;
+        cursor: pointer;
+
+        &:hover {
+            color: #1976d2 !important;
+        }
+    }
+}

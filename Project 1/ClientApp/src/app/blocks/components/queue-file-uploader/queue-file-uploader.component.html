@@ -1,0 +1,82 @@
+<ng-container #flowAdvanced="flow" [flowConfig]="{ headers: {
+    'Authorization' : accessToken 
+    }}"></ng-container>
+
+<div class="transfer-container" perfectScrollbar>
+    <div class="full-width fuse-card p-28" fxLayout="column" fxLayoutAlign="center center" [fxShow]="!(flowAdvanced.transfers$ | async).transfers.length">
+        <mat-icon class="s-48 blue-300-fg">
+            cloud_done
+        </mat-icon>
+        <div class="no-files">
+            No files to upload
+        </div>
+    </div>
+
+    <div [fxShow]="(flowAdvanced.transfers$ | async).transfers.length" class="full-width fuse-card p-4 pr-12 pl-12" fxLayout="row" fxLayoutAlign="space-between center">
+        <div fxLayout="row" fxLayoutAlign="start center">
+            <mat-icon title="Upload all" (click)="onResumeAll()" class="main-action-btn s-32 mr-4">play_circle_filled</mat-icon>
+            <mat-icon title="Pause all" (click)="onPauseAll()" class="main-action-btn s-32">pause_circle_filled</mat-icon>
+        </div>
+        <div class="stats">
+            {{(flowAdvanced.transfers$ | async).transfers.length}} Files
+        </div>
+
+    </div>
+
+    <div class="transfer"
+        fxLayout="column" fxLayoutAlign="start start"
+        *ngFor="let transfer of (flowAdvanced.transfers$ | async).transfers; trackBy: trackTransfer">
+
+        <div fxLayout="row">
+
+            <!-- PREVIEW -->
+            <div fxLayout="row" style="min-height: 40px;min-width: 40px;">
+                <ng-container *ngIf="isImage(transfer.flowFile.file.type); else elseTemplate">
+                    <img [flowSrc]="transfer" width="50px" height="50px" style="max-height: 50px;height: 50px;">
+                </ng-container>
+                <ng-template #elseTemplate>
+                    <mat-icon class="s-40 blue-grey-400-fg">insert_drive_file</mat-icon>
+                </ng-template>
+            </div>
+            <!-- / PREVIEW -->
+
+            <!-- TOOLS -->
+            <div class="tools" fxLayout="column" fxLayoutAlign="space-between start">
+                
+                <!-- HEAD -->
+                <div class="status" fxLayout="row" fxLayoutGap="10px">
+                    <div class=""
+                        [ngClass]="{'mat-error': transfer.error}">
+                        {{ getStatus(transfer) }}
+                    </div>
+                    <div>
+                        {{ (transfer.flowFile.size / 1024 / 1024).toFixed(2) + ' MB'}}
+                    </div>
+                    <div [fxShow]="transfer.progress > 0 && !transfer.error">
+                        {{ transfer.progress | percent }}
+                    </div>
+                    <div [fxShow]="transfer.progress > 0 && !transfer.complete">
+                        {{ transfer.averageSpeed / 1000 | number: '1.0' }} kb/s
+                    </div>
+                </div>
+                <!-- / HEAD -->
+
+                <!-- FOOTER -->
+                <div fxLayout="row" title="Resume" fxLayoutGap="3px">
+                    <mat-icon class="action-btn" (click)="onResumeFile(transfer)"
+                        [fxShow]="!transfer.complete && (!transfer.flowFile.isUploading() || transfer.paused)">play_circle_filled</mat-icon>
+                    <mat-icon title="Pause" class="action-btn" (click)="onPauseFile(transfer)" [fxShow]="!transfer.complete && transfer.paused">pause_circle_filled</mat-icon>
+                    <mat-icon title="Retry" class="action-btn" (click)="onRetryFile(transfer)" [fxShow]="transfer.error">replay</mat-icon>
+                    <mat-icon title="Delete" class="action-btn" (click)="onCancelFile(transfer)">delete</mat-icon>
+                </div>
+                <!-- / FOOTER -->
+
+            </div>
+            <!-- / TOOLS -->
+        </div>
+
+        <div class="progress">
+            <mat-progress-bar color="accent" mode="determinate" [value]="transfer.progress * 100"></mat-progress-bar>
+        </div>
+    </div>
+</div>

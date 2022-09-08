@@ -1,0 +1,154 @@
+<div id="element_within_div">
+    <h1 mat-dialog-title>Edit Medical History</h1>
+    <div mat-dialog-content class="mat-dialog-content">
+        <form #form="ngForm" autocomplete="off">
+
+            <!-- PRESENT MEDICATIONS-->
+            <div class="flex-container">
+
+                <div class="flex-box m-0">
+
+                    <!--PRESENT MEDICATIONS -->
+                    <mdc-form-group class="mdc-form-group">
+                        <!-- HEADER -->
+                        <ng-container class="form-group-header-selector">
+                            <span class="m-0 h3">Present Medications</span>
+                            <span class="mdc-card-mark">
+                            </span>
+                        </ng-container>
+                        <!-- / HEADER -->
+
+                        <!-- FRONT -->
+                        <div class="form-group-front-selector">
+                            <div class="mdc-form-body">
+                                <div class="mdc-form-box" [class.flashit]="focusTo == 'presentMedication'">
+                                    <mdc-medication-input
+                                        [focus]="focusTo == 'presentMedication'"
+                                        [dataLink]="patient.patientInfo.specialities.cardiology.medicalHistory.presentMedication.data"
+                                        [placeholder]="'Present Medications'" [modelName]="'presentMedication'"
+                                        (notifyMedication)="notifyMedicationHandler($event)"></mdc-medication-input>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- / FRONT -->
+
+                    </mdc-form-group>
+                    <!-- / PRESENT MEDICATIONS -->
+
+                </div>
+
+            </div>
+            <!-- / PRESENT MEDICATIONS -->
+
+            <!-- PAST MEDICATIONS-->
+            <div class="flex-container">
+
+                <div class="flex-box m-0">
+
+                    <!-- PAST MEDICATIONS-->
+                    <mdc-form-group class="mdc-form-group">
+                        <!-- HEADER -->
+                        <ng-container class="form-group-header-selector">
+                            <span class="m-0 h3">Past Medications</span>
+                        </ng-container>
+                        <!-- / HEADER -->
+
+                        <!-- FRONT -->
+                        <div class="form-group-front-selector">
+                            <div class="mdc-form-body">
+                                <div class="mdc-form-box" [class.flashit]="focusTo == 'pastMedication'">
+                                    <mdc-medication-input
+                                        [focus]="focusTo == 'pastMedication'"
+                                        [dataLink]="patient.patientInfo.specialities.cardiology.medicalHistory.pastMedication.data"
+                                        [placeholder]="'Past Medications'" [modelName]="'pastMedication'"
+                                        (notifyMedication)="notifyMedicationHandler($event)"></mdc-medication-input>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- / FRONT -->
+
+                    </mdc-form-group>
+                    <!-- / PAST MEDICATIONS-->
+
+                </div>
+
+            </div>
+            <!-- /  PAST MEDICATIONS-->
+
+            <div>
+                <!-- MEDICAL HISTORY -->
+                <mdc-form-group class="mdc-form-group">
+                    <!-- HEADER -->
+                    <ng-container class="form-group-header-selector">
+                        <span class="m-0 h3">Medical History</span>
+                        <span class="mdc-card-mark">
+                            <span class="ml-8 mr-8 blue-grey-100-fg"> | </span>
+                            <small class="blue-100-fg"> Optional</small>
+                        </span>
+                    </ng-container>
+                    <!-- / HEADER -->
+
+                    <!-- FRONT -->
+                    <div class="form-group-front-selector">
+                        <div class="mdc-form-body mb-20" style="flex-direction: column">
+                            <div class="mdc-form-box w-per-100">
+
+                                <mdc-lookup-input-advanced
+                                    [lookupsCollection]="lookups.allergies || []"
+                                    [dataLink]="patient.patientInfo.specialities.cardiology.medicalHistory.allergies"
+                                    [groupkey]="'allergies'"
+                                    [modelName]="'allergies'"
+                                    [placeholder]="'Allergies'"
+                                    (notify)="lookupNotifyHandler($event)"
+                                    #inputAllergies>
+                                </mdc-lookup-input-advanced>
+
+                            </div>
+                            <div class="mdc-form-box w-per-100">
+
+                                <mdc-lookup-input-advanced
+                                    [lookupsCollection]="lookups.family_history || []"
+                                    [dataLink]="patient.patientInfo.specialities.cardiology.medicalHistory.familyHistory"
+                                    [groupkey]="'family_history'"
+                                    [modelName]="'familyHistory'"
+                                    [placeholder]="'Family History'"
+                                    (notify)="lookupNotifyHandler($event)"
+                                    #inputFamilyHistory>
+                                </mdc-lookup-input-advanced>
+
+                            </div>
+
+                            <div class="mdc-form-box w-per-100">
+
+                                <mdc-lookup-input-advanced
+                                    [lookupsCollection]="lookups.family_history || []"
+                                    [dataLink]="patient.patientInfo.specialities.cardiology.medicalHistory.medicalIssues"
+                                    [groupkey]="'medical_issues'"
+                                    [modelName]="'medicalIssues'"
+                                    [placeholder]="'Medical Issues'"
+                                    (notify)="lookupNotifyHandler($event)"
+                                    #inputMedicalIssues>
+                                </mdc-lookup-input-advanced>
+                            </div>
+                        </div>
+                        <div class="mdc-form-body" #surgicalHistoryContainer>
+                            <div class="mdc-form-box" style="overflow-x: auto;">
+                                
+                                <surgery-table-advanced [dataLink]="patient.patientInfo.specialities.cardiology.medicalHistory.surgicalHistory.data"
+                                (surgeryTable)="notifySurgeryHandler($event)" #surgeryWhatInput></surgery-table-advanced>
+                            
+                            </div>
+                        </div>
+                    </div>
+
+                </mdc-form-group>
+                <!-- / MEDICAL HISTORY -->
+            </div>
+
+        </form>
+    </div>
+    <div mat-dialog-actions>
+        <button mat-raised-button (click)="cancel()">Cancel</button>
+        <button mat-raised-button color="accent" (click)="saveChanges()" cdkFocusInitial>Save</button>
+    </div>
+</div>

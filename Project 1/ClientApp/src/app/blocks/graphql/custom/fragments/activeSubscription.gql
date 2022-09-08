@@ -1,0 +1,11 @@
+fragment ActiveSubscription on ActiveSubscription{
+id
+amount
+dayCount
+edition
+expireDate
+grossAmount
+paymentMethod
+processTime
+status    
+}

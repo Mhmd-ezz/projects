@@ -1,0 +1,46 @@
+<div style="width:100%;" fxLayout="row wrap" fxLayoutGap="20px">
+    <!-- <mat-form-field class="example-chip-list">
+        <mat-chip-list #tagsList>
+            <mat-chip *ngFor="let tag of dataLink"
+                [selectable]="tagChipssSlectable"
+                [removable]="tagChipsRemovable" (removed)="removeTag(tag)">
+                {{tag.name}}
+                <mat-icon matChipRemove *ngIf="tagChipsRemovable">cancel</mat-icon>
+            </mat-chip>
+            <input placeholder="Tags" [matChipInputFor]="tagsList"
+                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                [matChipInputAddOnBlur]="tagChipsAddOnBlur"
+                (matChipInputTokenEnd)="addTag($event)">
+        </mat-chip-list>
+    </mat-form-field> -->
+    <mat-form-field class="example-chip-list">
+        <!-- <mat-label>Favorite Fruits</mat-label> -->
+        <mat-chip-list #chipList aria-label="Tags selection">
+          <mat-chip
+          *ngFor="let tag of list"
+            [selectable]="tagChipssSlectable"
+            [removable]="tagChipsRemovable"
+            (removed)="removeTag(tag)">
+            {{tag.name}}
+            <mat-icon matChipRemove *ngIf="tagChipsRemovable">cancel</mat-icon>
+          </mat-chip>
+          <input
+            placeholder="Tags"
+            #tagInput            
+            [formControl]="tagCtrl"
+            [matAutocomplete]="auto"
+            [matChipInputFor]="chipList"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            (matChipInputTokenEnd)="addTag($event)">
+        </mat-chip-list>
+        <mat-autocomplete #auto="matAutocomplete"
+        [displayWith]="displayFn.bind(this)"
+        (optionSelected)="selected($event)">
+          <mat-option *ngFor="let tag of filteredTags | async" [value]="tag.name">
+            {{tag.name}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+   
+
+</div>

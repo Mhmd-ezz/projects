@@ -1,0 +1,59 @@
+@mixin file-manager-theme($theme) {
+
+    $background: map-get($theme, background);
+    $foreground: map-get($theme, foreground);
+    $accent: map-get($theme, accent);
+    $is-dark: map-get($theme, is-dark);
+
+    .center {
+
+        .header {
+
+            .search-wrapper {
+                background: map-get($background, card);
+
+                .sidebar-toggle {
+                    border-right-color: map-get($foreground, divider);
+                }
+
+                .search {
+
+                    input {
+                        background: map-get($background, card);
+                        color: map-get($foreground, text);
+                    }
+                }
+            }
+        }
+
+        .content-card {
+
+            .toolbar {
+
+                .toolbar-separator {
+                    background: map-get($foreground, divider);
+                }
+            }
+        }
+    }
+
+    file-list {
+
+
+        .mat-table {
+
+            .mat-row {
+
+                &.selected {
+                    @if ($is-dark) {
+                        background: map-get($background, hover);
+                    }
+
+                    @else {
+                        background: map-get($accent, 50);
+                    }
+                }
+            }
+        }
+    }
+}

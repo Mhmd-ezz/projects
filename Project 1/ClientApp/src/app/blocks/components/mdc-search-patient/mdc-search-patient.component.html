@@ -1,0 +1,69 @@
+<mat-form-field class="full-width" [ngStyle]="{'min-width.px': minWidth}" id="fuse-search-bar-input" [floatLabel]="'never'">
+    <span matPrefix>
+        <mat-icon matPrefix class="s-20 mr-8 secondary-text" style="vertical-align: bottom;">search</mat-icon>
+    </span>
+
+    <input type="text" placeholder="Search For Patient" aria-label="Number" matInput id="fuse-search-bar-input"
+        [formControl]="searchControl" [matAutocomplete]="auto" #searchInput (keydown.esc)="collapse()"
+        (input)="search($event.target.value)">
+
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayLookupFn">
+
+        <!-- LOADING -->
+        <mat-option *ngIf="loading$ | async" style="height: 25px; background: #e1e3ea;" disabled="true">
+            <div style="display: flex; align-items: center;">
+
+                <ng-container *ngIf="errorSubject.value == false">
+                    <span style="height:20px;font-size:12px;" class="flex-center mr-8"> Loading...</span>
+                    <mat-spinner
+                        [strokeWidth]="2"
+                        [diameter]="16">
+                    </mat-spinner>
+                </ng-container>
+
+                <ng-container *ngIf="errorSubject.value == true">
+                    <span style="height:20px;font-size:12px;" class="flex-center mr-8">Server unreachable</span>
+                </ng-container>
+
+            </div>
+        </mat-option>
+        <!-- / LOADING -->
+
+        <!-- NO RECORDS FOUND MESSAGE -->
+        <mat-option *ngIf="(loading$ | async) == false && patients?.length == 0" style="height: 25px; background: #e1e3ea;" disabled="true">
+            <div style="display: flex; align-items: center;">
+                <ng-container>
+                    <span style="height:20px;font-size:12px;" class="flex-center mr-8">No patients found.</span>
+                </ng-container>
+            </div>
+        </mat-option>
+        <!-- NO RECORDS FOUND MESSAGE -->
+
+        <mat-option class="patient-option" *ngFor="let option of patients"
+            [value]="option" (onSelectionChange)="searchInput.value !=undefined && MatOptionSelectionChange($event)">
+
+            <div class="flex-row" [ngClass]="{'small': size=='small','medium': size=='medium'}">
+
+                <div class="text-capitalize name" [innerHTML]="option.highlights?.name ? option.highlights.name :
+                    option.name"></div>
+
+                <div class="ml-12 contact-number" *ngIf="option.highlights?.telephone || option.telephone">
+                    <mat-icon class="s-16 mr-4 accent-500-fg">local_phone</mat-icon>
+                    <span class="secondary-text" [innerHTML]="option.highlights?.telephone ? option.highlights.telephone :
+                        option.telephone">
+                    </span>
+                </div>
+
+                <div class="ml-12 birthday" *ngIf="option.highlights?.birthDate || option.birthDate">
+                    <mat-icon class="s-16 mr-4 accent-500-fg">cake</mat-icon>
+                    <span class="secondary-text" [innerHTML]="option.highlights?.birthDate ? option.highlights.birthDate :
+                        option.birthDate">
+                    </span>
+                </div>
+
+            </div>
+
+        </mat-option>
+    </mat-autocomplete>
+    <mat-icon matSuffix class="s-16 cursor-pointer" *ngIf="searchInput.value" (click)="clearInput()">clear</mat-icon>
+</mat-form-field>

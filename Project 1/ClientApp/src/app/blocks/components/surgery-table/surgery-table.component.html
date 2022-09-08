@@ -1,0 +1,159 @@
+
+                            <h3>Surgical History</h3>
+                            <div class="table-responsive patient-surgeries">
+                                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" style="width:100%;">
+
+                                    <!-- index Column -->
+                                    <ng-container matColumnDef="index">
+                                        <th mat-header-cell *matHeaderCellDef class="surgery-tbl-header"> # </th>
+                                        <td mat-cell *matCellDef="let element; let i= index;"> {{i + 1}} </td>
+                                        <td mat-footer-cell *matFooterCellDef>
+
+                                        </td>
+                                    </ng-container>
+                                    
+                                    <!-- Type Column -->
+                                    <ng-container matColumnDef="type" >
+                                        <th mat-header-cell *matHeaderCellDef class="surgery-tbl-header"> Type </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.type}} </td>
+                                        <td mat-footer-cell *matFooterCellDef>
+
+                                            <mat-form-field>
+                                                <mat-select placeholder="Operation Type" name="op_type" [(ngModel)]="surgery.type">
+                                                    <mat-option>-- SELECT TYPE --</mat-option> 
+                                                    <mat-option *ngFor="let type of types" [value]="type.name">
+                                                        {{type.name}}
+                                                    </mat-option>
+                                                    <!-- <mat-option value="cvs_endovascular_procedure">CVS / Endovascular Procedure</mat-option>
+                                                    <mat-option value="cvs_surgical">CVS / Surgical</mat-option>
+                                                    <mat-option value="chest_surgery">Chest surgery</mat-option>
+                                                    <mat-option value="orthopedic_surgery">Orthopedic surgery</mat-option>
+                                                    <mat-option value="neuro_surgery">Neuro surgery</mat-option>
+                                                    <mat-option value="thyroid_surgery">Thyroid surgery</mat-option>
+                                                    <mat-option value="general_surgery">General surgery</mat-option> -->
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </td>
+                                    </ng-container>
+
+                                    <!-- what Column -->
+                                    <ng-container matColumnDef="what">
+                                        <th mat-header-cell *matHeaderCellDef class="surgery-tbl-header"> What </th>
+                                        <td mat-cell *matCellDef="let element">   
+                                               
+                                            <div  *ngFor="let item of element.what">                                            
+                                            {{item.text}} </div> 
+                                        </td>
+                                        <td mat-footer-cell *matFooterCellDef>
+                                            <mdc-lookup-input-advanced-predefined
+                                            class="pr-20"
+                                            [groupkey]="'op_type'"
+                                            [modelName]="'SurgicalHistory'"
+                                            [placeholder]="'Operation'"
+                                            [risk]="true"
+                                            [predefinedActive]="true"
+                                            (notifyOperation)="lookupNotifyHandlerOperation($event)" 
+                                            [list]="surgery.what"
+                                             #surgeryWhatInput >
+                                        </mdc-lookup-input-advanced-predefined>
+                                        </td>
+                                    </ng-container>
+
+                                    <!-- when Column -->
+                                    <ng-container matColumnDef="when">
+                                        <th mat-header-cell *matHeaderCellDef class="surgery-tbl-header"> When </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.when | date: 'dd MMM, yyyy'}}
+                                        </td>
+                                        <td mat-footer-cell *matFooterCellDef>
+                                            <div fxLayout="row" fxLayoutGap="10px">
+                                                <mat-form-field fxFlex class="pr-20"  fxFlex="75">
+                                                    <input
+                                                        appMaskDate
+                                                        matInput
+                                                        placeholder="When"
+                                                        name="when"
+                                                        [ngModelOptions]="{standalone: true}"
+                                                        [(ngModel)]="surgery.when"
+                                                        [matDatepicker]="dp"
+                                                        (dateChange)="onSurgeryDateChange($event)"
+                                                        (keyup.enter)="onAddSurgery()"
+                                                        (input)="onSurgeryDateChange($event.target.value)">
+                                                    <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+                                                    <mat-datepicker #dp>
+                                                    </mat-datepicker>
+                                                </mat-form-field>
+                                                <mat-form-field fxFlex class="pr-20"  fxFlex="25">
+                                                    <input matInput
+                                                        placeholder="Years ago"
+                                                        name="age"
+                                                        [ngModelOptions]="{standalone: true}"
+                                                        [(ngModel)]="surgeryAgo"
+                                                        (input)="onSurgeryAgoChange($event.target.value)"
+                                                        (keyup.enter)="onAddSurgery()">
+                                                </mat-form-field>
+                                            </div>
+                                        </td>
+                                    </ng-container>
+
+                                    <!-- since Column -->
+                                    <!-- <ng-container matColumnDef="since">
+                                                <th mat-header-cell *matHeaderCellDef class="surgery-tbl-header"> Since </th>
+                                                <td mat-cell *matCellDef="let element"> {{element.since}} </td>
+                                                <td mat-footer-cell *matFooterCellDef>
+                                                    <mat-form-field class="pr-20" style="width: 100%;">
+                                                        <input matInput placeholder="Since" name="since" [(ngModel)]="surgery.since"
+                                                            (keyup.enter)="onAddSurgery()">
+                                                    </mat-form-field>
+                                                </td>
+                                            </ng-container> -->
+                                    <!-- note Column -->
+                                    <ng-container matColumnDef="note">
+                                        <th mat-header-cell *matHeaderCellDef class="surgery-tbl-header"> Note </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.note}} </td>
+                                        <td mat-footer-cell *matFooterCellDef>
+                                            <mat-form-field class="pr-20" style="width: 100%;">
+                                                <input matInput
+                                                    placeholder="Note"
+                                                    [ngModelOptions]="{standalone: true}"
+                                                    name="note"
+                                                    [(ngModel)]="surgery.note"
+                                                    (keyup.enter)="onAddSurgery()">
+                                            </mat-form-field>
+                                        </td>
+                                    </ng-container>
+
+                                    <!-- action Column -->
+                                    <ng-container matColumnDef="action">
+                                        <th mat-header-cell *matHeaderCellDef></th>
+                                        <td mat-cell *matCellDef="let row; let i= index;" class="text-center">
+                                            <!-- <mat-icon class="cursor-pointer blue-500-fg s-18 mr-8" (click)="$event.stopPropagation()"
+                                                        matSuffix>edit</mat-icon> -->
+                                        <div  fxLayoutAlign="space-between center"> 
+                                            <mat-icon
+                                                class="cursor-pointer red-400-fg s-20"
+                                                (click)="onRemoveSurgery(i);$event.stopPropagation()"
+                                                matSuffix #save>remove</mat-icon>
+                                            <mat-icon
+                                                class="cursor-pointer green-400-fg s-20"
+                                                (click)="onEditSurgery(i);$event.stopPropagation()"
+                                                matSuffix >edit</mat-icon>
+                                        </div>
+                                        </td>
+                                       
+                                        <td mat-footer-cell *matFooterCellDef class="text-center">
+                                            <mat-icon
+                                                class="cursor-pointer blue-600-fg"
+                                                (click)="onAddSurgery();$event.stopPropagation()"
+                                                matTooltip="Click here or press enter to store this record"
+                                                [matTooltipClass]="'font-size-12'"
+                                                matSuffix>add</mat-icon>
+                                        </td>
+                                    </ng-container>
+
+                                    <tr mat-header-row *matHeaderRowDef="surgeryDisplayedColumns"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: surgeryDisplayedColumns;"></tr>
+                                    <tr mat-footer-row *matFooterRowDef="surgeryDisplayedColumns"></tr>
+                                </table>
+                            </div>
+
+                       

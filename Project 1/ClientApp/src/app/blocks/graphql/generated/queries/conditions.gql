@@ -1,0 +1,9 @@
+query conditions{
+    conditions{
+        name
+        type
+        closed
+        opened
+        status
+    }
+}

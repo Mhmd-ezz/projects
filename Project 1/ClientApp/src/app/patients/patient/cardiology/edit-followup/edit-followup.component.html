@@ -1,0 +1,452 @@
+<ng-container #mediaFlow="flow"
+    [flowConfig]="{target: mediaEndpoint+ '/files/uploads' ,
+    allowDuplicateUploads :true,
+    chunkSize: 1000000,
+    headers: {
+    'Authorization' : accessToken
+    }}"></ng-container>
+
+
+<div class="content">
+    <div class="header-tool accent mb-24" stickybits>
+        <div class="flex-center">
+            <mat-icon class="mr-8 s-22" (click)="$event.stopPropagation()" matSuffix>edit</mat-icon>
+            <span class="h2">
+                Edit Followup
+                <small [hidden]="!selectedCondition.name" style="color: #98f677;"> for
+                    <span class="text-capitalize">{{selectedCondition.name}}</span>
+                </small>
+            </span>
+        </div>
+        <div class="flex-center">
+
+            <mdc-form-status [formStatus]="formStatus"></mdc-form-status>
+
+        </div>
+        <span>
+            <button mat-flat-button type="button" (click)="saveChanges()">Save</button>
+            <button mat-flat-button type="button" (click)="onDone()" class=ml-8>Done</button>
+        </span>
+    </div>
+
+    <mdc-form-infobox-error [dataLink]="errors"></mdc-form-infobox-error>
+
+    <form #form="ngForm" class="mdc-form" autocomplete="off">
+
+        <!-- MAIN REQUIRED -->
+        <mdc-form-group class="mdc-form-group">
+            <!-- HEADER -->
+            <ng-container class="form-group-header-selector">
+                <span class="m-0 h3">Main</span>
+                <span class="mdc-card-mark">
+                    <span class="ml-8 mr-8 blue-grey-100-fg"> | </span>
+                    <small class="orange-300-fg"> Required</small>
+                </span>
+            </ng-container>
+            <!-- / HEADER -->
+
+            <!-- FRONT -->
+            <div class="form-group-front-selector">
+                <div class="mdc-form-body">
+                    <!-- <div class="mdc-form-box" style="flex-grow: 1;">
+                        <mat-form-field class="mdc-smart-input">
+                            <input matInput placeholder="Name" #nameControl="ngModel" name="name" [(ngModel)]="followup.name"
+                                 required>
+                            <mat-error *ngIf="nameControl.hasError('required')">
+                                This field is required
+                            </mat-error>
+                        </mat-form-field>
+                    </div> -->
+                    <div class="mdc-form-box" style="flex-grow: 1;">
+                        <mat-form-field>
+                            <input appMaskDate
+                                [ngModelOptions]="{updateOn:'blur'}"
+                                matInput
+                                [matDatepicker]="picker"
+                                #entryDateControl="ngModel"
+                                name="entryDate"
+                                placeholder="Entry Date"
+                                [(ngModel)]="followup.opened"
+                                required>
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                            <mat-error *ngIf="entryDateControl.hasError('required')">
+                                This field is required
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="mdc-form-box" style="flex-grow: 1;">
+                        <mat-form-field>
+                            <mat-select placeholder="Choose Location" name="location" [(ngModel)]="followup.location"
+                                [compareWith]="matSelectCompare" #locationControl="ngModel" required mdcRequiredValidator="id">
+                                <mat-option>--</mat-option>
+                                <mat-option *ngFor="let location of locations" [value]="{id: location.id, name: location.name,
+                                    __typename:'LocationView'}">
+                                    {{location.name}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="locationControl.hasError('required')">Please choose location</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="mdc-form-box" style="flex-grow: 1;">
+                        <mat-form-field>
+                            <mat-select
+                                placeholder="Choose Sub-Location"
+                                [compareWith]="matSelectCompareString"
+                                name="subLocation"
+                                [(ngModel)]="followup.subLocation">
+                                <mat-option>--</mat-option>
+                                <mat-option *ngFor="let subLocation of subLocations" [value]="subLocation">
+                                    {{subLocation}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="mdc-form-box" style="flex-grow: 1;">
+                        <mat-form-field>
+                            <mat-select placeholder="Choose Condition" name="conditionId" [ngModel]="conditionId"
+                                (ngModelChange)="onConditionChanged($event)" #conditionControl="ngModel"
+                                required>
+                                <!-- <mat-option>--</mat-option> -->
+
+                                <mat-option *ngFor="let condition of patientConditions" [value]="condition.id">
+                                    <div class=flex-spacebetween>
+                                        <div>
+                                            {{condition.name}}
+                                            <span class="secondary-text" *ngIf="condition?.diagnosis?.text.length">
+                                                /
+                                                <span class="teal-400-fg text-capitalize">
+                                                    {{condition?.diagnosis?.text[0].text}}
+                                                </span>
+                                            </span>
+                                        </div>
+                                        <!-- <div class="secondary-text font-8em">{{condition.date | date : 'd MMM y'}}</div> -->
+                                    </div>
+                                </mat-option>
+                            </mat-select>
+                            <!-- <mat-error *ngIf="conditionControl.hasError('required')">Please choose location</mat-error> -->
+                            <mat-error *ngIf="locationControl.hasError('mdcRequired')">Please choose condition</mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+
+        </mdc-form-group>
+        <!-- / MAIN REQUIRED -->
+
+        <!-- SUBJECTIVE -->
+        <div fxLayout="row">
+
+            <div [fxFlex]="100">
+
+                <!-- SUBJECTIVE -->
+                <mdc-form-group class="mdc-form-group">
+
+                    <!-- HEADER -->
+                    <ng-container class="form-group-header-selector">
+                        <span class="m-0 h3">Subjective</span>
+                        <span class="mdc-card-mark"> </span>
+                    </ng-container>
+                    <!-- / HEADER -->
+
+                    <!-- FRONT -->
+                    <div class="form-group-front-selector">
+                        <mdc-lookup-input-advanced
+                            [lookupsCollection]="lookups.subjective || []"
+                            [dataLink]="followup.subjective"
+                            [groupkey]="'subjective'"
+                            [modelName]="'subjective'"
+                            [placeholder]="'Subjective'"
+                            (notify)="notifyHandler($event)"
+                            #subjectiveElRef>
+                        </mdc-lookup-input-advanced>
+                    </div>
+                    <!-- / FRONT -->
+
+                </mdc-form-group>
+                <!-- / SUBJECTIVE -->
+
+            </div>
+
+        </div>
+        <!-- / SUBJECTIVE -->
+
+        <!-- OBJECTIVE -->
+        <mdc-form-group class="mdc-form-group">
+
+            <!-- HEADER -->
+            <ng-container class="form-group-header-selector">
+                <span class="m-0 h3">Objective</span>
+            </ng-container>
+            <!-- / HEADER -->
+
+            <!-- FRONT -->
+            <div class="form-group-front-selector">
+
+                <div fxLayout="column">
+
+                    <!-- PHYSICAL EXAM -->
+                    <div class="mb-20" fxLayout="row" fxLayout.xs="column"
+                        fxLayoutAlign="start start" fxLayoutAlign.xs="start unset"
+                        fxLayoutGap="30px">
+
+                        <mdc-lookup-input-advanced
+                            fxFlex="50" [fxFlex.xs]="100"
+                            [lookupsCollection]="lookups.physical_exam || []"
+                            [dataLink]="followup.physicalExam"
+                            [groupkey]="'physical_exam'"
+                            [modelName]="'physicalExam'"
+                            [flow]="mediaFlow"
+                            [placeholder]="'Physical Exam'"
+                            (notify)="notifyHandler($event)"
+                            #physicalExamElRef>
+                        </mdc-lookup-input-advanced>
+
+                        <media-file-list
+                            fxFlex="50" [fxFlex.xs]="100"
+                            [flow]="mediaFlow"
+                            [files]="activityFiles.physicalExam"
+                            [autoTagName]="FileSystemTagsEnum.physicalExam"
+                            [headerName]="'Phy. Exam'"
+                            (onDeleteSelected)="onDeleteSelectedFiles($event)"
+                            (onAttachedFiles)="onAttachedFiles($event)"></media-file-list>
+                    </div>
+                    <!-- / PHYSICAL EXAM -->
+
+                    <!-- RADIO-->
+                    <div class="mb-20" fxLayout="row" fxLayout.xs="column"
+                        fxLayoutAlign="start start" fxLayoutAlign.xs="start unset"
+                        fxLayoutGap="30px">
+
+                        <mdc-lookup-input-advanced
+                            fxFlex="50" [fxFlex.xs]="100"
+                            [lookupsCollection]="lookups.radio || []"
+                            [dataLink]="followup.radio"
+                            [groupkey]="'radio'"
+                            [modelName]="'radio'"
+                            [flow]="mediaFlow"
+                            [placeholder]="'Radio'"
+                            (notify)="notifyHandler($event)"
+                            #radioElRef>
+                        </mdc-lookup-input-advanced>
+
+                        <media-file-list
+                            fxFlex="50" [fxFlex.xs]="100"
+                            [flow]="mediaFlow"
+                            [files]="activityFiles.radio"
+                            [autoTagName]="FileSystemTagsEnum.radio"
+                            [headerName]="'Radio'"
+                            (onDeleteSelected)="onDeleteSelectedFiles($event)"
+                            (onAttachedFiles)="onAttachedFiles($event)"></media-file-list>
+                    </div>
+                    <!-- / RADIO-->
+
+                    <!-- LABORATORY-->
+                    <div class="mb-20" fxLayout="row" fxLayout.xs="column"
+                        fxLayoutAlign="start start" fxLayoutAlign.xs="start unset"
+                        fxLayoutGap="30px">
+
+                        <mdc-lookup-input-advanced
+                            fxFlex="50" [fxFlex.xs]="100"
+                            [lookupsCollection]="lookups.laboratory || []"
+                            [dataLink]="followup.laboratory"
+                            [groupkey]="'laboratory'"
+                            [modelName]="'laboratory'"
+                            [flow]="mediaFlow"
+                            [placeholder]="'Laboratory'"
+                            (notify)="notifyHandler($event)"
+                            #laboratoryElRef>
+                        </mdc-lookup-input-advanced>
+
+                        <media-file-list
+                            fxFlex="50" [fxFlex.xs]="100"
+                            [flow]="mediaFlow"
+                            [files]="activityFiles.laboratory"
+                            [autoTagName]="FileSystemTagsEnum.laboratory"
+                            [headerName]="'Laboratory'"
+                            (onDeleteSelected)="onDeleteSelectedFiles($event)"
+                            (onAttachedFiles)="onAttachedFiles($event)"></media-file-list>
+                    </div>
+                    <!-- / LABORATORY-->
+
+                    <!-- CONSULTATION-->
+                    <div class="mb-20" fxLayout="row" fxLayout.xs="column"
+                        fxLayoutAlign="start start" fxLayoutAlign.xs="start unset" fxLayoutGap="30px">
+                        <mdc-lookup-input-advanced
+                            fxFlex="50" [fxFlex.xs]="100"
+                            [lookupsCollection]="lookups.consultation || []"
+                            [dataLink]="followup.consultation"
+                            [groupkey]="'consultation'"
+                            [modelName]="'consultation'"
+                            [placeholder]="'Consultation'"
+                            (notify)="notifyHandler($event)"
+                            #consultationElRef>
+                        </mdc-lookup-input-advanced>
+                    </div>
+                    <!-- / CONSULTATION-->
+
+                </div>
+
+            </div>
+        </mdc-form-group>
+        <!-- / OBJECTIVE -->
+
+        <!-- ASSESSMENT && DIAGNOSIS -->
+        <div fxLayout="row" fxLayout.xs="column" fxLayoutGap="30px">
+
+            <div [fxFlex.xs]="100" [fxFlex]="50">
+
+                <!-- ASSESSMENT -->
+                <mdc-form-group class="mdc-form-group">
+                    <!-- HEADER -->
+                    <ng-container class="form-group-header-selector">
+                        <span class="m-0 h3">Assessment</span>
+                        <span class="mdc-card-mark">
+                        </span>
+                    </ng-container>
+                    <!-- / HEADER -->
+
+                    <!-- FRONT -->
+                    <div class="form-group-front-selector">
+                        <mdc-lookup-input-advanced
+                            [lookupsCollection]="lookups.assessment || []"
+                            [dataLink]="followup.assessment"
+                            [groupkey]="'assessment'"
+                            [modelName]="'assessment'"
+                            [placeholder]="'Assessment'"
+                            (notify)="notifyHandler($event)"
+                            #assessmentElRef>
+
+                        </mdc-lookup-input-advanced>
+                    </div>
+                    <!-- / FRONT -->
+
+                </mdc-form-group>
+                <!-- / ASSESSMENT && DIAGNOSIS-->
+
+            </div>
+
+            <div [fxFlex.xs]="100" [fxFlex]="50">
+
+                <!-- DIAGNOSIS -->
+                <mdc-form-group class="mdc-form-group">
+                    <!-- HEADER -->
+                    <ng-container class="form-group-header-selector">
+                        <span class="m-0 h3">Diagnosis</span>
+                        <span class="mdc-card-mark">
+                        </span>
+                    </ng-container>
+                    <!-- / HEADER -->
+
+                    <!-- FRONT -->
+                    <div class="form-group-front-selector">
+                        <mdc-lookup-input-advanced
+                            [lookupsCollection]="lookups.diagnosis || []"
+                            [dataLink]="followup.diagnosis"
+                            [groupkey]="'diagnosis'"
+                            [modelName]="'diagnosis'"
+                            [placeholder]="'Diagnosis'"
+                            (notify)="notifyHandler($event)"
+                            #diagnosisElRef>
+                        </mdc-lookup-input-advanced>
+                    </div>
+                    <!-- / FRONT -->
+
+                </mdc-form-group>
+                <!-- / DIAGNOSIS -->
+            </div>
+
+        </div>
+        <!-- / ASSESSMENT -->
+
+        <!-- TREATMENT & NOTE -->
+        <div fxLayout="row" fxLayout.xs="column" fxLayoutGap="30px">
+
+            <div class="" [fxFlex.xs]="100" [fxFlex]="50">
+
+                <!-- TREATMENT -->
+                <mdc-form-group class="mdc-form-group">
+
+                    <!-- HEADER -->
+                    <ng-container class="form-group-header-selector">
+                        <span class="m-0 h3">Treatment plan</span>
+                    </ng-container>
+                    <!-- / HEADER -->
+
+                    <!-- FRONT -->
+                    <div class="form-group-front-selector">
+
+                        <div fxLayout="column">
+
+                            <mdc-medication-input [dataLink]="followup.medications" [modelName]="'medications'"
+                                (notifyMedication)="notifyMedicationHandler($event)"></mdc-medication-input>
+                            <mdc-lookup-input-advanced
+                                [lookupsCollection]="lookups.other_treatments || []"
+                                [dataLink]="followup.otherTreatments"
+                                [groupkey]="'other_treatments'"
+                                [modelName]="'otherTreatments'"
+                                [placeholder]="'Other'"
+                                (notify)="notifyHandler($event)"
+                                #otherTreatmentsElRef>
+                            </mdc-lookup-input-advanced>
+                        </div>
+                    </div>
+
+                    <!-- / FRONT -->
+
+                </mdc-form-group>
+                <!-- / TREATMENT -->
+
+            </div>
+
+            <div class="" [fxFlex.xs]="100" [fxFlex]="50">
+
+                <!-- NOTE -->
+                <mdc-form-group class="mdc-form-group">
+
+                    <!-- HEADER -->
+                    <ng-container class="form-group-header-selector">
+                        <span class="m-0 h3">Note</span>
+                    </ng-container>
+                    <!-- / HEADER -->
+
+                    <!-- FRONT -->
+                    <div class="form-group-front-selector">
+                        <mdc-lookup-input-advanced
+                            [lookupsCollection]="lookups.note || []"
+                            [dataLink]="followup.note"
+                            [groupkey]="'note'"
+                            [modelName]="'note'"
+                            [placeholder]="'Note'"
+                            (notify)="notifyHandler($event)"
+                            #noteElRef>
+                        </mdc-lookup-input-advanced>
+                    </div>
+                    <!-- / FRONT -->
+
+                </mdc-form-group>
+                <!-- / NOTE -->
+
+            </div>
+
+        </div>
+        <!-- / TREATMENT & NOTES -->
+
+        <!-- MEDIA -->
+        <div class="media-file-list-container">
+            <media-file-list
+                [flow]="mediaFlow"
+                [files]="activityFiles.other"
+                [autoTagName]="''"
+                [headerName]="'Media'"
+                (onDeleteSelected)="onDeleteSelectedFiles($event)"
+                (onAttachedFiles)="onAttachedFiles($event)"></media-file-list>
+        </div>
+        <!-- MEDIA -->
+
+    </form>
+</div>
+
+<upload-file-popup *ngIf="isUploadPopupOpened" [flow]="mediaFlow" [isOpened]="isUploadPopupOpened"
+    (onClose)="isUploadPopupOpened= false"></upload-file-popup>

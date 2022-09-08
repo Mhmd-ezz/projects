@@ -1,0 +1,19 @@
+.sidebar {
+    width: unset;
+    max-width: unset;
+    min-width: unset;
+    box-shadow: unset;
+}
+
+.custom-event-content {
+    min-height: 90px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 15px 15px 0 15px;
+    font-size: 14px;
+
+    .box {
+        padding-bottom: 10px;
+    }
+}

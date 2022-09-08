@@ -1,0 +1,16 @@
+@import "src/@fuse/scss/fuse";
+
+
+
+.unread-count {
+    position: absolute;
+width: 18px;
+height: 18px;
+bottom: 28px;
+align-items: center;
+justify-content: center;
+left: 22px;
+border: 2px solid;
+text-align: center;
+border-radius: 50%;
+}

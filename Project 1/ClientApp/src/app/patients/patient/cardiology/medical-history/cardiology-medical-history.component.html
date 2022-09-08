@@ -1,0 +1,210 @@
+<div class="mb-20 pr-8 pl-8" (click)="toggleVisbility()" [hidden]="!isXs" >
+    <div class="header" fxLayoutAlign="space-between center">
+        <span fxLayoutAlign="space-between center">
+            <mat-icon class="mr-8" style="color: #ffb300;">assignment</mat-icon>
+            <span class="title">Medical history</span>
+        </span>
+        <span> {{isExpanded ? 'Collapse': 'Expand' }}  </span>
+    </div>
+</div>
+
+<div class="gh-container" *ngIf="isExpanded" >
+    <div class="element-card blue-grey-500 mat-elevation-z5" (click)="toggle('allergies')" [class.open]="activeCard ===
+        'allergies'">
+        <div class="front-facing blue-grey-500" [class.blue-grey-800]="medicalHistory.allergies?.data.length">
+            <h1 class="abr">Allergies</h1>
+            <i class="fa fa-exclamation-circle i-alerts"></i>
+            <span class="atomic-number">{{ medicalHistory.allergies?.data.length }}</span>
+            <span class="atomic-mass">{{ medicalHistory.allergies?.lastUpdate | date:'d MMM y'}}</span>
+        </div>
+        <div class="back-facing blue-grey-400">
+            <div class="list">
+                <div class="card-item" *ngFor="let val of medicalHistory.allergies?.data; trackBy:trackValue">
+                    {{val.text}}
+                </div>
+            </div>
+            <div class="footer">
+                <mat-icon class="" (click)="onEdit('allergies')">edit</mat-icon>
+            </div>
+        </div>
+    </div>
+    <div class="element-card blue-grey-500 mat-elevation-z5" (click)="toggle('pastMedication')" [class.open]="activeCard ===
+        'pastMedication'">
+        <div class="front-facing blue-grey-500" [class.blue-grey-800]="medicalHistory.pastMedication?.data.length">
+            <h1 class="abr">Past <br> Medication</h1>
+            <i class="fa fa-exclamation-circle i-alerts"></i>
+            <span class="atomic-number"> {{ medicalHistory.pastMedication?.data.length}} </span>
+            <span class="atomic-mass"> {{ medicalHistory.pastMedication?.lastUpdate | date:'d MMM y'}} </span>
+        </div>
+        <div class="back-facing blue-grey-400">
+            <div class="list">
+                <div class="card-item" *ngFor="let val of medicalHistory.pastMedication?.data;" fxLayout="column"
+                    fxLayoutAlign="space-between start">
+                    <div class="text-capitalize">{{val.drug?.name}}</div>
+                    <div><span class="secondary-text" *ngIf="val.frequency">Freq : </span> {{val.frequency}}</div>
+                    <div><span class="secondary-text" *ngIf="val.startDate">Since : </span> {{val.startDate | date:'MM yyyy'}}</div>
+                    <div><span class="secondary-text" *ngIf="val.endDate">Until : </span> {{val.endDate | date:'MM yyyy'}}</div>
+                </div>
+            </div>
+            <div class="footer">
+                <mat-icon class="" (click)="onEdit('pastMedication')">edit</mat-icon>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="element-card blue-grey-500 mat-elevation-z5" (click)="toggle('presentMedication')" [class.open]="activeCard
+        ===
+        'presentMedication'">
+        <div class="front-facing blue-grey-500" [class.blue-grey-800]="medicalHistory.presentMedication?.data.length">
+            <h1 class="abr">Present Medication</h1>
+            <i class="fa fa-exclamation-circle i-alerts"></i>
+            <span class="atomic-number">{{ medicalHistory.presentMedication?.data.length}}</span>
+            <span class="atomic-mass">{{ medicalHistory.presentMedication?.lastUpdate | date:'d MMM y'}}</span>
+        </div>
+        <div class="back-facing blue-grey-400">
+            <div class="list">
+                <div class="card-item" *ngFor="let val of medicalHistory.presentMedication?.data;" fxLayout="column"
+                    fxLayoutAlign="space-between start">
+                    <div class="text-capitalize">{{val?.drug?.name}} {{val?.drug?.dosage}}</div>
+                    <div>
+                        <span class="secondary-text" *ngIf="val.frequency">Freq : </span> {{val?.frequency}}
+                    </div>
+                    <div>
+                        <span class="secondary-text" *ngIf="val.startDate">Since : </span> {{val?.startDate | date:'MM yyyy'}}
+                    </div>
+                    <div>
+                        <span class="secondary-text" *ngIf="val.endDate">Until : </span> {{val?.endDate | date:'MM yyyy'}}
+                    </div>
+                </div>
+            </div>
+            <div class="footer">
+                <mat-icon class="" (click)="onEdit('presentMedication')">edit</mat-icon>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="element-card blue-grey-500 mat-elevation-z5" (click)="toggle('familyHistory')" [class.open]="activeCard ===
+        'familyHistory'">
+        <div class="front-facing blue-grey-500" [class.blue-grey-800]="medicalHistory.familyHistory?.data.length">
+            <h1 class="abr">Family History</h1>
+            <i class="fa fa-exclamation-circle i-alerts"></i>
+            <span class="atomic-number">{{ medicalHistory.familyHistory?.data.length }}</span>
+            <span class="atomic-mass">{{ medicalHistory.familyHistory?.lastUpdate | date:'d MMM y'}}</span>
+        </div>
+        <div class="back-facing blue-grey-400">
+            <div class="list">
+                <div class="card-item" *ngFor="let val of medicalHistory.familyHistory?.data; trackBy:trackValue">{{val.text}}</div>
+            </div>
+            <div class="footer">
+                <mat-icon class="" (click)="onEdit('familyHistory')">edit</mat-icon>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="element-card blue-grey-500 mat-elevation-z5" (click)="toggle('medicalIssues')" [class.open]="activeCard ===
+        'medicalIssues'">
+        <div class="front-facing blue-grey-500" [class.blue-grey-800]="medicalHistory.medicalIssues?.data.length">
+            <h1 class="abr">Medical Issues</h1>
+            <i class="fa fa-exclamation-circle i-alerts"></i>
+            <span class="atomic-number">{{ medicalHistory.medicalIssues?.data.length }}</span>
+            <span class="atomic-mass">{{ medicalHistory.medicalIssues?.lastUpdate | date:'d MMM y'}}</span>
+        </div>
+        <div class="back-facing blue-grey-400">
+            <div class="list">
+                <div class="card-item" *ngFor="let val of medicalHistory.medicalIssues?.data; trackBy:trackValue">
+                    {{val.text}}
+                </div>
+            </div>
+            <div class="footer">
+                <mat-icon class="" (click)="onEdit('medicalIssues')">edit</mat-icon>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="element-card blue-grey-500 mat-elevation-z5" (click)="toggle('surgicalHistory')" [class.open]="activeCard ===
+        'surgicalHistory'">
+        <div class="front-facing blue-grey-500" [class.blue-grey-800]="medicalHistory.surgicalHistory?.data.length">
+            <h1 class="abr">Surgical History</h1>
+            <i class="fa fa-exclamation-circle i-alerts"></i>
+            <span class="atomic-number">{{ medicalHistory.surgicalHistory?.data.length}}</span>
+            <span class="atomic-mass">{{ medicalHistory.surgicalHistory?.lastUpdate | date:'d MMM y'}}</span>
+        </div>
+        <div class="back-facing blue-grey-400">
+            <div class="list">
+                <div class="card-item" *ngFor="let val of medicalHistory.surgicalHistory?.data;" fxLayout="column"
+                    fxLayoutAlign="space-between start">
+                    <div *ngFor="let value of val.what" ><span class="secondary-text"></span>{{value.text}}</div>
+                    <!-- <div><span class="secondary-text">When : </span>{{val.when | date:'d MMM y'}}</div>
+                    <div><span class="secondary-text">Note : </span>{{val.note}}</div> -->
+                </div>
+            </div>
+            <div class="footer">
+                <mat-icon class="" (click)="onEdit('surgicalHistory')">edit</mat-icon>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="element-card blue-grey-500 mat-elevation-z5" (click)="toggle('alerts')" [class.open]="activeCard ===
+        'alerts'">
+        <div class="front-facing blue-grey-500">
+            <h1 class="abr">Risk Factors</h1>
+            <i class="fa fa-exclamation-circle i-alerts"></i>
+            <span class="atomic-number">{{ medicalHistory.riskFactors?.data.length }}</span>
+            <span class="atomic-mass">{{ medicalHistory.riskFactors?.lastUpdate | date:'d MMM y'}}</span>
+        </div>
+        <div class="back-facing blue-grey-400">
+            <div class="list">
+                <div class="card-item" *ngFor="let val of medicalHistory.riskFactors?.data; trackBy:trackValue">{{val.text}}</div>
+            </div>
+            <div class="footer">
+                <mat-icon class="" (click)="onEdit('alerts')">edit</mat-icon>
+            </div>
+        </div>
+    </div>
+    <div class="element-card blue-grey-500 mat-elevation-z5" (click)="toggle('conditions')" [class.open]="activeCard === 'conditions'">
+    <div class="front-facing blue-grey-500" [class.blue-grey-800]="patient?.patientInfo.specialities.cardiology.conditions?.length">
+        <h1 class="abr">Conditions</h1>
+        <i class="fa fa-exclamation-circle i-alerts"></i>
+        <span class="atomic-number">{{patient?.patientInfo.specialities.cardiology.conditions?.length }}</span>
+        <!-- <span class="atomic-mass">{{ medicalHistory.allergies?.lastUpdate | date:'d MMM y'}}</span> -->
+    </div>
+    <div class="back-facing blue-grey-400">
+        <div class="list">
+            <div class="card-item" *ngFor="let val of patient?.patientInfo.specialities.cardiology.conditions">
+                {{val.name}}
+            </div>
+        </div>
+        <!-- <div class="footer">
+            <mat-icon class="" (click)="onEdit('allergies')">edit</mat-icon>
+        </div> -->
+    </div>
+</div>
+
+<div class="element-card blue-grey-500 mat-elevation-z5" (click)="toggle('medications')" [class.open]="activeCard === 'medications'">
+    <div class="front-facing blue-grey-500" [class.blue-grey-800]="medications?.length">
+        <h1 class="abr">Medications</h1>
+        <i class="fa fa-exclamation-circle i-alerts"></i>
+        <span class="atomic-number">{{medications?.length }}</span>
+        <!-- <span class="atomic-mass">{{ medicalHistory.allergies?.lastUpdate | date:'d MMM y'}}</span> -->
+    </div>
+    <div class="back-facing blue-grey-400">
+        <div class="list">
+            <div class="card-item" *ngFor="let val of medications">
+                <!-- {{val.drug?.name}} -->
+                <span *ngIf="val.isActive"> {{val.drug?.name}}</span>
+                <!-- <span *ngIf="!val.isActive">(InActive)</span> -->
+            </div>
+        </div>
+        <div class="footer">
+            <mat-icon class="" (click)="onEditMedications()">edit</mat-icon>
+        </div>
+    </div>
+</div>
+
+</div>

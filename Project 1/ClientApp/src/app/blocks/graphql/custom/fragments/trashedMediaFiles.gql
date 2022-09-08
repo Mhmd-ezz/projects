@@ -1,0 +1,31 @@
+fragment TrashedMediaFiles on TrashedMediaFiles{
+id
+name
+path
+type
+size
+tenantId
+patientId
+patientName
+speciality
+conditionId
+activityType
+activityId
+isDeleted
+modified
+deletedOn
+systemTagging
+tags{
+text{
+group
+value
+text
+            }
+media{
+text
+tags
+date
+            }
+tags
+        }    
+}

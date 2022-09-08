@@ -1,0 +1,23 @@
+fragment PatientMedicationByFollowup on PatientMedicationByFollowup{
+medicationId
+patientId
+conditionId
+followupId
+startTime
+endTime
+drug{
+id
+name
+dosage
+        }
+isActive
+reason
+history{
+startDate
+endDate
+duration
+frequency
+note
+status
+        }    
+}

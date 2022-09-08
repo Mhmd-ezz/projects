@@ -1,0 +1,17 @@
+fragment Ticket on Ticket{
+id
+ticketNumber
+tenantName
+subject
+details
+status
+attachFile
+isReadByAdmin
+isReadByClient
+ticketDate
+messages{
+message
+requestBy
+messageDate
+        }    
+}

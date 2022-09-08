@@ -1,0 +1,32 @@
+query lightPatients ($page: Int, $size: Int, $filter: String, $sortBy: String, $descending: Boolean){
+    patients (page: $page, size: $size, filter: $filter, sortBy: $sortBy, descending: $descending,) @connection(key: "lightPatients", filter: ["filter","page","size","sortBy" ,"descending"]){
+        id
+        name
+        birthDate
+        telephone
+        city
+        country
+        createdOn
+        modified
+        isDuplicate
+        email
+        gender
+        patientInfo{
+            totalDigitizedData
+            bloodType
+            emergancyContact
+            entryDate
+            fileNumber
+            flags
+            createdOn
+            modified
+            lastSeen
+            maritalStatus
+            referral
+            grantors{
+                id
+                name
+            }
+        }
+    }
+}

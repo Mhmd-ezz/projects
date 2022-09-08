@@ -1,0 +1,10 @@
+mutation createLocation($location: LocationInput!){
+    createLocation(location: $location){
+        id
+        name
+        contact
+        address
+        type
+        subLocations
+    }
+}

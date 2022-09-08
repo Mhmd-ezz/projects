@@ -1,0 +1,138 @@
+.panel {
+    border: 1px solid transparent;
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+    border-color: #ddd;
+    color: #333333;
+    margin-bottom: 20px;
+    background-color: #fff;
+    border-radius: 3px;
+}
+
+.panel-body {
+    position: relative;
+    padding: 20px;
+    background: #f5f5f5;
+}
+
+.panel-footer-condensed {
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+
+.medication-footer {
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+    background-color: #fcfcfc;
+    border-top: 1px solid #ddd;
+    padding-left: 15px;
+    padding-right: 15px;
+
+    .heading-elements {
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .left,
+        .right,
+        .item {
+            display: flex;
+            align-items: center;
+        }
+
+        .item {
+            padding-left: 7px;
+            padding-right: 7px;
+            color: #2a83ae;
+            font-family: Roboto;
+            border-right: 1px solid rgb(172, 172, 172);
+            cursor: pointer;
+        }
+
+        .item:last-child {
+            border-right: none !important;
+        }
+
+    }
+}
+
+.history-container {
+    border-top: 1px solid #F44336;
+    // border-color: #ddd;
+    padding: 20px;
+
+    .list-history {
+        padding: 7px 0;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+
+        .history-entity {
+            position: relative;
+            margin: 0;
+            padding-bottom: 20px;
+            padding-left: 28px;
+
+            .media-body {
+                display: table-cell;
+                vertical-align: top;
+                width: 10000px;
+            }
+
+            .media-right {
+                padding-left: 20px;
+                display: table-cell;
+                vertical-align: top;
+                list-style: none;
+
+                .icons-list {
+                    margin: 0;
+                    padding: 0;
+                    list-style: none;
+                    line-height: 1;
+                    font-size: 0;
+                }
+
+                .icons-list>li {
+                    position: relative;
+                    display: inline-block;
+                    margin-left: 5px;
+                    font-size: 13px;
+                }
+            }
+        }
+    }
+
+    .list-history>li:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 5px;
+        width: 8px;
+        height: 8px;
+        background-color: #fff;
+        display: inline-block;
+        border-radius: 50%;
+        border: 2px solid #607D8B;
+        z-index: 3;
+    }
+
+    .list-history>li:after {
+        content: '';
+        position: absolute;
+        top: 5px;
+        left: 3px;
+        bottom: -7px;
+        width: 0;
+        border-left: 1px solid #607D8B;
+        border-right: 1px solid #607D8B;
+        z-index: 2;
+    }
+
+    .list-history>li:last-child:after {
+        content: none;
+    }
+}

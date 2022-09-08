@@ -1,0 +1,108 @@
+<div class="content">
+
+    <div class="header-tool accent mb-24">
+        <div class="flex-center">
+            <mat-icon class="mr-8 s-22" matSuffix>add_box</mat-icon>
+            <span class="h2">New Drug</span>
+        </div>
+        <div class="flex-center">
+
+            <mdc-form-status [formStatus]="formStatus"></mdc-form-status>
+
+        </div>
+        <div>
+            <!-- <button mat-flat-button type="button" (click)="saveChanges()">Save</button> -->
+            <button mat-flat-button type="button" (click)="onDone()" class="ml-8">Done</button>
+        </div>
+
+    </div>
+
+    <mdc-form-infobox-error [dataLink]="errors"></mdc-form-infobox-error>
+
+    <form #form="ngForm" fxLayout="column" autocomplete="off">
+
+        <span>Define a prescription drug by entering the information below:</span>
+        <br />
+        <mat-form-field appearance="outline">
+            <mat-label>Name</mat-label>
+            <input matInput placeholder="Ex: Panadol" #nameControl="ngModel" name="name" [(ngModel)]="drug.name"
+                type="text" autofocus required>
+            <mat-error *ngIf="nameControl.hasError('required')">
+                This field is required
+            </mat-error>
+            <mat-hint>The official or known name of a prescription drug</mat-hint>
+        </mat-form-field>
+<!-- 
+        <br />
+
+        <mat-form-field appearance="outline">
+            <mat-label>Dosage</mat-label>
+            <input matInput placeholder="Ex: 2 Tablets every 6 hours ..." #dosageModel="ngModel" name="dosage"
+                [(ngModel)]="drug.dosage">
+            <mat-hint>Dosage is the prescribed administration of a specific amount, number, and frequency of doses
+                over
+                a specific period of time</mat-hint>
+        </mat-form-field>
+        <br />
+        <mat-form-field appearance="outline">
+            <mat-label>Form</mat-label>
+            <mat-select name="form" placeholder="Choose Form" [(ngModel)]="drug.form" #drugModel="ngModel" required>
+                <mat-option value="tablets">Tablets</mat-option>
+                <mat-option value="capsules">Capsules</mat-option>
+                <mat-option value="chewable_tablets">Chewable tablets</mat-option>
+                <mat-option value="powders">Powders</mat-option>
+                <mat-option value="solutions">Solutions</mat-option>
+                <mat-option value="suspensions">Suspensions</mat-option>
+                <mat-option value="lotions">Lotions</mat-option>
+                <mat-option value="creams">Creams</mat-option>
+                <mat-option value="ointments">Ointments</mat-option>
+                <mat-option value="effervescent">Effervescent granules</mat-option>
+                <mat-option value="gasses">Gasses</mat-option>
+                <mat-option value="suppositories">Suppositories</mat-option>
+                <mat-option value="injections">Injections</mat-option>
+            </mat-select>
+            <mat-error *ngIf="drugModel.hasError('required')">
+                This field is required
+            </mat-error>
+            <mat-hint>In what forms or presentations this drug exists ?</mat-hint>
+        </mat-form-field>
+        <br />
+        <mat-form-field appearance="outline">
+            <mat-label>Route</mat-label>
+            <mat-select name="route" placeholder="Choose Route" [(ngModel)]="drug.route" #routeModel="ngModel" required>
+                <mat-option value="oral">Oral</mat-option>
+                <mat-option value="injection">Injection</mat-option>
+                <mat-option value="sublingual_buccal">Sublingual and buccal</mat-option>
+                <mat-option value="rectal">Rectal</mat-option>
+                <mat-option value="vaginal">Vaginal</mat-option>
+                <mat-option value="ocular">Ocular</mat-option>
+                <mat-option value="otic">Otic</mat-option>
+                <mat-option value="nasal">Nasal</mat-option>
+                <mat-option value="inhalation">Inhalation</mat-option>
+                <mat-option value="nebulization">Nebulization</mat-option>
+                <mat-option value="cutaneous">Cutaneous</mat-option>
+                <mat-option value="transdermal">Transdermal</mat-option>
+            </mat-select>
+            <mat-error *ngIf="routeModel.hasError('required')">
+                This field is required
+            </mat-error>
+            <mat-hint>How is the drug taken?</mat-hint>
+        </mat-form-field> -->
+        <!-- <br />
+        <mat-form-field appearance="outline">
+            <mat-label>Laboratory</mat-label>
+            <input matInput placeholder="" #laboratoryModel="ngModel" name="laboratory" [(ngModel)]="drug.laboratory">
+        </mat-form-field>
+        <br />
+        <mat-form-field appearance="outline">
+            <mat-label>Price</mat-label>
+            <input matInput placeholder="" #priceModel="ngModel" name="price" [(ngModel)]="drug.price">
+        </mat-form-field>
+        <br />
+        <mat-form-field appearance="outline">
+            <mat-label>Country</mat-label>
+            <input matInput placeholder="" #countryModel="ngModel" name="country" [(ngModel)]="drug.country">
+        </mat-form-field> -->
+    </form>
+
+</div>

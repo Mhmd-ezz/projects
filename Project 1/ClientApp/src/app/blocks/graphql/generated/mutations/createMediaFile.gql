@@ -1,0 +1,34 @@
+mutation createMediaFile($mediaFile: MediaFileInput!){
+    createMediaFile(mediaFile: $mediaFile){
+        id
+        name
+        path
+        type
+        size
+        tenantId
+        patientId
+        patientName
+        speciality
+        conditionId
+        activityType
+        activityId
+        ticketNumber
+        isDeleted
+        modified
+        deletedOn
+        systemTagging
+        tags{
+            text{
+                group
+                value
+                text
+            }
+            media{
+                text
+                tags
+                date
+            }
+            tags
+        }
+    }
+}

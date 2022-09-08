@@ -1,0 +1,10 @@
+query locations{
+    locations{
+        id
+        name
+        contact
+        address
+        type
+        subLocations
+    }
+}

@@ -1,0 +1,13 @@
+@media(min-width: 960px) {
+    :host {
+        display: block;
+        width: 700px;
+    }
+}
+
+@media(max-width: 959px) {
+    :host {
+        display: block;
+        width: calc(75vw - 24px);
+    }
+}

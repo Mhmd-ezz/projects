@@ -1,0 +1,141 @@
+<div class="content pt-12">
+
+    <div class="header-tool accent mb-24">
+        <div class="flex-center">
+            <mat-icon class="mr-8 s-22" (click)="$event.stopPropagation()" matSuffix>format_list_bulleted</mat-icon>
+            <span class="h2">Tickets</span>
+        </div>
+        <div>
+            <button mat-flat-button type="button" [routerLink]="['/tickets/new-ticket']">New Ticket</button>
+        </div>
+    </div>
+
+    <div class="content mdc-table-container" style="height: 100%;">
+
+        <div>
+            <mat-form-field appearance="outline" fxFlex.xs="100" fxFlex="300px">
+                <mat-label>Search ...</mat-label>
+                <input matInput placeholder="Search ticket" [formControl]="search">
+                <mat-icon matSuffix class="secondary-text">search</mat-icon>
+            </mat-form-field>
+        </div>
+
+        <div class="stats blue-grey-700-fg" fxLayout="row" fxLayoutAlign="start center">
+           
+        </div>
+
+        <div class="mat-elevation-z8 responsive-table">
+
+            <mat-table class="lessons-table text-capitalize" [dataSource]="dataSource"
+                matSort matSortActive="ticketNumber" matSortDirection="asc" matSortDisableClear>
+                <!--  Ticket-ID --> 
+                <ng-container matColumnDef="ticketId" sticky>
+                    <mat-header-cell *matHeaderCellDef>Ticket-ID</mat-header-cell>
+                    <mat-cell class="name-cell" ngStyle.xs="font-size: 12px;" *matCellDef="let ticket"    
+                    [routerLink]="['/tickets/edit-ticket', ticket.id ]"                 
+                    >{{ticket.ticketNumber}}</mat-cell>
+                </ng-container>
+                <!-- / Ticket-ID -->
+
+                <!-- Subject -->
+                <ng-container matColumnDef="subject">
+                    <mat-header-cell *matHeaderCellDef>Subject</mat-header-cell>
+                    <mat-cell *matCellDef="let ticket">{{ticket.subject}}</mat-cell>
+                </ng-container>
+                <!-- / Subject -->
+
+                <!-- Status -->
+                <ng-container matColumnDef="status">
+                    <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
+                    <mat-cell *matCellDef="let ticket">
+                        <div *ngFor="let status of ticketStatus">
+                            <div *ngIf="status.id===ticket.status">
+
+                                <p class="status text-truncate h6 p-4" [ngClass]="status.color"> {{status.name}}
+                                </p>
+                            </div>
+                        </div>
+                      
+                        <mat-icon class="s-22 mr-4" mat-icon-button [matMenuTriggerFor]="cmenu"
+                        class="cursor-pointer blue-grey-600-fg mr-16"
+                        (click)="$event.stopPropagation()"> more_vert</mat-icon>
+                    <mat-menu #cmenu="matMenu">
+                        <button mat-menu-item 
+                            (click)="updateTicketStatus(ticket.id,ticketStatus[3].id)">
+                            <mat-icon>done</mat-icon>
+                            <span>{{ticketStatus[3].name}}</span>
+                        </button>
+                        <button mat-menu-item
+                        (click)="updateTicketStatus(ticket.id,ticketStatus[2].id)">
+                        <mat-icon>pending</mat-icon>
+                        <span>{{ticketStatus[2].name}}</span>
+                    </button>
+                        
+                    </mat-menu>
+                    </mat-cell>
+                </ng-container>
+                <!-- / Status -->
+ <!--  Ticket-ID --> 
+ <ng-container matColumnDef="ticketDate" sticky>
+    <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
+    <mat-cell class="name-cell" ngStyle.xs="font-size: 12px;" *matCellDef="let ticket"    
+                    
+    >{{ticket.ticketDate  | date:'MMM dd, h:mm a'}}</mat-cell>
+</ng-container>
+<!-- / Ticket-ID -->
+                <ng-container matColumnDef="action">
+                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-cell fxLayout="row" fxLayoutAlign="start center" *matCellDef="let ticket">
+
+                        <mat-icon class="cursor-pointer blue-grey-600-fg mr-16"
+                            [routerLink]="['/tickets/edit-ticket', ticket.id ]"
+                            matSuffix>edit</mat-icon>
+
+                        <span *ngIf="ticket.attachFile === true" fxLayout="row" fxLayoutAlign="center center">                           
+                            <mat-icon class=" blue-grey-600-fg mr-4" matSuffix>attach_file</mat-icon>
+                            
+                        </span>
+
+                    </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="notification">
+                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-cell fxLayout="row" fxLayoutAlign="start center" *matCellDef="let ticket">
+                        <span *ngIf="ticket.isReadByClient === false" fxLayout="row" fxLayoutAlign="center center">
+                            <mat-icon  >mail</mat-icon>
+    
+                        </span>
+                        <!-- <button mat-icon-button (click)="stopAlert(ticket.ticketNumber)"
+                        aria-label="Toggle important">
+                        <div *ngFor="let modify of Modify ">
+                            
+                        <mat-icon  *ngIf="modify===ticket.ticketNumber">mail</mat-icon>
+                         
+                        </div>
+                    </button> -->
+
+                    </mat-cell>
+                </ng-container>
+               
+
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+
+            </mat-table>
+
+            <div *ngIf="total==0" class="no-records">
+                No  tickets found
+            </div>
+
+            <div class="footer">              
+
+                <mat-paginator [length]="total" [pageSize]="pageSizeOptions[0]"
+                    [pageSizeOptions]="pageSizeOptions" [showFirstLastButtons]="true">
+                </mat-paginator>
+            </div>
+
+
+
+        </div>
+    </div>
+</div>

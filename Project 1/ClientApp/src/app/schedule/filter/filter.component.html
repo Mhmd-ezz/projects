@@ -1,0 +1,35 @@
+<div fxLayout="column" fxLayoutAlign="center center" ngClass.lt-md="unfolded" [ngClass]="{'unfolded': !folded}" class="main-container">
+
+    <!-- TOGGEL -->
+    <div fxHide fxShow.gt-md fxLayout="row" [fxLayoutAlign]="folded ? 'center center' : 'end center'" class="menu-btn" (click)="toggleFolded()">
+        <mat-icon [hidden]="!folded">menu</mat-icon>
+        <mat-icon [hidden]="folded">keyboard_backspace</mat-icon>
+    </div>
+    <!-- / TOGGEL -->
+
+    <!-- FILTER -->
+    <div class="filter-column" fxLayout="column" [fxHide]="folded">
+
+        <mat-checkbox
+            class="mb-8"
+            color="primary"
+            (change)="onAllSelectedChange($event)"
+            [(ngModel)]="allSelected"
+            [indeterminate]="indeterminate">
+            FILTERS
+        </mat-checkbox>
+
+        <ng-container *ngFor="let item of types; let i=index">
+            <mat-checkbox
+                class="checkbox"
+                (change)="refactorCheckbox($event,types[i])"
+                [(ngModel)]="types[i].value">
+                {{types[i].name}}
+            </mat-checkbox>
+        </ng-container>
+
+
+    </div>
+    <!-- / FILTER -->
+
+</div>

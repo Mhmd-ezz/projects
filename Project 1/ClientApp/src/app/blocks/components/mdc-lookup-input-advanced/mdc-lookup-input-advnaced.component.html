@@ -1,0 +1,156 @@
+<mat-form-field class="mdc-smart-input">
+    <input matInput #input placeholder="{{placeholder}}"
+        [formControl]="ctrl"
+        [matAutocomplete]="autoComplete">
+
+
+    <!-- <mat-icon class="cursor-pointer"
+        *ngIf="showRiskIcon"
+        style="cursor: pointer;"
+        (click)="$event.stopPropagation();"
+        matSuffix
+        matTooltip=""
+        class="mr-12"
+        [matTooltipClass]="'font-size-12'">add_alert</mat-icon> -->
+
+        <mat-icon class="cursor-pointer"
+        [matMenuTriggerFor]="preset"
+        (click)="loadPredefinedLookups($event)"
+        [hidden]="!predefinedActivated"
+        class="mr-12"
+        style="color: #0775aa;"
+        matSuffix
+        matTooltip="Show preset values"
+        [matTooltipClass]="'font-size-12'" #save>system_update_alt</mat-icon>
+
+
+    <!-- IMAGE BUTTON -->
+    <input hidden
+        *ngIf="flow != null"
+        type="file"
+        #fileInput
+        flowButton
+        id="{{FileSystemTagsEnum[modelName]}}"
+        [flow]="flow.flowJs"
+        [flowAttributes]="{accept: 'image/*'}" />
+
+    <mat-icon class="cursor-pointer"
+        *ngIf="flow != null"
+        style="cursor: pointer;"
+        (click)="$event.stopPropagation(); fileInput.nativeElement.click()"
+        matSuffix
+        matTooltip="Click here to add files"
+        class="mr-12"
+        [matTooltipClass]="'font-size-12'">photo_camera</mat-icon>
+    <!-- (click)="$event.stopPropagation(); fileInput.click()" -->
+
+    <!-- IMAGE BUTTON -->
+
+    <mat-icon class="cursor-pointer"
+        (click)="$event.stopPropagation()"
+        matSuffix
+        matTooltip="Click here or press enter to store this record"
+        [matTooltipClass]="'font-size-12'" #save>add_box</mat-icon>
+
+    <mat-autocomplete #autoComplete="matAutocomplete"
+        [displayWith]="displayLookupFn">
+        <mat-option *ngFor="let option of lookups$ | async"
+            [value]="option" (onSelectionChange)="input.value !=undefined &&
+            MatOptionSelectionChange($event)">
+            <div class="flex-spacebetween">
+                <div [innerHTML]="option.highlights?.text"> </div>
+            </div>
+        </mat-option>
+    </mat-autocomplete>
+</mat-form-field>
+<div *ngIf="!riskFactor">
+    <table class="simple clickable">
+        <tbody>
+    
+            <tr  *ngFor="let item of list; index as index" [class.accent-100]="index === editIndex">
+                <td class="text-left" fxFlex="1 0 88%">
+                    
+                    <span class="text"> {{ item.text }} </span>
+                </td>
+                <td class="text-right">
+    
+                    <mat-icon [fxHide]="editIndex >= 0" class="cursor-pointer s-16 mr-4" (click)="edit(index);$event.stopPropagation()"
+                        matSuffix>edit</mat-icon>
+                </td>
+                <td class="text-left">
+                    <mat-icon [fxHide]="!showRiskIcon" class="cursor-pointer s-16 mr-4" (click)="insert(index);$event.stopPropagation()"
+                matSuffix>add_alert</mat-icon>
+                </td>
+                <td class="text-left">
+                    <mat-icon [fxHide]="editIndex >= 0" class="cursor-pointer s-16" (click)="delete(index);$event.stopPropagation()"
+                        matSuffix>delete_forever</mat-icon>
+                </td>
+                <td class="text-left">
+                    <mat-icon fxHide [fxShow]="editIndex >= 0" class="cursor-pointer s-16" matTooltip="This field is in edit mode"
+                        (click)="$event.stopPropagation()" matSuffix>lock</mat-icon>
+                </td>
+    
+            </tr>
+        </tbody>
+    </table>
+<!-- <div *ngFor="let item of list; index as index" [class.accent-100]="index === editIndex">
+    <div class="text-container">
+        <mat-icon class="cursor-pointer s-16 mr-8" matSuffix>subdirectory_arrow_right</mat-icon>
+        <span class="action blue-grey-500">
+            <mat-icon [fxHide]="editIndex >= 0" class="cursor-pointer s-16 mr-4" (click)="edit(index);$event.stopPropagation()"
+                matSuffix>edit</mat-icon> 
+            <mat-icon [fxHide]="!showRiskIcon" class="cursor-pointer s-16 mr-4" (click)="insert(index);$event.stopPropagation()"
+                matSuffix>add_alert</mat-icon>
+            <mat-icon [fxHide]="editIndex >= 0" class="cursor-pointer s-16" (click)="delete(index);$event.stopPropagation()"
+                matSuffix>delete_forever</mat-icon>
+            <mat-icon fxHide [fxShow]="editIndex >= 0" class="cursor-pointer s-16" matTooltip="This field is in edit mode"
+                (click)="$event.stopPropagation()" matSuffix>lock</mat-icon>
+        </span>
+        <span class="text"> {{ item.text }} </span>
+    </div>
+</div> -->
+</div>
+<div *ngIf="riskFactor"> 
+    <table class="simple clickable">
+        <tbody>
+    
+            <tr  *ngFor="let item of list1; index as index" [class.accent-100]="index === editIndex">
+                <td class="text-left" fxFlex="1 0 92%">
+                    
+                    <span class="text"> {{ item.text }} </span>
+                </td>
+             
+                <td class="text-left">
+                    <mat-icon [fxHide]="editIndex >= 0" class="cursor-pointer s-16" (click)="deleteRiskFactor(index);$event.stopPropagation()"
+                        matSuffix>delete_forever</mat-icon>
+                </td>
+                <td class="text-left">
+                    <mat-icon fxHide [fxShow]="editIndex >= 0" class="cursor-pointer s-16" matTooltip="This field is in edit mode"
+                        (click)="$event.stopPropagation()" matSuffix>lock</mat-icon>
+                </td>
+    
+            </tr>
+        </tbody>
+    </table>
+<!-- <div *ngFor="let item of list1; index as index" [class.accent-100]="index === editIndex">
+    <div class="text-container">
+        <mat-icon class="cursor-pointer s-16 mr-8" matSuffix>subdirectory_arrow_right</mat-icon>
+        <span class="action blue-grey-500"> -->
+            <!-- <mat-icon [fxHide]="editIndex >= 0" class="cursor-pointer s-16 mr-4" (click)="edit(index);$event.stopPropagation()"
+                matSuffix>edit</mat-icon> -->
+            <!-- <mat-icon [fxHide]="!showRiskIcon" class="cursor-pointer s-16 mr-4" (click)="insert(index);$event.stopPropagation()"
+                matSuffix>add_alert</mat-icon> -->
+            <!-- <mat-icon [fxHide]="editIndex >= 0" class="cursor-pointer s-16" (click)="deleteRiskFactor(index);$event.stopPropagation()"
+                matSuffix>delete_forever</mat-icon>
+            <mat-icon fxHide [fxShow]="editIndex >= 0" class="cursor-pointer s-16" matTooltip="This field is in edit mode"
+                (click)="$event.stopPropagation()" matSuffix>lock</mat-icon>
+        </span>
+        <span class="text"> {{ item.text }} </span>
+    </div>
+</div> -->
+</div>
+<mat-menu style="width:200px;" #preset="matMenu">
+    <div style="padding: 10px; min-width: 200px;" *ngFor="let item of predefinedLookupsSubject$ | async" (click)="$event.stopPropagation()">
+        <mat-checkbox [checked]="checkboxCompare(item.text)" (change)="onPredefinedCheckedChange($event)" [value]="item">{{item.text}}</mat-checkbox>
+    </div>
+</mat-menu>

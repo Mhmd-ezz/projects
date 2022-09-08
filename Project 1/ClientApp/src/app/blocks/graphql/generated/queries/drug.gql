@@ -1,0 +1,9 @@
+query drug($id: String!){
+    drug(id: $id){
+        id
+        atcCode
+        name
+        dosage
+        form
+    }
+}

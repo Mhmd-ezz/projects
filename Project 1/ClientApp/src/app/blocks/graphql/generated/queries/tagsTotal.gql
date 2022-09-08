@@ -1,0 +1,3 @@
+query tagsTotal($filter: String, $page: Int, $size: Int){
+    tagsTotal(filter: $filter, page: $page, size: $size)
+}

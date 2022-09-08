@@ -1,0 +1,13 @@
+mutation deleteTodo($id: String!){
+    deleteTodo(id: $id){
+        id
+        title
+        notes
+        startDate
+        dueDate
+        isCompleted
+        isStarred
+        isImportant
+        patientId
+    }
+}

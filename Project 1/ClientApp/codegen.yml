@@ -1,0 +1,22 @@
+schema: http://localhost:24550/graphql
+documents: 
+  # - src/app/blocks/graphql/generated/**/*.gql
+  - src/app/blocks/graphql/generated/queries/*.gql
+  - src/app/blocks/graphql/generated/mutations/*.gql
+  - src/app/blocks/graphql/generated/subscriptions/*.gql
+generates:
+  src/app/blocks/graphql/generated/gqlServices.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-apollo-angular
+    config:
+      preResolveTypes: true
+  src/app/blocks/graphql/generated/bases.ts:
+    plugins:
+      - src/assets/development/gql-bases-generator/dist/index.js
+    config:
+      typesSuffix: Base
+      declarationKind:
+        type: 'class'
+        input: 'class'

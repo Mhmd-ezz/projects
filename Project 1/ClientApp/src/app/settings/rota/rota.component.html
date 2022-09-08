@@ -1,0 +1,32 @@
+<div id="board">
+
+    <div  class="add-list">
+        <div class="list new-list mat-elevation-z1 mb-24">
+            <button mat-button class="new-list-form-button" (click)="add()">
+                <div fxLayout="row" fxLayoutAlign="start center">
+                    <mat-icon class="red">add</mat-icon>
+                    <span>Add</span>
+                </div>
+            </button>
+        </div>
+    </div>
+
+    <div fxFlex class="board-content-wrapper">
+
+        <!-- BOARD -->
+        <div class="board-content" fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="24px" [@animateStagger]="{value:'50'}">
+
+            <!-- LIST -->
+            <app-rota-list
+                fxFlex.xs="1 0 auto"
+                [@animate]="{value:'*',params:{duration:'350ms',x:'100%'}}"
+                *ngFor="let item of rota$ | async"
+                [data]="item">
+            </app-rota-list>
+            <!-- / LIST -->
+
+        </div>
+        <!-- / BOARD -->
+    </div>
+    <!-- primary content -->
+</div>

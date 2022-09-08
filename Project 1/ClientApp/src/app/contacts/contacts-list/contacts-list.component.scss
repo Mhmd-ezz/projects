@@ -1,0 +1,18 @@
+.name-cell {
+    cursor: pointer;
+    color: #1976d2 !important; // font-weight: 600;
+}
+
+.footer {
+    display: flex;
+    background-color: #fff;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.stats {
+    max-width: 115px;
+    background-color: white;
+    padding: 2px 10px;
+    box-shadow: 0px 0px 1px #ccc;
+}

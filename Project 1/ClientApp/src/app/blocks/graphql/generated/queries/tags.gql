@@ -1,0 +1,7 @@
+query tags($filter: String, $page: Int, $size: Int){
+    tags(filter: $filter, page: $page, size: $size){
+        id
+        name
+        group
+    }
+}

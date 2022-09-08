@@ -1,0 +1,10 @@
+mutation deleteSubLocation($id: String!, $subLocation: String!){
+    deleteSubLocation(id: $id, subLocation: $subLocation){
+        id
+        name
+        contact
+        address
+        type
+        subLocations
+    }
+}

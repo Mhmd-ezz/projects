@@ -1,0 +1,11 @@
+subscription messageAddedByUser($id: String!){
+    messageAddedByUser(id: $id){
+        content
+        sentAt
+        sub
+        from{
+            id
+            displayName
+        }
+    }
+}

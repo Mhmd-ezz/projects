@@ -1,0 +1,33 @@
+    .patient-option {
+        height: 30px;
+    }
+
+    .small {
+        font-size: 12px;
+        .name {
+            min-width: 110px;
+        }
+        .contact-number {
+            min-width: 105px;
+        }
+        .birthday {
+            min-width: 90px;
+        }
+        .patient-option {
+            padding: 0 10px;
+        }
+    }
+
+    .medium {
+        .name {
+            min-width: 180px;
+        }
+        .contact-number {
+            min-width: 110px;
+        }
+        .birthday {
+            min-width: 110px;
+        }
+    }
+
+    // .large {}

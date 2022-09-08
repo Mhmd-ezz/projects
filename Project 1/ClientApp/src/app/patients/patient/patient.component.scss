@@ -1,0 +1,52 @@
+.menu-icon {
+    margin-right: 16px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+
+.page-layout.simple.left-sidebar>.center>.header,
+.page-layout.simple.right-sidebar>.center>.header {
+    height: 40px;
+    min-height: 40px;
+    max-height: 40px;
+}
+
+.is-duplicate {
+    color: #039be5;
+    cursor: pointer;
+}
+
+.duplicate-label {
+    color: #d3625b !important;
+    background: #ffffff;
+    border: 2px solid #ea8484;
+    border-radius: 4px;
+    padding: 0px 8px;
+    font-weight: 600;
+    letter-spacing: 0.6px;
+    font-size: 13px;
+    margin-right: 10px;
+}
+
+.section-patient-content {
+    display: flex;
+}
+
+.sidebar {
+    box-shadow: 1px 1px 1px #ececec !important;
+}
+
+@media(min-width: 1275px) {
+    .section-patient-content {
+        padding-left: 8px !important;
+    }
+
+    .router-outlet {
+        padding-left: 15px;
+    }
+}
+
+.router-outlet {
+    width: 100%;
+}

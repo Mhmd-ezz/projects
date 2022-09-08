@@ -1,0 +1,19 @@
+.medications {
+    // margin-left: -5px;
+    // margin-right: -5px;
+    background: #fff;
+    border: 1px solid #d0cccc;
+    border-top: none;
+    min-height: 206px;
+    margin-top: 12px;
+}
+
+.noMedications{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background: #fff;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}

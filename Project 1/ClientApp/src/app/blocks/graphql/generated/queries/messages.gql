@@ -1,0 +1,11 @@
+query messages{
+    messages{
+        content
+        sentAt
+        sub
+        from{
+            id
+            displayName
+        }
+    }
+}

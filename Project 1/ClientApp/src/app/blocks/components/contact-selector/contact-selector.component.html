@@ -1,0 +1,58 @@
+<div fxLayout="row" fxLayoutAlign="center center">
+    <mat-form-field appearance="outline" style="width: 100%;">
+        <mat-label>Contact</mat-label>
+        <input type="text"
+            placeholder="Choose a contact"
+            matInput
+            name="contact"
+            [(ngModel)]="contact"
+            #ctrl
+            #contactControl="ngModel"
+            [matAutocomplete]="auto"
+            [required]="required"
+            mdcRequiredValidator="id">
+        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayWith" (optionSelected)="optionSelections($event)">
+
+            <!-- LOADING -->
+            <mat-option *ngIf="loading$ | async" style="height: 25px; background: #e1e3ea;" disabled="true">
+                <div style="display: flex; align-items: center;">
+
+                    <ng-container *ngIf="errorSubject.value == false">
+                        <span style="height:20px;font-size:12px;" class="flex-center mr-8"> Loading...</span>
+                        <mat-spinner
+                            [strokeWidth]="2"
+                            [diameter]="16">
+                        </mat-spinner>
+                    </ng-container>
+
+                    <ng-container *ngIf="errorSubject.value == true">
+                        <span style="height:20px;font-size:12px;" class="flex-center mr-8">Server unreachable</span>
+                    </ng-container>
+
+                </div>
+            </mat-option>
+            <!-- / LOADING -->
+
+            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                <div fxLayout="column">
+                    <div fxLayout="row">
+                        <span class="contact-name">{{option.name}}</span>
+                    </div>
+                    <div fxLayout="row" fxLayoutAlign="space-between" class="contact-details">
+                        <span>{{option.telephone}}</span>
+                        <span>{{option.type}}</span>
+                    </div>
+                </div>
+            </mat-option>
+        </mat-autocomplete>
+        <mat-icon *ngIf='contact?.id' class="accent-fg" matSuffix>person_pin</mat-icon>
+
+        <mat-error *ngIf="contactControl.hasError('required') || contactControl.hasError('mdcRequired')">Please choose contact
+        </mat-error>
+      
+    </mat-form-field>
+    <!-- <button type="button" style="margin-top: -18px;margin-left: 4px;margin-right: 2px;"
+        mat-mini-fab color="accent" (click)="openDialog()">
+        <mat-icon class="">add</mat-icon>
+    </button> -->
+</div>

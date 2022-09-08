@@ -1,0 +1,10 @@
+query location($id: String!){
+    location(id: $id){
+        id
+        name
+        contact
+        address
+        type
+        subLocations
+    }
+}

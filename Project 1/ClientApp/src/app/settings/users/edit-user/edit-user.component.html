@@ -1,0 +1,96 @@
+<div class="content">
+    <div class="header-tool accent mb-24">
+        <div class="flex-center">
+            <mat-icon class="mr-8 s-22" matSuffix>edit</mat-icon>
+            <span class="h2">Edit User</span>
+        </div>
+        <div class="flex-center">
+            <span class="flex-center" *ngIf="formStatus === 'saved'">
+                <mat-icon class="mr-8 s-22" matSuffix>check_circle</mat-icon>
+                AutoSaved
+            </span>
+            <span class="flex-center" *ngIf="formStatus === 'savedLocally'">
+                <mat-icon class="mr-8 s-22" matSuffix>check_circle</mat-icon>
+                No internet access, Saved locally
+            </span>
+            <span class="flex-center" *ngIf="formStatus === 'pending'">
+                <mat-icon class="mr-8 s-22" matSuffix>keyboard</mat-icon>
+                Pending...
+            </span>
+            <span class="flex-center deep-orange-100-fg" *ngIf="formStatus === 'invalid'">
+                <mat-icon class="mr-8 s-22" matSuffix>error_outline</mat-icon>
+                Missing Required Fields...
+            </span>
+            <span class="flex-center deep-orange-100-fg" *ngIf="formStatus === 'error'">
+                <mat-icon class="mr-8 s-22" matSuffix>error_outline</mat-icon>
+                An Error Occurred ( couldn't save changes ). Please, contact support...
+            </span>
+            <span class="flex-center" *ngIf="formStatus === 'saving'">
+                <div class="mr-8 loader-dual-ring--22"></div>
+                Saving...
+            </span>
+
+        </div>
+        <span>
+            <button mat-flat-button type="button" (click)="onSave()" class="mr-12">Save</button>
+            <button mat-flat-button type="button" (click)="onBack()">Back</button>
+        </span>
+    </div>
+
+    <form #form="ngForm"  autocomplete="off" fxLayout="column">
+
+        <div class="mb-24" fxLayout="row" fxLayoutAlign="space-between stretch">
+            <span>User is {{ user.isEnabled ? 'enabled' : 'disabled' }}</span>
+            <mat-slide-toggle [checked]="user.isEnabled" (change)="setEnabled($event)"></mat-slide-toggle>
+        </div>
+        <mat-form-field appearance="outline">
+            <mat-label>First Name</mat-label>
+            <input matInput placeholder="Ex: John" #firstnameControl="ngModel" name="firstname"
+                [(ngModel)]="user.firstName" type="text" autofocus required>
+            <mat-error *ngIf="firstnameControl.hasError('required')">
+                First name is required
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Last Name</mat-label>
+            <input matInput placeholder="Ex: Doe" #lastNameControl="ngModel" name="lastname" [(ngModel)]="user.lastName"
+                type="text" required>
+            <mat-error *ngIf="lastNameControl.hasError('required')">
+                Last name is required
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput email="true" placeholder="Ex: email@somewhere.com" #emailControl="ngModel" name="email"
+                [(ngModel)]="user.email" type="text" required>
+            <mat-error *ngIf="emailControl.hasError('email') && !emailControl.hasError('required')">
+                Please enter a valid email address
+            </mat-error>
+            <mat-error *ngIf="emailControl.hasError('required')">
+                Email is <strong>required</strong>
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Phone</mat-label>
+            <input matInput placeholder="Ex: 01-999 000" #phoneControl="ngModel" name="phone" [(ngModel)]="user.phone"
+                type="text">
+        </mat-form-field>
+
+
+        <mat-form-field appearance="outline">
+            <mat-select placeholder="Roles" name="roles" #rolesControl="ngModel" [(ngModel)]="user.roles" multiple
+                required>
+                <mat-option value="TenantAdmin">Admin</mat-option>
+                <mat-option value="Doctor">Doctor</mat-option>
+                <mat-option value="Secretary">Secretary</mat-option>
+                <mat-option value="Assistant">Assistant</mat-option>
+                <mat-option value="Accountant">Accountant</mat-option>
+            </mat-select>
+            <mat-error *ngIf="rolesControl.hasError('required')">
+                This field is required
+            </mat-error>
+        </mat-form-field>
+
+    </form>
+</div>

@@ -1,0 +1,30 @@
+﻿@using Auth.Models
+@using Microsoft.Extensions.Options
+@{
+    ViewData["Title"] = "Medcilia Identity";
+}
+@inject IOptions<StsConfig> OptionsStsConfig
+@*@if (User.Identity.IsAuthenticated)
+    {
+        <h1>Hi @User.Identity.Name</h1>
+    }
+    else
+    {
+        <br />
+    }*@
+@section metatags
+{
+    <meta http-equiv="Refresh" content="5; url=@OptionsStsConfig.Value.MedciliaAngularClinicUrl" />
+}
+
+
+<div>
+    <a href="@OptionsStsConfig.Value.MedciliaAngularClinicUrl">
+        Please click here to access Medcilia
+    </a>
+</div>
+<br />
+
+@*<a href="@OptionsStsConfig.Value.MedciliaAngularAdminUrl">
+        MedciliaAngularAdminUrl
+    </a>*@

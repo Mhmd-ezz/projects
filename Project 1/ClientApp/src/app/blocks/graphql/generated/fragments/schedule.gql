@@ -1,0 +1,6 @@
+fragment Schedule on Schedule{
+id
+startHour
+endHour
+displayRota    
+}

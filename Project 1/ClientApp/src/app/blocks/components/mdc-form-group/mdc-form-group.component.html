@@ -1,0 +1,48 @@
+<div class="form-group-template">
+    <div class="form-group-wrapper mat-card mat-elevation-z2">
+
+        <div class="form-group-header blue-grey-500-bg">
+
+            <div class="form-group-title text-capitalize" fxLayout="row" fxLayoutAlign="start center">
+                <ng-content select=".form-group-header-selector"></ng-content>
+            </div>
+
+            <button style="text-align: right;" [fxHide]="!containImages" mat-icon-button type="button" (click)="toggleSourceView()" [matTooltip]="'Photo library'">
+                <mat-icon class="s-20">
+                    photo_library
+                </mat-icon>
+            </button>
+        </div>
+
+        <div class="form-group-source" [hidden]="!showBack">
+            <ng-content select=".form-group-back-selector"></ng-content>
+        </div>
+
+        <div class="form-group-body" [hidden]="showBack">
+            <ng-content select=".form-group-front-selector"></ng-content>
+        </div>
+    </div>
+</div>
+
+
+<!-- USAGE -->
+
+<!-- <mdc-form-group class="mdc-form-group"> -->
+
+    <!-- HEADER -->
+    <!-- <ng-container class="form-group-header-selector">
+        <span class="m-0 h3">TITLE</span>
+    </ng-container> -->
+    <!-- / HEADER -->
+
+    <!-- FRONT -->
+    <!-- <div class="form-group-front-selector">
+    </div> -->
+    <!-- FRONT -->
+
+    <!-- BACK -->
+    <!-- <div class="form-group-back-selector">
+    </div> -->
+    <!-- / BACK -->
+
+<!-- </mdc-form-group> -->

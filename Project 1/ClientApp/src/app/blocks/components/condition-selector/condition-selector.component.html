@@ -1,0 +1,13 @@
+<mat-form-field style="width: 100%;">
+    <mat-select [(ngModel)]="selectorArgs" placeholder="Select Condition" (selectionChange)="onSelectionChanged($event)" [compareWith]="compareCategoryObjects">
+
+        <mat-option>-- None --</mat-option>
+        <mat-optgroup class="capitalize-letter" *ngFor="let group of grouped" [label]="group.name">
+            <mat-option class="capitalize-letter" *ngFor="let condition of group.value" [value]="{ speciality: group.name, id: condition.id }">
+                {{condition.name}}
+                <span [hidden]="!condition.diagnosis"> / <span class="teal-400-fg"> {{ condition.diagnosis }} </span></span>
+            </mat-option>
+        </mat-optgroup>
+
+    </mat-select>
+</mat-form-field>

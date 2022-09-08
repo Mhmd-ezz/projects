@@ -1,0 +1,17 @@
+<div class="tab-content" fxLayout="column">
+    <mat-form-field class="mdc-smart-input" >
+        <input
+            matInput
+            placeholder="Tag"
+            name="name"
+            [value]="value" #input>
+       
+    </mat-form-field>
+   
+
+  
+    <div class="footer p-64">
+        <button mat-raised-button class="mr-12" (click)="onCancelClick()">Cancel</button>
+        <button mat-raised-button color="accent" (click)="onSaveClick()">Save</button>
+    </div>
+</div>

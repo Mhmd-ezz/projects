@@ -1,0 +1,68 @@
+<div style="width:100%;" fxLayout="row wrap" fxLayoutGap="20px">
+    <mat-form-field class="mdc-smart-input" fxFlex="1 0 100%">
+        <input matInput placeholder="{{inputPlaceHolder}}" #input name="Medication" matInput [formControl]="drugNameInput"
+            [matAutocomplete]="autoComplaint">
+        <mat-icon class="cursor-pointer" (click)="EnterNewRecord($event);$event.stopPropagation()" matSuffix matTooltip="Click
+            here or press enter to store this record" [matTooltipClass]="'font-size-12'" #save>add_box</mat-icon>
+        <mat-autocomplete #autoComplaint="matAutocomplete" [displayWith]="displayLookupFn">
+            <mat-option *ngFor="let option of drugs$ | async" [value]="option"
+                (onSelectionChange)="input.value !=undefined && MatOptionSelectionChange($event)">
+                <div class="text-capitalize">
+                    <span [innerHTML]="option.highlights?.name"> </span>
+                    <!-- <span class="ml-8 blue-600-fg" [innerHTML]="option.highlights?.dosage ? option.highlights?.dosage :
+                        option._item.dosage"> -->
+                    <!-- </span> -->
+                </div>
+            </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+
+    <!-- <mat-form-field>
+        <input matInput placeholder="Frequency" name="frequency" [(ngModel)]="medication.frequency"
+            (keyup.enter)="EnterNewRecord($event)">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput placeholder="Note" name="note" [(ngModel)]="medication.note" (keyup.enter)="EnterNewRecord($event)">
+    </mat-form-field> -->
+
+</div>
+
+<!-- <div *ngFor="let medication_ of list; index as index" [class.accent-100]="index === editIndex">
+    <div class="text-container" (click)="viewMedication(medication_)">
+        <mat-icon class="cursor-pointer s-16" matSuffix>keyboard_arrow_right</mat-icon>
+        <span class="action blue-grey-500"> -->
+            <!-- <mat-icon [fxHide]="editIndex >= 0" class="cursor-pointer s-16" (click)="edit(index);$event.stopPropagation()"
+                matSuffix>edit</mat-icon> -->
+            <!-- <mat-icon [fxHide]="editIndex >= 0" class="cursor-pointer s-16" (click)="delete(index);$event.stopPropagation()"
+                matSuffix>delete_forever</mat-icon>
+            <mat-icon fxHide [fxShow]="editIndex >= 0" class="cursor-pointer s-16" matTooltip="This field is in edit mode"
+                (click)="$event.stopPropagation()" matSuffix>lock</mat-icon>
+        </span>
+        <span class="text"> {{ medication_?.drug?.name }} </span>
+    </div>
+</div> -->
+
+<table class="simple clickable">
+    <tbody>
+
+        <tr *ngFor="let medication_ of list; index as index" [class.accent-100]="index === editIndex">
+            <td class="text-left" fxFlex="1 0 92%" >
+                <span class="text"> {{ medication_?.drug?.name }} </span>
+            </td>
+            <td class="text-left">
+
+                <mat-icon [fxHide]="editIndex >= 0" class="cursor-pointer s-16"  (click)="edit(index);$event.stopPropagation()" matSuffix>edit
+                </mat-icon>
+            </td>
+            <td class="text-left">
+                <mat-icon [fxHide]="editIndex >= 0" class="cursor-pointer s-16"  (click)="delete(index);$event.stopPropagation()" matSuffix>
+                    delete_forever</mat-icon>
+            </td>
+            <td class="text-left">
+                <mat-icon fxHide [fxShow]="editIndex >= 0" class="cursor-pointer s-16"
+                    matTooltip="This field is in edit mode" (click)="$event.stopPropagation()" matSuffix>lock</mat-icon>
+            </td>
+
+        </tr>
+    </tbody>
+</table>

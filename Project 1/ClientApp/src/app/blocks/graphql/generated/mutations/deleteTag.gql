@@ -1,0 +1,7 @@
+mutation deleteTag($id: String!){
+    deleteTag(id: $id){
+        id
+        name
+        group
+    }
+}

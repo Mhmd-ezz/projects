@@ -1,0 +1,3 @@
+mutation deleteMedicalActivity($patientId: String!, $speciality: String!, $conditionId: String!, $activityType: String, $activityId: String){
+    deleteMedicalActivity(patientId: $patientId, speciality: $speciality, conditionId: $conditionId, activityType: $activityType, activityId: $activityId)
+}

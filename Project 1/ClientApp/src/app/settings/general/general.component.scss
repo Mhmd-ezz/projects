@@ -1,0 +1,27 @@
+.uptodate {
+    border-radius: 3px;
+    background-color: #b8f6c752;
+    border: 1px solid #8fe2a4;
+    padding: 3px 7px;
+    color: #141414;
+    font-size: 12px;
+}
+
+.update-available {
+    border-radius: 3px;
+    background-color: #f6dfb852;
+    border: 1px solid #e2c78f;
+    padding: 3px 7px;
+    color: #141414;
+    font-size: 12px;
+}
+
+.refresh-btn {
+    font-size: 11px;
+    line-height: 25px;
+}
+
+.label {
+    min-width: 150px;
+    justify-content: start;
+}

@@ -1,0 +1,25 @@
+mutation createMedication($patientMedications: PatientMedicationsInput!){
+    createMedication(patientMedications: $patientMedications){
+        medicationId
+        patientId
+        conditionId
+        followupId
+        startTime
+        endTime
+        drug{
+            id
+            name
+            dosage
+        }
+        isActive
+        reason
+        history{
+            startDate
+            endDate
+            duration
+            frequency
+            note
+            status
+        }
+    }
+}

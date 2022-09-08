@@ -1,0 +1,5 @@
+fragment Tags on Tags{
+id
+name
+group    
+}

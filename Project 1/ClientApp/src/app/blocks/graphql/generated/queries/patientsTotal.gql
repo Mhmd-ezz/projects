@@ -1,0 +1,3 @@
+query patientsTotal($sortBy: String, $page: Int, $size: Int, $filter: String, $descending: Boolean){
+    patientsTotal(sortBy: $sortBy, page: $page, size: $size, filter: $filter, descending: $descending)
+}

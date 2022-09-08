@@ -1,0 +1,6 @@
+query grantors($filter: String, $page: Int, $size: Int){
+    grantors(filter: $filter, page: $page, size: $size){
+        id
+        name
+    }
+}

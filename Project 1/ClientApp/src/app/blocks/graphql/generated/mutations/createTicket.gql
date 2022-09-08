@@ -1,0 +1,19 @@
+mutation createTicket($ticket: TicketInput!){
+    createTicket(ticket: $ticket){
+        id
+        ticketNumber
+        tenantName
+        subject
+        details
+        status
+        attachFile
+        isReadByAdmin
+        isReadByClient
+        ticketDate
+        messages{
+            message
+            requestBy
+            messageDate
+        }
+    }
+}

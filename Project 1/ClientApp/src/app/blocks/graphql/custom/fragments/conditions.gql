@@ -1,0 +1,7 @@
+fragment Conditions on Conditions{
+name
+type
+closed
+opened
+status    
+}

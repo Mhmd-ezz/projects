@@ -1,0 +1,4 @@
+<div class="recurrence-container" [ngClass]="{'editable': isEditable}" fxLayout="row">
+    <div class="recurrence-label">Repeat: </div>
+    <div class="recurrence-value capitalize-letter" [rruleToText]="value" (click)="onEditClick()"></div>
+</div>

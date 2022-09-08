@@ -1,0 +1,19 @@
+mutation updateTicket($ticket: TicketInput!, $broadcast: Boolean){
+    updateTicket(ticket: $ticket, broadcast: $broadcast){
+        id
+        ticketNumber
+        tenantName
+        subject
+        details
+        status
+        attachFile
+        isReadByAdmin
+        isReadByClient
+        ticketDate
+        messages{
+            message
+            requestBy
+            messageDate
+        }
+    }
+}

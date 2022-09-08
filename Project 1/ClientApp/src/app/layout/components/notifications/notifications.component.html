@@ -1,0 +1,36 @@
+<button mat-icon-button [matMenuTriggerFor]="addMenu" matTooltip="Ticket Notifications">
+    <mat-icon class="accent-600-fg">notifications</mat-icon>
+    <div class="unread-count" *ngIf="unreadCount>0">{{unreadCount}}</div>
+</button>
+
+<mat-menu #addMenu="matMenu" fxFlex>
+    <mat-nav-list fusePerfectScrollbar>
+
+        <mat-list-item *ngFor="let notification of notifications" class="mb-16 mt-16" fxFlex>
+
+            <ng-container>
+
+                <a fxFlex [routerLink]="['/tickets/edit-ticket/',notification.content.id]"
+                    (click)="delete(notification)">
+                    <span *ngIf="notification.content.ticketNumber">{{notification.content.ticketNumber}}</span>
+                    <div *ngIf="notification.from.displayName" matLine fxFlex class="secondary-text text-bold">
+                        {{notification.from.displayName}} -
+
+                        <span *ngIf="notification.content.details" [innerHTML]="notification.content.details"></span>
+                    </div>
+
+                </a>
+                <mat-icon class="ml-8 accent-fg" (click)="delete(notification,1)">close</mat-icon>
+
+            </ng-container>
+
+        </mat-list-item>
+
+        <mat-list-item *ngIf="notifications.length === 0">
+            <p>
+                <small>No notifications yet!</small>
+            </p>
+        </mat-list-item>
+
+    </mat-nav-list>
+</mat-menu>

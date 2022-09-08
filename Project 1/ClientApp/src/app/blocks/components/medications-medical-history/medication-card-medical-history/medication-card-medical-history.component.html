@@ -1,0 +1,85 @@
+<div class="panel" style="margin: 5px;">
+    <div class="panel-body">
+    <div fxLayout="column" fxFlex="50">
+        <a href="javascript:void(0)" class="font-weight-500">{{medications.drug.name}} {{medications.drug.dosage}}</a>
+        <!-- <div>lepsom leorem</div> -->
+    </div>
+    <div class="text-right" fxLayout="column" fxFlex="50">
+        <div>{{medications.history[totalHistory-1].duration}}</div>
+        <div>{{medications.history[totalHistory-1].frequency}}</div>
+    </div>
+        <!-- <div fxLayout="column" fxFlex="50">
+            <a href="javascript:void(0)" class="font-weight-500">Pariet 20ml</a>
+            <div>lepsom leorem</div>
+        </div>
+        <div class="text-right" fxLayout="column" fxFlex="50">
+            <div>3 weeks</div>
+            <div>3 times per day</div>
+        </div> -->
+    </div>
+
+    <div class="medication-footer panel-footer-condensed">
+        <div class="heading-elements not-collapsible">
+            <span class="left">
+                <mat-icon class="s-18 mr-4">schedule</mat-icon>
+                 {{medications.history[totalHistory-1].startDate | date:'yyyy-MM-dd'}}
+            </span>
+
+            <span class="right">
+                <div class="item" (click)="stop()" *ngIf="medications?.isActive">
+                    Stop
+                </div>
+                <div class="item" (click)="replace()" *ngIf="medications?.isActive">
+                    Replace
+                </div>
+                <div class="item" (click)="renew()">
+                    Renew
+                </div>
+                <div class="item" (click)="showHistory = !showHistory" >
+                    History
+                    <mat-icon class="s-18 ml-4">expand_more</mat-icon>
+                </div>
+            </span>
+        </div>
+    </div>
+
+    <div class="medication-history" *ngIf="showHistory"  [@fadeInOut] >
+        <div class="history-container">
+
+            <ul class="list-history">
+                <ng-container *ngFor="let item of medications.history.slice().reverse()">
+                <li class="history-entity">
+                    <div class="media-body">
+                        <div class="text-muted">{{item.startDate | date:'yyyy-MM-dd'}}</div><a href="#">{{item.status}}</a>
+                    </div>
+
+                    <div class="media-right">
+                        <ul class="icons-list icons-list-extended text-nowrap">
+                            <li>
+                                <mat-icon>exit_to_app</mat-icon>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                </ng-container> 
+<!--                 
+                <li class="history-entity">
+                    <div class="media-body">
+                        <div class="text-muted">Jan 7, 06:32</div><a href="#">Renewal</a>
+                        | 3 weeks
+                    </div>
+
+                    <div class="media-right">
+                        <ul class="icons-list icons-list-extended text-nowrap">
+                            <li>
+                                <mat-icon>exit_to_app</mat-icon>
+                            </li>
+                        </ul>
+                    </div>
+                </li> -->
+
+            </ul>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,553 @@
+<ng-container #mediaFlow="flow"
+    [flowConfig]="{target: mediaEndpoint+ '/files/uploads' ,
+    allowDuplicateUploads :true,
+    chunkSize: 1000000,
+    headers: {
+    'Authorization' : accessToken
+    }}"></ng-container>
+
+<div class="content">
+    <div class="header-tool accent mb-24" stickybits>
+        <div class="flex-center">
+            <mat-icon class="mr-8 s-22" (click)="$event.stopPropagation()" matSuffix>add_box</mat-icon>
+            <span class="h2">
+                New Operation
+                <small [hidden]="!selectedCondition.name" style="color: #98f677;"> for
+                    <span class="text-capitalize">{{selectedCondition.name}}</span>
+                </small>
+            </span>
+        </div>
+        <div class="flex-center">
+
+            <mdc-form-status [formStatus]="formStatus"></mdc-form-status>
+
+        </div>
+        <span>
+            <button mat-flat-button type="button" (click)="saveChanges()">Save</button>
+            <button mat-flat-button type="button" (click)="onDone()" class="ml-8">Done</button>
+        </span>
+    </div>
+
+    <mdc-form-infobox-error [dataLink]="errors"></mdc-form-infobox-error>
+
+    <form #form="ngForm" class="mdc-form" autocomplete="off">
+        <!-- MAIN REQUIRED -->
+        <mdc-form-group class="mdc-form-group">
+            <!-- HEADER -->
+            <ng-container class="form-group-header-selector">
+                <span class="m-0 h3">Main</span>
+                <span class="mdc-card-mark">
+                    <span class="ml-8 mr-8 blue-grey-100-fg"> | </span>
+                    <small class="orange-300-fg"> Required</small>
+                </span>
+            </ng-container>
+            <!-- / HEADER -->
+
+            <!-- FRONT -->
+            <div class="form-group-front-selector">
+                <div class="mdc-form-body">
+                    <div class="mdc-form-box" style="flex-grow: 1;">
+                        <mat-form-field class="mdc-smart-input">
+                            <input matInput
+                                [ngModelOptions]="{updateOn:'blur'}"
+                                placeholder="Operation name"
+                                #nameControl="ngModel"
+                                name="name"
+                                [(ngModel)]="operation.name"
+                                autofocus
+                                required>
+                            <mat-error *ngIf="nameControl.hasError('required')">
+                                This field is required
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="mdc-form-box" style="flex-grow: 1;">
+                        <mat-form-field>
+                            <input
+                                appMaskDate
+                                [ngModelOptions]="{updateOn:'blur'}"
+                                matInput
+                                [matDatepicker]="picker"
+                                #entryDateControl="ngModel"
+                                name="entryDate"
+                                placeholder="Entry Date"
+                                [(ngModel)]="operation.opened"
+                                required>
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                            <mat-error *ngIf="entryDateControl.hasError('required')">
+                                This field is required
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="mdc-form-box" style="flex-grow: 1;">
+                        <mat-form-field>
+                            <mat-select placeholder="Choose Location" name="location" [(ngModel)]="operation.location"
+                                #locationControl="ngModel" [compareWith]="matSelectCompare" required mdcRequiredValidator="id">
+                                <mat-option>--</mat-option>
+                                <mat-option *ngFor="let location of locations" [value]="{id: location.id, name: location.name,
+                                    __typename:'LocationView'}">
+                                    {{location.name}}
+                                </mat-option>
+                            </mat-select>
+                            <!-- <mat-error *ngIf="locationControl.hasError('required')">Please choose location</mat-error> -->
+                            <mat-error *ngIf="locationControl.hasError('mdcRequired')">Please choose location</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="mdc-form-box" style="flex-grow: 1;">
+                        <mat-form-field>
+                            <mat-select
+                                placeholder="Choose Sub-Location"
+                                [compareWith]="matSelectCompareString"
+                                name="subLocation" [(ngModel)]="operation.subLocation">
+                                <mat-option>--</mat-option>
+                                <mat-option *ngFor="let subLocation of subLocations" [value]="subLocation">
+                                    {{subLocation}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="mdc-form-box" style="flex-grow: 1;" *ngIf="!isConditionIdSet">
+                        <mat-form-field>
+                            <mat-select placeholder="Choose Condition" name="conditionId" [ngModel]="conditionId"
+                                (ngModelChange)="onConditionChanged($event)" #conditionControl="ngModel"
+                                [compareWith]="matSelectCompare"
+                                required>
+                                <mat-option>--</mat-option>
+
+                                <mat-option *ngFor="let condition of patientConditions" [value]="condition.id">
+                                    <div class=flex-spacebetween>
+                                        <div>
+                                            {{condition.name}}
+                                            <span class="secondary-text" *ngIf="condition?.diagnosis?.text.length">
+                                                /
+                                                <span class="teal-400-fg text-capitalize">
+                                                    {{condition?.diagnosis?.text[0].text}}
+                                                </span>
+                                            </span>
+                                        </div>
+                                        <!-- <div class="secondary-text font-8em">{{condition.date | date : 'd MMM y'}}</div> -->
+                                    </div>
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="conditionControl.hasError('required')">Please choose condition</mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+
+        </mdc-form-group>
+        <!-- / MAIN REQUIRED -->
+
+        <!-- BASIC -->
+        <mdc-form-group class="mdc-form-group">
+            <!-- HEADER -->
+            <ng-container class="form-group-header-selector">
+                <span class="m-0 h3">Basic</span>
+            </ng-container>
+            <!-- / HEADER -->
+
+            <!-- FRONT -->
+            <div class="form-group-front-selector">
+                <div class="mdc-form-body">
+                    <div class="mdc-form-box">
+                        <mat-form-field>
+                            <mat-select placeholder="Choose Department" name="department" [(ngModel)]="operation.department"
+                                #departmentControl="ngModel">
+                                <mat-option>--</mat-option>
+                                <mat-option *ngFor="let department of departments" [value]="department">
+                                    {{department}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="departmentControl.hasError('required')">Please choose department</mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="mdc-form-box">
+                        <mdc-lookup-input-advanced
+                            [lookupsCollection]="[]"
+                            [dataLink]="operation.surgeons"
+                            [groupkey]="'surgeons'"
+                            [modelName]="'surgeons'"
+                            [placeholder]="'Surgeons'"
+                            (notify)="notifyHandler($event)">
+                        </mdc-lookup-input-advanced>
+                    </div>
+
+                </div>
+                <div class="mdc-form-body">
+                    <div class="mdc-form-box">
+                        <mdc-lookup-input-advanced
+                            [lookupsCollection]="lookups.anesthesia || []"
+                            [dataLink]="operation.anesthesia"
+                            [groupkey]="'anesthesia'"
+                            [modelName]="'anesthesia'"
+                            [placeholder]="'Anesthesia'"
+                            (notify)="notifyHandler($event)"
+                            #anesthesiaElRef>
+                            <mat-form-field class="mdc-smart-input">
+                                <input matInput #input placeholder="Anesthesia" name="anesthesia" matInput
+                                    [formControl]="anesthesiaControl" [matAutocomplete]="autoAnesthesia">
+                                <mat-icon class="cursor-pointer" (click)="$event.stopPropagation()" matSuffix matTooltip="Click
+                                    here or press enter to store this record" [matTooltipClass]="'font-size-12'" #save>add_box</mat-icon>
+                                <mat-autocomplete #autoAnesthesia="matAutocomplete"
+                                    [displayWith]="anesthesiaElRef.displayLookupFn">
+                                    <mat-option *ngFor="let option of (lookups.anesthesia | fuzzysearch: anesthesiaControl.value :
+                                        ['text'])"
+                                        [value]="option" (onSelectionChange)="input.value !=undefined &&
+                                        anesthesiaElRef.MatOptionSelectionChange($event)">
+                                        <div class="flex-spacebetween">
+                                            <div [innerHTML]="option.highlights?.text"> </div>
+                                        </div>
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </mdc-lookup-input-advanced>
+                    </div>
+                    <div class="mdc-form-box">
+                        <mat-form-field class="example-chip-list">
+                            <mat-chip-list #chipList>
+                                <mat-chip
+                                    *ngFor="let code of operation.code"
+                                    [selectable]="selectable"
+                                    [removable]="removable"
+                                    (removed)="remove(code)">
+                                    {{code}}
+                                    <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                                </mat-chip>
+                                <input
+                                    placeholder="New Code..."
+                                    [formControl]="codeCtrl"
+                                    [matChipInputFor]="chipList"
+                                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                    [matChipInputAddOnBlur]="addOnBlur"
+                                    (matChipInputTokenEnd)="add($event)">
+                            </mat-chip-list>
+                            <!-- <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+                                      <mat-option *ngFor="let fruit of filteredFruits | async" [value]="fruit">
+                                        {{fruit}}
+                                      </mat-option>
+                                    </mat-autocomplete> -->
+                        </mat-form-field>
+                        <!-- <mat-form-field class="mdc-smart-input">
+                            <input matInput placeholder="Code (Disabed Maintenance Mode)" #nameControl="ngModel" name="Code"
+                                [(ngModel)]="operation.code"  disabled=true>
+
+                        </mat-form-field> -->
+                    </div>
+                </div>
+            </div>
+            <!-- / FRONT -->
+
+            <!-- BACK -->
+            <div class="form-group-back-selector">
+                <div class="flex-container">
+                    <div class="flex-box">
+                        IMAGES
+                    </div>
+                </div>
+            </div>
+            <!-- / BACK -->
+
+        </mdc-form-group>
+        <!-- / BASIC -->
+
+        <!-- OPERATION PERFORMED -->
+        <mdc-form-group class="mdc-form-group">
+            <!-- HEADER -->
+            <ng-container class="form-group-header-selector">
+                <span class="m-0 h3">Operation Performed</span>
+            </ng-container>
+            <!-- / HEADER -->
+
+            <!-- FRONT -->
+            <div class="form-group-front-selector">
+
+                <div class="mdc-form-body">
+                    <div class="mdc-form-box">
+                        <mdc-lookup-input-advanced
+                            [lookupsCollection]="[]"
+                            [dataLink]="operation.operationCategory"
+                            [groupkey]="'operation_category'"
+                            [modelName]="'operationCategory'"
+                            [placeholder]="'Operation Category'"
+                            (notify)="notifyHandler($event)">
+                        </mdc-lookup-input-advanced>
+                    </div>
+                </div>
+
+                <div class="mdc-form-body">
+                    <div class="mdc-form-box">
+                        <mdc-lookup-input-advanced
+                            [lookupsCollection]="lookups.operation_type || []"
+                            [dataLink]="operation.operationType"
+                            [groupkey]="'operation_type'"
+                            [modelName]="'operationType'"
+                            [placeholder]="'Operation Type'"
+                            (notify)="notifyHandler($event)"
+                            #operationTypeElRef>
+                            <mat-form-field class="mdc-smart-input">
+                                <input matInput #input placeholder="Operation Type" name="operationType"
+                                    matInput [formControl]="operationTypeControl" [matAutocomplete]="autoOperationType">
+                                <mat-icon class="cursor-pointer" (click)="$event.stopPropagation()" matSuffix matTooltip="Click
+                                    here or press enter to store this record" [matTooltipClass]="'font-size-12'" #save>add_box</mat-icon>
+                                <mat-autocomplete #autoOperationType="matAutocomplete"
+                                    [displayWith]="operationTypeElRef.displayLookupFn">
+                                    <mat-option *ngFor="let option of (lookups.operationType | fuzzysearch:
+                                        operationTypeControl.value : ['text'])"
+                                        [value]="option" (onSelectionChange)="input.value !=undefined &&
+                                        operationTypeElRef.MatOptionSelectionChange($event)">
+                                        <div class="flex-spacebetween">
+                                            <div [innerHTML]="option.highlights?.text"> </div>
+                                        </div>
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </mdc-lookup-input-advanced>
+                    </div>
+                    <div class="mdc-form-box">
+                        <mdc-lookup-input-advanced
+                            [lookupsCollection]="lookups.operationPerformed || []"
+                            [dataLink]="operation.operationPerformed"
+                            [groupkey]="'operation_performed'"
+                            [modelName]="'operationPerformed'"
+                            [placeholder]="'Operation Performed'"
+                            (notify)="notifyHandler($event)"
+                            #operationPerformedElRef>
+                            <mat-form-field class="mdc-smart-input">
+                                <input matInput #input placeholder="Operation Performed" name="operationPerformed"
+                                    matInput [formControl]="operationPerformedControl"
+                                    [matAutocomplete]="autoOperationPerformed">
+                                <mat-icon class="cursor-pointer" (click)="$event.stopPropagation()" matSuffix matTooltip="Click
+                                    here or press enter to store this record" [matTooltipClass]="'font-size-12'" #save>add_box</mat-icon>
+                                <mat-autocomplete #autoOperationPerformed="matAutocomplete"
+                                    [displayWith]="operationPerformedElRef.displayLookupFn">
+                                    <mat-option *ngFor="let option of (lookups.operationPerformed | fuzzysearch:
+                                        operationPerformedControl.value : ['text'])"
+                                        [value]="option" (onSelectionChange)="input.value !=undefined &&
+                                        operationPerformedElRef.MatOptionSelectionChange($event)">
+                                        <div class="flex-spacebetween">
+                                            <div [innerHTML]="option.highlights?.text"> </div>
+                                        </div>
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </mdc-lookup-input-advanced>
+                    </div>
+                </div>
+            </div>
+            <!-- / FRONT -->
+
+            <!-- BACK -->
+            <div class="form-group-back-selector">
+                <div class="flex-container">
+                    <div class="flex-box">
+                        IMAGES
+                    </div>
+                </div>
+            </div>
+            <!-- / BACK -->
+
+        </mdc-form-group>
+        <!-- / OPERATION PERFORMED -->
+
+        <!-- DIAGNOSIS -->
+        <mdc-form-group class="mdc-form-group">
+            <!-- HEADER -->
+            <ng-container class="form-group-header-selector">
+                <span class="m-0 h3">Diagnosis</span>
+            </ng-container>
+            <!-- / HEADER -->
+
+            <!-- FRONT -->
+            <div class="form-group-front-selector">
+                <div class="mdc-form-body">
+
+                    <div class="mdc-form-box">
+                        <mdc-lookup-input-advanced
+                            [lookupsCollection]="lookups.diagnosis || []"
+                            [dataLink]="operation.operationDiagnosis"
+                            [groupkey]="'diagnosis'"
+                            [modelName]="'operationDiagnosis'"
+                            [placeholder]="'Diagnosis'"
+                            (notify)="notifyHandler($event)"
+                            #diagnosisElRef>
+                            <mat-form-field class="mdc-smart-input">
+                                <input matInput #input placeholder="Diagnosis" name="operationDiagnosis"
+                                    matInput [formControl]="diagnosisControl" [matAutocomplete]="autoDiagnosis">
+                                <mat-icon class="cursor-pointer" (click)="$event.stopPropagation()" matSuffix matTooltip="Click
+                                    here or press enter to store this record" [matTooltipClass]="'font-size-12'" #save>add_box</mat-icon>
+                                <mat-autocomplete #autoDiagnosis="matAutocomplete" [displayWith]="diagnosisElRef.displayLookupFn">
+                                    <mat-option *ngFor="let option of (lookups.diagnosis | fuzzysearch: diagnosisControl.value :
+                                        ['text'])"
+                                        [value]="option" (onSelectionChange)="input.value !=undefined &&
+                                        diagnosisElRef.MatOptionSelectionChange($event)">
+                                        <div class="flex-spacebetween">
+                                            <div [innerHTML]="option.highlights?.text"> </div>
+                                        </div>
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </mdc-lookup-input-advanced>
+                    </div>
+
+                    <div class="mdc-form-box">
+                        <mdc-lookup-input-advanced
+                            [lookupsCollection]="lookups.diagnosis || []"
+                            [dataLink]="operation.operationPostDiagnosis"
+                            [groupkey]="'diagnosis'"
+                            [modelName]="'operationPostDiagnosis'"
+                            [placeholder]="'Post Op. Diagnosis'"
+                            (notify)="notifyHandler($event)"
+                            #operationPostDiagnosiselRef>
+                            <mat-form-field class="mdc-smart-input">
+                                <input matInput #input placeholder="Post Op. Diagnosis" name="operationPostDiagnosis"
+                                    matInput [formControl]="operationPostDiagnosisControl"
+                                    [matAutocomplete]="autoOperationPostDiagnosis">
+                                <mat-icon class="cursor-pointer" (click)="$event.stopPropagation()" matSuffix matTooltip="Click
+                                    here or press enter to store this record" [matTooltipClass]="'font-size-12'" #save>add_box</mat-icon>
+                                <mat-autocomplete #autoOperationPostDiagnosis="matAutocomplete"
+                                    [displayWith]="operationPostDiagnosiselRef.displayLookupFn">
+                                    <mat-option *ngFor="let option of (lookups.diagnosis | fuzzysearch:
+                                        operationPostDiagnosisControl.value : ['text'])"
+                                        [value]="option" (onSelectionChange)="input.value !=undefined &&
+                                        operationPostDiagnosiselRef.MatOptionSelectionChange($event)">
+                                        <div class="flex-spacebetween">
+                                            <div [innerHTML]="option.highlights?.text"> </div>
+                                        </div>
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </mdc-lookup-input-advanced>
+                    </div>
+
+                </div>
+
+                <div class="mdc-form-body">
+
+
+                    <div class="mdc-form-box">
+                        <mdc-lookup-input-advanced
+                            [lookupsCollection]="lookups.diagnosis || []"
+                            [dataLink]="operation.operationPreFindings"
+                            [groupkey]="'diagnosis'"
+                            [modelName]="'operationPreFindings'"
+                            [placeholder]="'Pre Op. Findings'"
+                            (notify)="notifyHandler($event)"
+                            #operationPreFindingsElRef>
+                            <mat-form-field class="mdc-smart-input">
+                                <input matInput #input placeholder="Pre Op. Findings" name="operationPreFindings"
+                                    matInput [formControl]="operationPreFindingsControl"
+                                    [matAutocomplete]="autoOperationPreFindings">
+                                <mat-icon class="cursor-pointer" (click)="$event.stopPropagation()" matSuffix matTooltip="Click
+                                    here or press enter to store this record" [matTooltipClass]="'font-size-12'" #save>add_box</mat-icon>
+                                <mat-autocomplete #autoOperationPreFindings="matAutocomplete"
+                                    [displayWith]="operationPreFindingsElRef.displayLookupFn">
+                                    <mat-option *ngFor="let option of (lookups.diagnosis | fuzzysearch:
+                                        operationPreFindingsControl.value : ['text'])"
+                                        [value]="option" (onSelectionChange)="input.value !=undefined &&
+                                        operationPreFindingsElRef.MatOptionSelectionChange($event)">
+                                        <div class="flex-spacebetween">
+                                            <div [innerHTML]="option.highlights?.text"> </div>
+                                        </div>
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </mdc-lookup-input-advanced>
+                    </div>
+
+                    <div class="mdc-form-box">
+                        <mdc-lookup-input-advanced
+                            [lookupsCollection]="[]"
+                            [dataLink]="operation.physicalExam"
+                            [groupkey]="'physical_exam'"
+                            [modelName]="'physicalExam'"
+                            [placeholder]="'Physical Exam'"
+                            (notify)="notifyHandler($event)">
+                        </mdc-lookup-input-advanced>
+
+                        <media-file-list
+                            [flow]="mediaFlow"
+                            [files]="activityFiles.physicalExam"
+                            [autoTagName]="FileSystemTagsEnum.physicalExam"
+                            [headerName]="'Phy. Exam'"
+                            (onDeleteSelected)="onDeleteSelectedFiles($event)"
+                            (onAttachedFiles)="onAttachedFiles($event)"></media-file-list>
+
+                    </div>
+
+                </div>
+            </div>
+            <!-- / FRONT -->
+
+            <!-- BACK -->
+            <div class="form-group-back-selector">
+                <div class="flex-container">
+                    <div class="flex-box">
+                        IMAGES
+                    </div>
+                </div>
+            </div>
+            <!-- / BACK -->
+
+        </mdc-form-group>
+        <!-- / DIAGNOSIS -->
+
+        <!-- OPERATION DETAILS -->
+        <div class="flex-container">
+
+            <div class="flex-box">
+
+                <!-- OPERATION DETAILS -->
+                <mdc-form-group class="mdc-form-group">
+                    <!-- HEADER -->
+                    <ng-container class="form-group-header-selector">
+                        <span class="m-0 h3">Operation Details</span>
+                        <span class="mdc-card-mark">
+                        </span>
+                    </ng-container>
+                    <!-- / HEADER -->
+
+                    <!-- FRONT -->
+                    <div class="form-group-front-selector">
+                        <div class="mdc-form-body">
+                            <div class="mdc-form-box mr-0">
+                                <quill-editor [(ngModel)]="operation.operationDetails" name="operationDetails"></quill-editor>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- / FRONT -->
+
+                    <!-- BACK -->
+                    <div class="form-group-back-selector">
+                        <div class="flex-container">
+                            <div class="flex-box">
+                                IMAGES
+                            </div>
+                        </div>
+                    </div>
+                    <!-- / BACK -->
+
+                </mdc-form-group>
+                <!-- / OPERATION DETAILS -->
+
+            </div>
+
+        </div>
+        <!-- / OPERATION DETAILS -->
+
+        <div class="media-file-list-container">
+            <media-file-list
+                [flow]="mediaFlow"
+                [files]="activityFiles.other"
+                [autoTagName]="''"
+                [headerName]="'Media'"
+                (onDeleteSelected)="onDeleteSelectedFiles($event)"
+                (onAttachedFiles)="onAttachedFiles($event)"></media-file-list>
+        </div>
+
+    </form>
+</div>
+
+<upload-file-popup *ngIf="isUploadPopupOpened" [flow]="mediaFlow" [isOpened]="isUploadPopupOpened"
+    (onClose)="isUploadPopupOpened= false"></upload-file-popup>

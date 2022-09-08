@@ -1,0 +1,11 @@
+mutation addMessage($message: MessageInputType){
+    addMessage(message: $message){
+        content
+        sentAt
+        sub
+        from{
+            id
+            displayName
+        }
+    }
+}

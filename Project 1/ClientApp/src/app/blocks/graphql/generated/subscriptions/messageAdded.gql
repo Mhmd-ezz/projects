@@ -1,0 +1,11 @@
+subscription messageAdded{
+    messageAdded{
+        content
+        sentAt
+        sub
+        from{
+            id
+            displayName
+        }
+    }
+}

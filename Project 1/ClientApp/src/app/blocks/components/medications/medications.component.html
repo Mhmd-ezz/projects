@@ -1,0 +1,36 @@
+<div class="medications">
+  <!-- fxLayout="row wrap" fxLayoutAlign="start start" -->
+  <ng-template #noMedications>
+    <div class="noMedications">
+      <div><mat-icon class="font-size-52 w-100-p h-100-p blue-200-fg">vaccines</mat-icon></div>
+      <div class="secondary-text font-size-16 mb-20">No medications</div>
+      <button  mat-stroked-button color="accent" (click)="newMedication()">
+        <mat-icon >add</mat-icon>
+        Add Medication
+      </button>
+    </div>
+  </ng-template>
+
+  <mat-tab-group *ngIf="medication?.length; else noMedications">
+    <!--  Active TAB -->
+    <mat-tab label="Active">
+      <div class="p-12" fxLayout="row wrap" fxLayoutAlign="start start">
+        <ng-container *ngFor="let item of medication">
+          <app-medication-card *ngIf="item.isActive" [conditionId]="conditionId" [followupId]="followupId"
+            [medications]="item" fxFlex="100%" fxFlex.gt-sm="50%"></app-medication-card>
+        </ng-container>
+      </div>
+    </mat-tab>
+    <!-- INActive TAB -->
+    <mat-tab label="InActive">
+      <div fxLayout="row wrap" fxLayoutAlign="start start">
+        <ng-container *ngFor="let item of medication">
+          <app-medication-card *ngIf="!item.isActive" [conditionId]="conditionId" [followupId]="followupId"
+            [medications]="item" fxFlex="100%" fxFlex.gt-sm="50%"></app-medication-card>
+        </ng-container>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+
+
+</div>

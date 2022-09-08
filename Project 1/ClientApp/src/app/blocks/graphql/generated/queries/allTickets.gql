@@ -1,0 +1,22 @@
+query allTickets($filter: String, $page: Int, $size: Int, $descending: Boolean, $sortBy: String, $type: String){
+    allTickets(filter: $filter, page: $page, size: $size, descending: $descending, sortBy: $sortBy, type: $type){
+        count
+        items{
+            id
+            ticketNumber
+            tenantName
+            subject
+            details
+            status
+            attachFile
+            isReadByAdmin
+            isReadByClient
+            ticketDate
+            messages{
+                message
+                requestBy
+                messageDate
+            }
+        }
+    }
+}

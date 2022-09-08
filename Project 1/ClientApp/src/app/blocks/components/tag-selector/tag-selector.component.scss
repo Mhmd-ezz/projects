@@ -1,0 +1,14 @@
+.tag-container {
+    padding: 2px 2px 3px 8px;  
+    
+    &.editable {
+        .tag-value {
+            cursor: pointer;
+        }
+    
+        .tag-value:hover {
+            color: rgb(79, 143, 204);
+        }
+    }
+}
+

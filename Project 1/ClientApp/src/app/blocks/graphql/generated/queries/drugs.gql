@@ -1,0 +1,9 @@
+query drugs($filter: String, $page: Int, $size: Int){
+    drugs(filter: $filter, page: $page, size: $size){
+        id
+        atcCode
+        name
+        dosage
+        form
+    }
+}

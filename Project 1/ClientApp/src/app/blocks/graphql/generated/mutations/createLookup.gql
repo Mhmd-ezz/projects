@@ -1,0 +1,18 @@
+mutation createLookup($lookup: LookupInput!){
+    createLookup(lookup: $lookup){
+        id
+        tenantId
+        groupKey
+        value
+        symbol
+        text
+        description
+        cultureName
+        parentValue
+        parentId
+        createdDate
+        modifiedDate
+        order
+        predefined
+    }
+}

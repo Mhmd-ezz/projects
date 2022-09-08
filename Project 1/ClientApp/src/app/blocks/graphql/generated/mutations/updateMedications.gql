@@ -1,0 +1,25 @@
+mutation updateMedications($patientMedications: PatientMedicationsInput!, $patientId: String!, $medicationId: String!){
+    updateMedications(patientMedications: $patientMedications, patientId: $patientId, medicationId: $medicationId){
+        medicationId
+        patientId
+        conditionId
+        followupId
+        startTime
+        endTime
+        drug{
+            id
+            name
+            dosage
+        }
+        isActive
+        reason
+        history{
+            startDate
+            endDate
+            duration
+            frequency
+            note
+            status
+        }
+    }
+}

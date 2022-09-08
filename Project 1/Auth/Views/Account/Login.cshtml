@@ -1,0 +1,104 @@
+﻿@using Auth.Models
+@using Auth.Resources
+@using Microsoft.Extensions.Options
+@model Auth.Models.AccountViewModels.LoginViewModel
+@inject SignInManager<ApplicationUser> SignInManager
+@inject LocService SharedLocalizer
+@inject IOptions<GoogleReCaptchaConfig> CaptchaConfig
+@{
+    ViewData["Title"] = @SharedLocalizer.GetLocalizedHtmlString("ACCOUNT_LOGIN");
+}
+
+<div class="content-wrapper">
+    <div class="content custom-scrollbar">
+        <div id="login-v2" class="row no-gutters">
+
+            <div class="intro col-md light-fg">
+
+                <div class="d-none d-sm-none d-md-block flex-column align-items-center align-items-md-start text-center text-md-left py-16 py-md-32 px-12">
+
+                    <div class="logo bg-secondary mb-8">
+                        <span>M</span>
+                    </div>
+
+                    <div class="title">
+                        Medcilia Assistant
+                    </div>
+
+                    <div class="description pt-2">
+                        For doctors by doctors
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="form-wrapper col-12 col-md-auto d-flex justify-content-center p-4 p-md-0">
+                <div class="form-content md-elevation-8 h-100 bg-white text-auto py-16 py-md-32 px-12">
+
+                    <div class="">
+                        <div class="logo bg-secondary center mb-8">
+                            <span>M</span>
+                        </div>
+                    </div>
+
+                    <div class="title h5 text-center text-uppercase">Log in to your account</div>
+                    <div class="description mt-2 d-none d-sm-none d-md-block text-center">Welcome to Medcilia Assistant</div>
+                    <form asp-controller="Account" asp-action="Login" asp-route-returnurl="@Model.ReturnUrl" method="post" name="loginForm" novalidate="" class="mt-8">
+
+                        @*<input asp-for="Captcha" type="hidden" value="" />*@
+
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                        <div class="form-group mb-4">
+                            <input asp-for="Email" type="email" class="form-control" id="loginFormInputEmail" aria-describedby="emailHelp" placeholder="">
+                            <label for="loginFormInputEmail">@SharedLocalizer.GetLocalizedHtmlString("EMAIL")</label>
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <input asp-for="Password" type="password" class="form-control" id="loginFormInputPassword" placeholder="">
+                            <label for="loginFormInputPassword">@SharedLocalizer.GetLocalizedHtmlString("PASSWORD")</label>
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        <div class="remember-forgot-password row no-gutters align-items-center justify-content-between pt-4">
+
+                            @*<div class="form-check remember-me mb-4">
+                                <label class="form-check-label">
+                                    <input type="checkbox" class="form-check-input" aria-label="Remember Me">
+                                    <span class="checkbox-icon fuse-ripple-ready"></span>
+                                    <span class="form-check-description">@SharedLocalizer.GetLocalizedHtmlString("REMEMBER_ME")</span>
+                                </label>
+                            </div>*@
+
+                            <a asp-action="ForgotPassword" class="forgot-password text-secondary mb-4">@SharedLocalizer.GetLocalizedHtmlString("FORGOT_YOUR_PASSWORD")</a>
+
+                        </div>
+
+                        <button type="submit" class="submit-button btn btn-block btn-secondary my-4 mx-auto fuse-ripple-ready" aria-label="LOG IN">
+                            @SharedLocalizer.GetLocalizedHtmlString("ACCOUNT_LOGIN")
+                        </button>
+
+                    </form>
+
+                    @*<div class="register d-flex flex-column flex-sm-row align-items-center justify-content-center mt-8 mb-6 mx-auto">
+                            <span class="text mr-sm-2">Don't have an account?</span>
+                            <a class="link text-secondary" href="#">Register Now</a>
+                        </div>*@
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    @*<script>
+        grecaptcha.ready(function() {
+            grecaptcha.execute('@CaptchaConfig.Value.ClientKey', { action: 'login'})
+                .then(function(token) {
+                    // Set `token` in a hidden form input.
+                    $("#Captcha").val(token);
+                });
+        });
+    </script>*@
+}

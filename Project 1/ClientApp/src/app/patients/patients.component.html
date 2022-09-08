@@ -1,0 +1,34 @@
+<div class="page-layout blank" >
+
+    <!-- HEADER -->
+    <div class="header accent p-8" fxLayout="row" fxLayoutAlign="start center">
+        <div fxLayout="column" fxLayoutAlign="center start">
+            <div class="black-fg" fxLayout="row" fxLayoutAlign="start center">
+
+                  <!-- SIDEBAR XS TRIGGER -->
+                  <button mat-icon-button class="sidebar-toggle mr-8" fxHide.gt-md (click)="toggleSidebar('patient-sidebar')">
+                    <mat-icon>menu</mat-icon>
+                </button>
+                <!-- / SIDEBAR XS TRIGGER -->
+
+                <!-- <mat-icon class="secondary-text s-18 mr-4xs">home</mat-icon>
+                <span class="secondary-text">Patients</span> -->
+                <mat-icon class="secondary-text s-18 mr-4">home</mat-icon>
+                <breadcrumb #parent>
+                    <span class="breadcrumb text-capitalize" *ngFor="let route of parent.breadcrumbs; let isLast= last">
+                        <a class="breadcrumb-item secondary-text" *ngIf="!route.terminal || (route.terminal &&
+                            route.route.loadChildren)"href="" [routerLink]="[route.url]">{{
+                            route.displayName }}</a>
+                        <a mat-button class="breadcrumb-item" *ngIf="route.terminal && !route.route.loadChildren">{{
+                            route.displayName }}</a>
+                        <span [hidden]="isLast" class="secondary-text"> / </span>
+                    </span>
+                </breadcrumb>
+            </div>
+        </div>
+    </div>
+    <!-- / HEADER -->
+
+    <router-outlet></router-outlet>
+
+</div>

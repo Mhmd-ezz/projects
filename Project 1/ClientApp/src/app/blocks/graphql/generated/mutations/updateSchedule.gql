@@ -1,0 +1,8 @@
+mutation updateSchedule($schedule: ScheduleInput!){
+    updateSchedule(schedule: $schedule){
+        id
+        startHour
+        endHour
+        displayRota
+    }
+}

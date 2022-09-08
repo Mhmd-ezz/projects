@@ -1,0 +1,12 @@
+// .physical-exam{
+//     @media (min-width:710px){
+//         min-height: 212px;
+//     }
+// }
+
+.media-file-list-container{
+    @media (max-width: 768px) {
+        padding-left: 0;
+        padding-right: 0;
+    }
+}

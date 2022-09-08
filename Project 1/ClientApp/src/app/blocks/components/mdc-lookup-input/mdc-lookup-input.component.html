@@ -1,0 +1,12 @@
+<ng-content select=".mdc-smart-input"></ng-content>
+<div *ngFor="let item of list; index as index" [class.accent-100]="index === editIndex">
+    <div class="text-container">
+        <mat-icon class="cursor-pointer s-16" matSuffix>keyboard_arrow_right</mat-icon>
+        <span class="action blue-grey-500">
+            <mat-icon [fxHide]="editIndex >= 0" class="cursor-pointer s-16" (click)="edit(index);$event.stopPropagation()" matSuffix>edit</mat-icon>
+            <mat-icon [fxHide]="editIndex >= 0" class="cursor-pointer s-16" (click)="delete(index);$event.stopPropagation()" matSuffix>delete_forever</mat-icon>
+            <mat-icon fxHide [fxShow]="editIndex >= 0" class="cursor-pointer s-16" matTooltip="This field is in edit mode" (click)="$event.stopPropagation()" matSuffix>lock</mat-icon>
+        </span>
+        <span class="text"> {{ item.text }} </span>
+    </div>
+</div>

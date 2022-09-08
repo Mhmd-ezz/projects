@@ -1,0 +1,120 @@
+<ng-container #mediaFlow="flow" [flowConfig]="{target: mediaEndpoint+ '/files/uploads' ,
+    allowDuplicateUploads :true,
+    chunkSize: 1000000,
+    headers: {
+    }}"></ng-container>
+
+<div class="header-tool accent mb-24">
+    <div class="flex-center">
+        <mat-icon class="mr-8 s-22" matSuffix>add_box</mat-icon>
+        <span class="h2">Edit Ticket</span>
+    </div>
+    <div class="flex-center">
+
+        <mdc-form-status></mdc-form-status>
+
+    </div>
+    <div>
+        <button mat-flat-button type="button" (click)="onDone()" class="ml-8">Done</button>
+    </div>
+
+</div>
+
+<mdc-form-infobox-error [dataLink]="errors"></mdc-form-infobox-error>
+
+<div class="todo-content" fxLayout="column" fxLayout.gt-md="row">
+    <div fxLayout="column" class="header p-24" style="min-width: 300px;" fxFlex.gt-md="50%" fxFlex="100%">
+
+        <form #form="ngForm" autocomplete="off">
+            <div class="mdc-form-box full-width">
+                <span style="font-weight:bold;">Subject</span>
+                <mat-form-field appearance="outline" class="title mt-8" fxFill>
+                    <mat-label>Subject</mat-label>
+                    <input matInput #titleControl="ngModel" [(ngModel)]="ticket.subject"
+                        #titleInput
+                        name="subject"
+                        required>
+                </mat-form-field>
+            </div>
+            <div class="mdc-form-box full-width">
+                <span style="font-weight:bold;">Description</span>
+                <angular-editor [ngModelOptions]="{standalone: true}" [(ngModel)]="ticket.details" [config]="config">
+                </angular-editor>
+            </div>
+            <!-- <mat-form-field appearance="outline" fxFill>
+            <mat-label>Details</mat-label>
+            <textarea matInput #notesControl="ngModel" [(ngModel)]="ticket.details" #details
+                        name="details"
+                        maxlength="1000">
+            </textarea>
+            <mat-hint align="end">{{details.value.length}} / 1000</mat-hint>
+        </mat-form-field> -->
+            <div class="mdc-form-box full-width mt-12">
+                <span style="font-weight:bold;">Attachments</span>
+                <media-file-list [flow]="mediaFlow" [files]="activityFiles" [autoTagName]="FileSystemTagsEnum.ticket"
+                    [headerName]="'Images'"></media-file-list>
+            </div>
+        </form>
+
+    </div>
+    <div fxLayout="column" class="header p-24" style="min-width: 300px;" fxFlex.gt-md="50%" fxFlex="100%">
+
+        <form #form="ngForm" autocomplete="off">
+            <!-- <div class="mdc-form-box full-width">
+                <span style="font-weight:bold;">Subject</span>
+                <mat-form-field appearance="outline" class="title mt-8" fxFill>
+                    <mat-label>Subject</mat-label>
+                    <input matInput #titleControl="ngModel" [(ngModel)]="ticket.subject"
+                        #titleInput
+                        name="subject"
+                        required>
+                </mat-form-field>
+            </div> -->
+            <div class="mdc-form-box full-width mt-12">
+                <span style="font-weight:bold;">Ticket Chat</span>
+             <mat-form-field appearance="outline" fxFill>
+            <mat-label>Enter Description</mat-label>
+            <textarea matInput #details [(ngModel)]="newMessage"
+                        name="details"
+                        maxlength="1000">
+            </textarea>
+           
+        </mat-form-field>
+        <button mat-raised-button class="mat-accent mr-16 mt-12" (click)="reply()">Send Reply</button></div>
+            <!-- <div class="mdc-form-box full-width">
+                <span style="font-weight:bold;">Ticket Chat</span>
+                <angular-editor  [config]="configWithoutToolbar" [ngModelOptions]="{standalone: true}" [(ngModel)]="newMessage">
+                </angular-editor>
+    <button mat-raised-button class="mat-accent mr-16 mt-12" (click)="reply()">Send Reply</button>
+            </div> -->
+            <div fxLayout="row" class="mdc-form-box full-width mt-12" >
+                <table matSort fxFlex fusePerfectScrollbar>
+                    <thead style="position: sticky;top: 0;">
+                        <tr *ngFor="let message of ticket.messages">
+                            <td ><span style="font-weight:bold;">{{message.requestBy}}</span>
+                            <div style="white-space: pre-wrap;">{{message.message}}</div></td>
+                            <td>{{message.messageDate| date:'d/M/yy hh:mm a'}}</td>
+                         
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div *ngIf="ticket?.messages?.length === 0">
+                No chats available.
+            </div>
+            <!-- <mat-form-field appearance="outline" fxFill>
+            <mat-label>Details</mat-label>
+            <textarea matInput #notesControl="ngModel" [(ngModel)]="ticket.details" #details
+                        name="details"
+                        maxlength="1000">
+            </textarea>
+            <mat-hint align="end">{{details.value.length}} / 1000</mat-hint>
+        </mat-form-field> -->
+            <!-- <div class="mdc-form-box full-width mt-12">
+                <span style="font-weight:bold;">Attachments</span>
+                <media-file-list [flow]="mediaFlow" [files]="activityFiles" [autoTagName]="FileSystemTagsEnum.ticket"
+                    [headerName]="'Images'"></media-file-list>
+            </div> -->
+        </form>
+
+    </div>

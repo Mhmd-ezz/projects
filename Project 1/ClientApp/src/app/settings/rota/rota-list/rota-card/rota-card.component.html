@@ -1,0 +1,37 @@
+<!-- CARD DETAILS -->
+<div class="list-card-details">
+
+    <!-- CARD NAME -->
+    <div class="list-card-name">
+        <app-recurrence-selector [data]="data.rule" [isEditable]="false" ></app-recurrence-selector>
+    </div>
+
+    <!-- / CARD NAME -->
+
+</div>
+<!-- / CARD DETAILS -->
+
+<!-- CARD FOOTER -->
+<div class="list-card-footer" fxLayout="row" fxLayoutAlign="space-between center">
+
+    <div fxLayout="row" fxLayoutAlign="start center">
+        <span
+            class="list-card-footer-item time-range"
+            fxLayout="row" fxLayoutAlign="start center">
+            <span>{{data.startTime | date:'h:mm a' }} </span>
+            <span> - {{data.endTime | date:'h:mm a' }}</span>
+        </span>
+
+    </div>
+
+    <div fxLayout="row" fxLayoutAlign="end center">
+
+        <!-- <span
+            class="list-card-footer-item"
+            fxLayout="row" fxLayoutAlign="start center">
+            <mat-icon class="s-18">edit</mat-icon>
+        </span> -->
+
+    </div>
+</div>
+<!-- CARD FOOTER -->

@@ -1,0 +1,674 @@
+<ng-container #mediaFlow="flow" [flowConfig]="{target: mediaEndpoint+ '/files/uploads' ,
+    allowDuplicateUploads :true,
+    chunkSize: 1000000,
+    headers: {
+    'Authorization' : accessToken
+    }}"></ng-container>
+
+<div class="content">
+    <div class="header-tool accent mb-24" stickybits>
+        <div class="flex-center">
+            <mat-icon class="mr-8 s-22" (click)="$event.stopPropagation()" matSuffix>add_box</mat-icon>
+            <span class="h2">
+                {{CompTitle}}
+                <small [hidden]="!selectedCondition.name" style="color: #98f677;"> for
+                    <span class="text-capitalize">{{selectedCondition.name}}</span>
+                </small>
+            </span>
+        </div>
+
+        <div class="flex-center">
+            <mdc-form-status [formStatus]="formStatus"></mdc-form-status>
+        </div>
+
+        <span>
+            <button mat-flat-button type="button" (click)="saveChanges()">Save</button>
+            <button mat-flat-button type="button" (click)="onDone()" class="ml-8">Done</button>
+        </span>
+
+    </div>
+
+    <mdc-form-infobox-error [dataLink]="errors"></mdc-form-infobox-error>
+
+    <form #form="ngForm" class="mdc-form" autocomplete="off">
+
+        <!-- MAIN REQUIRED -->
+        <mdc-form-group class="mdc-form-group">
+
+            <!-- HEADER -->
+            <ng-container class="form-group-header-selector">
+                <span class="m-0 h3">Main</span>
+                <span class="mdc-card-mark">
+                    <span class="ml-8 mr-8 blue-grey-100-fg"> | </span>
+                    <small class="orange-300-fg"> Required</small>
+                </span>
+            </ng-container>
+            <!-- / HEADER -->
+
+            <!-- FRONT -->
+            <div class="form-group-front-selector">
+                <div class="mdc-form-body">
+                    <!-- <div class="mdc-form-box" style="flex-grow: 1;">
+                        <mat-form-field class="mdc-smart-input">
+                            <input matInput placeholder="Name" #nameControl="ngModel" name="name" [(ngModel)]="followup.name"
+                                 required>
+                            <mat-error *ngIf="nameControl.hasError('required')">
+                                This field is required
+                            </mat-error>
+                        </mat-form-field>
+                    </div> -->
+                    <div class="mdc-form-box" style="flex-grow: 1;">
+                        <mat-form-field>
+                            <input appMaskDate [ngModelOptions]="{updateOn:'blur'}" matInput [matDatepicker]="picker"
+                                #entryDateControl="ngModel" name="entryDate" placeholder="Entry Date"
+                                [(ngModel)]="followup.opened" required>
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                            <mat-error *ngIf="entryDateControl.hasError('required')">
+                                This field is required
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="mdc-form-box" style="flex-grow: 1;">
+                        <mat-form-field>
+                            <mat-select placeholder="Choose Location" name="location" [(ngModel)]="followup.location"
+                                #locationControl="ngModel" [compareWith]="matSelectCompare" required
+                                mdcRequiredValidator="id">
+                                <mat-option>--</mat-option>
+                                <mat-option *ngFor="let location of locations" [value]="{id: location.id, name: location.name,
+                                    __typename:'LocationView'}">
+                                    {{location.name}}
+                                </mat-option>
+                            </mat-select>
+                            <!-- <mat-error *ngIf="locationControl.hasError('required')">Please choose location</mat-error> -->
+                            <mat-error *ngIf="locationControl.hasError('mdcRequired')">Please choose location
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="mdc-form-box" style="flex-grow: 1;">
+                        <mat-form-field>
+                            <mat-select placeholder="Choose Sub-Location" [compareWith]="matSelectCompareString"
+                                name="subLocation" [(ngModel)]="followup.subLocation">
+                                <mat-option>--</mat-option>
+                                <mat-option *ngFor="let subLocation of subLocations" [value]="subLocation">
+                                    {{subLocation}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="mdc-form-box" style="flex-grow: 1;" *ngIf="!isConditionIdSet">
+                        <mat-form-field>
+                            <mat-select placeholder="Choose Condition" name="conditionId" [ngModel]="conditionId"
+                                (ngModelChange)="onConditionChanged($event)" [compareWith]="matSelectCompare"
+                                #conditionControl="ngModel" required>
+                                <mat-option>--</mat-option>
+
+                                <mat-option *ngFor="let condition of patientConditions" [value]="condition.id">
+                                    <div class=flex-spacebetween>
+                                        <div>
+                                            {{condition.name}}
+                                            <span class="secondary-text" *ngIf="condition?.diagnosis?.text.length">
+                                                /
+                                                <span class="teal-400-fg text-capitalize">
+                                                    {{condition?.diagnosis?.text[0].text}}
+                                                </span>
+                                            </span>
+                                        </div>
+
+                                        <!-- <div class="secondary-text font-8em">{{condition.date | date : 'd MMM y'}}</div> -->
+                                    </div>
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="conditionControl.hasError('required')">Please choose location</mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+            <!-- / FRONT -->
+
+        </mdc-form-group>
+        <!-- / MAIN REQUIRED -->
+
+         <!-- CLINICAL -->
+         <div fxLayout="row">
+
+            <mdc-form-group class="mdc-form-group full-width">
+                <ng-container class="form-group-header-selector">
+                    <span class="m-0 h3">Clinical Examination</span>
+                </ng-container>
+
+                <div class="form-group-front-selector">
+
+                    <div class="mdc-form-body" fxLayout="column">
+
+                        <!-- FIRST ROW -->
+                        <div class="full-width fieldset-body" >
+
+                            <!-- BLOOD PRESSURE -->
+                            <fieldset fxFlex="100" fxFlex.gt-xs="calc(50% - 10px)">
+                                <legend>Blood Pressure</legend>
+
+                                <div class="pt-16" fxLayout="row wrap">
+
+                                    <mat-form-field class="m-sides-8" [appearance]="'outline'" fxFlex.xs="calc(50% - 16px)"
+                                        fxFlex="65px">
+                                        <mat-label>BP</mat-label>
+                                        <input matInput placeholder="BP" name="bp"
+                                            [(ngModel)]="followup.cardiologyClinicalExamination.bp">
+                                    </mat-form-field>
+
+                                    <mat-form-field class="m-sides-8" [appearance]="'outline'" fxFlex.xs="calc(50% - 16px)"
+                                        fxFlex="65px">
+                                        <mat-label>HR</mat-label>
+                                        <input matInput placeholder="HR" name="hr"
+                                            [(ngModel)]="followup.cardiologyClinicalExamination.hr">
+                                    </mat-form-field>
+
+                                    <mat-form-field class="m-sides-8" [appearance]="'outline'" fxFlex.xs="calc(50% - 16px)"
+                                        fxFlex="65px">
+                                        <mat-label>Pulse</mat-label>
+                                        <input matInput placeholder="Pulse" name="pulse"
+                                            [(ngModel)]="followup.cardiologyClinicalExamination.pulse">
+                                    </mat-form-field>
+
+                                    <mat-form-field class="m-sides-8" [appearance]="'outline'" fxFlex.xs="calc(50% - 16px)"
+                                        fxFlex="230px">
+                                        <mat-label>Pulse Classification</mat-label>
+                                        <mat-select placeholder="Pulse Classification" name="pulseClassification "
+                                            [(ngModel)]="followup.cardiologyClinicalExamination.pulseClassification">
+                                            <mat-option>-- SELECT --</mat-option>
+                                            <mat-option value="regular">Regular</mat-option>
+                                            <mat-option value="irregular">Irregular</mat-option>
+                                            <mat-option value="tachycardia">Tachycardia</mat-option>
+                                            <mat-option value="Bradycardia">Bradycardia</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+
+                                </div>
+
+                            </fieldset>
+                            <!-- / BLOOD PRESSURE -->
+
+                            <!-- CARDIAC AUSCULATION -->
+                            <fieldset fxLayout="row" fxFlex="100" fxFlex.gt-xs="calc(50% - 10px)">
+                                <legend>Cardiac Auscultation</legend>
+
+                                <div class="pt-16" fxLayout="row wrap">
+
+                                    <mat-form-field [appearance]="'outline'" class="m-sides-8" fxFlex.lt-md="100" fxFlex="calc(50% - 16px)">
+                                        <mat-label>Sound</mat-label>
+                                        <mat-select placeholder="Sound" name="sound"
+                                            [(ngModel)]="followup.cardiologyClinicalExamination.sound">
+                                            <mat-option>-- SELECT VALUE --</mat-option>
+                                            <mat-option value="Murmur Systolic">Murmur Systolic</mat-option>
+                                            <mat-option value="Murmur Diastlic">Murmur Diastlic</mat-option>
+                                            <mat-option value="Normal Sound">Normal Sound</mat-option>
+                                            <mat-option value="Third Sound">Third Sound</mat-option>
+                                            <mat-option value="Pericardial Friction">Pericardial Friction</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+
+                                    <mat-form-field [appearance]="'outline'" class="m-sides-8" fxFlex.lt-md="100" fxFlex="calc(50% - 16px)">
+                                        <mat-label>Intensity</mat-label>
+                                        <mat-select placeholder="Intensity" name="Intensity"
+                                            [(ngModel)]="followup.cardiologyClinicalExamination.intensity">
+                                            <mat-option>-- SELECT INTENSITY --</mat-option>
+                                            <mat-option value="1/4">1/4</mat-option>
+                                            <mat-option value="2/4">2/4</mat-option>
+                                            <mat-option value="3/4">3/4</mat-option>
+                                            <mat-option value="4/4">4/4</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+
+                                </div>
+
+                            </fieldset>
+                            <!-- / CARDIAC AUSCULATION -->
+
+                        </div>
+                        <!-- FIRST ROW -->
+
+
+                        <!-- SECOND ROW -->
+                        <div class="full-width fieldset-body">
+
+                            <!-- LUNG AUSCULATION-->
+                            <fieldset fxFlex="100" fxFlex.gt-xs="calc(50% - 10px)">
+                                <legend>Lung Auscultation</legend>
+
+                                <div class="pt-16" fxLayout="row wrap">
+
+                                    <mat-form-field [appearance]="'outline'" class="" fxFlex="100">
+                                        <mat-label>Lung Auscultation</mat-label>
+                                        <mat-select name="lungAuscultation" placeholder="Lung Auscultation"
+                                            [(ngModel)]="followup.cardiologyClinicalExamination.lungAuscultation">
+                                            <mat-option>-- SELECT --</mat-option>
+                                            <mat-option value="Wheezing">Wheezing</mat-option>
+                                            <mat-option value="Crepitation">Crepitation</mat-option>
+                                            <mat-option value="Air entry decrease">Air entry decrease</mat-option>
+                                            <mat-option value="Pleural friction">Pleural friction </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+
+                                </div>
+
+                            </fieldset>
+                            <!-- / LUNG AUSCULATION -->
+
+                            <!-- EXTREMITIES-->
+                            <fieldset fxFlex="100" fxFlex.gt-xs="calc(50% - 10px)">
+                                <legend>Extremities</legend>
+
+                                <div class="pt-16" fxLayout="row wrap">
+
+                                    <mat-form-field [appearance]="'outline'" class="m-sides-8"
+                                        fxFlex="0 0 calc(70% - 16px)">
+                                        <mat-label>Aspect</mat-label>
+                                        <mat-select name="aspect" placeholder="Aspect"
+                                            [(ngModel)]="followup.cardiologyClinicalExamination.aspect">
+                                            <mat-option>-- SELECT Aspect--</mat-option>
+                                            <mat-option value="Redness">Redness</mat-option>
+                                            <mat-option value="Edema">Edema</mat-option>
+                                            <mat-option value="Tenderness">Tenderness</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+
+                                    <div class="m-sides-8 pt-20" fxFlex="0 0 calc(30% - 16px)">
+                                        <mat-checkbox name="puls" [(ngModel)]="followup.cardiologyClinicalExamination.puls">
+                                            Puls</mat-checkbox>
+                                    </div>
+
+                                    <div fxLayout="row" fxFlex="0 0 105px" fxFlex.lt-md="100">
+
+                                        <div fxLayout="column" fxLayoutAlign="space-between center">
+                                            <mat-checkbox name="rightSuperior"
+                                            [indeterminate]="!followup.cardiologyClinicalExamination.rightSuperior"
+                                                [(ngModel)]="followup.cardiologyClinicalExamination.rightSuperior">
+                                            </mat-checkbox>
+                                            <mat-checkbox name="rightTransverse"
+                                            [indeterminate]="!followup.cardiologyClinicalExamination.rightTransverse"
+                                                [(ngModel)]="followup.cardiologyClinicalExamination.rightTransverse">
+                                            </mat-checkbox>
+                                            <mat-checkbox name="rightInferior"
+                                            [indeterminate]="!followup.cardiologyClinicalExamination.rightInferior"
+                                                [(ngModel)]="followup.cardiologyClinicalExamination.rightInferior">
+                                            </mat-checkbox>
+                                        </div>
+
+                                        <img src="./assets/images/avatars/skeleton.png" style="height: 110px;">
+
+                                        <div fxLayout="column" fxLayoutAlign="space-between center">
+                                            <mat-checkbox name="leftSuperior"
+                                            [indeterminate]="!followup.cardiologyClinicalExamination.leftSuperior"
+                                                [(ngModel)]="followup.cardiologyClinicalExamination.leftSuperior">
+                                            </mat-checkbox>
+                                            <mat-checkbox name="leftTransverse"
+                                            [indeterminate]="!followup.cardiologyClinicalExamination.leftTransverse"
+                                                [(ngModel)]="followup.cardiologyClinicalExamination.leftTransverse">
+                                            </mat-checkbox>
+                                            <mat-checkbox name="leftInferior"
+                                            [indeterminate]="!followup.cardiologyClinicalExamination.leftInferior"
+                                                [(ngModel)]="followup.cardiologyClinicalExamination.leftInferior">
+                                            </mat-checkbox>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </fieldset>
+                            <!-- / EXTREMITIES -->
+
+                        </div>
+                        <!-- / SECOND ROW -->
+
+                        <!-- THIRD ROW -->
+                        <div class="full-width fieldset-body">
+
+                            <!-- NECK-->
+                            <fieldset fxFlex="100" fxFlex.gt-xs="calc(50% - 10px)">
+                                <legend>Neck</legend>
+
+                                <div class="pt-16" fxLayout="row wrap">
+
+                                    <mat-checkbox class="m-sides-8 pt-20" name="hepatoJugularReflux" fxFlex.lt-md="calc(100% - 16px)"
+                                        fxFlex="0 0 calc(50% - 16px)" [(ngModel)]="followup.cardiologyClinicalExamination.hepatoJugularReflux">
+                                        Hepato-jugular reflux</mat-checkbox>
+
+                                    <mat-form-field [appearance]="'outline'" class="m-sides-8" fxFlex.lt-md="calc(100% - 16px)"
+                                        fxFlex="0 0 calc(50% - 16px)">
+                                        <mat-select name="neckCarotidMurmur" placeholder="Carotid murmur"
+                                            [(ngModel)]="followup.cardiologyClinicalExamination.neckCarotidMurmur">
+                                            <mat-option>-- SELECT Carotid Murmur--</mat-option>
+                                            <mat-option value="left">Left</mat-option>
+                                            <mat-option value="right">Right</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+
+                                </div>
+
+                            </fieldset>
+                            <!-- / NECK -->
+
+                            <!-- ABDOMEN-->
+                            <fieldset fxFlex="100" fxFlex.gt-xs="calc(50% - 10px)">
+                                <legend>Abdomen</legend>
+
+                                <div class="pt-16" fxLayout="row wrap">
+
+                                    <mat-checkbox #soft name="soft" class="m-sides-8 pt-20" fxFlex.lt-lg="0 0 calc(50% - 16px)" fxFlex="0 0 calc(15% - 16px)"
+                                        [(ngModel)]="followup.cardiologyClinicalExamination.soft">Soft</mat-checkbox>
+
+                                    <mat-form-field class="m-sides-8" [appearance]="'outline'" *ngIf="!soft.checked" [fxShow]="soft" class="m-sides-8"
+                                        fxFlex.lt-lg="0 0 calc(50% - 16px)" fxFlex="0 0 calc(35% - 16px)">
+                                        <mat-label>Tender</mat-label>
+                                        <mat-select #tender placeholder="Tender" name="tender"
+                                            [(ngModel)]="followup.cardiologyClinicalExamination.tender">
+                                            <mat-option value="">-- SELECT Tender--</mat-option>
+                                            <mat-option value="murphy">murphy</mat-option>
+                                            <mat-option value="Mucc Burney">Mucc Burney</mat-option>
+                                            <mat-option value="general">general</mat-option>
+                                            <mat-option value="palpable mass">palpable mass </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+
+                                    <mat-checkbox class="m-sides-8 pt-20" name="hepatomegaly" fxFlex.lt-lg="0 0 calc(50% - 16px)" fxFlex="0 0 calc(25% - 16px)"
+                                        [(ngModel)]="followup.cardiologyClinicalExamination.hepatomegaly">Hepatomegaly
+                                    </mat-checkbox>
+
+                                    <mat-checkbox class="m-sides-8 pt-20" name="ascites" fxFlex.lt-lg="0 0 calc(50% - 16px)" fxFlex="0 0 calc(25% - 16px)"
+                                        [(ngModel)]="followup.cardiologyClinicalExamination.ascites">
+                                        Ascites</mat-checkbox>
+
+                                </div>
+                            </fieldset>
+                            <!-- / ABDOMEN-->
+
+                        </div>
+                        <!-- / THIRD ROW -->
+                    </div>
+                </div>
+
+            </mdc-form-group>
+
+        </div>
+        <!-- CLINICAL -->
+
+        <!-- SUBJECTIVE -->
+        <div fxLayout="row">
+
+            <div [fxFlex]="100">
+
+                <!-- SUBJECTIVE -->
+                <mdc-form-group class="mdc-form-group">
+
+                    <!-- HEADER -->
+                    <ng-container class="form-group-header-selector">
+                        <span class="m-0 h3">Subjective</span>
+                        <span class="mdc-card-mark"> </span>
+                    </ng-container>
+                    <!-- / HEADER -->
+
+                    <!-- FRONT -->
+                    <div class="form-group-front-selector">
+                        <mdc-lookup-input-advanced [lookupsCollection]="lookups.subjective || []"
+                            [dataLink]="followup.subjective" [groupkey]="'subjective'" [modelName]="'subjective'"
+                            [placeholder]="'Subjective'" (notify)="notifyHandler($event)" #subjectiveElRef>
+                        </mdc-lookup-input-advanced>
+                    </div>
+                    <!-- / FRONT -->
+
+                </mdc-form-group>
+                <!-- / SUBJECTIVE -->
+
+            </div>
+
+        </div>
+        <!-- / SUBJECTIVE -->
+
+        <!-- OBJECTIVE -->
+        <mdc-form-group class="mdc-form-group">
+
+            <!-- HEADER -->
+            <ng-container class="form-group-header-selector">
+                <span class="m-0 h3">Objective</span>
+            </ng-container>
+            <!-- / HEADER -->
+
+            <!-- FRONT -->
+            <div class="form-group-front-selector">
+
+                <div fxLayout="column">
+
+                    <!-- PHYSICAL EXAM -->
+                    <div class="mb-20" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start"
+                        fxLayoutAlign.xs="start unset" fxLayoutGap="30px">
+
+                        <mdc-lookup-input-advanced fxFlex="50" [fxFlex.xs]="100"
+                            [lookupsCollection]="lookups.physical_exam || []" [dataLink]="followup.physicalExam"
+                            [groupkey]="'physical_exam'" [modelName]="'physicalExam'" [flow]="mediaFlow"
+                            [placeholder]="'Physical Exam'" (notify)="notifyHandler($event)" #physicalExamElRef>
+                        </mdc-lookup-input-advanced>
+
+                        <media-file-list fxFlex="50" [fxFlex.xs]="100" [flow]="mediaFlow"
+                            [files]="activityFiles.physicalExam" [autoTagName]="FileSystemTagsEnum.physicalExam"
+                            [headerName]="'Phy. Exam'" (onDeleteSelected)="onDeleteSelectedFiles($event)"
+                            (onAttachedFiles)="onAttachedFiles($event)"></media-file-list>
+                    </div>
+                    <!-- / PHYSICAL EXAM -->
+
+                    <!-- RADIO-->
+                    <div class="mb-20" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start"
+                        fxLayoutAlign.xs="start unset" fxLayoutGap="30px">
+
+                        <mdc-lookup-input-advanced fxFlex="50" [fxFlex.xs]="100"
+                            [lookupsCollection]="lookups.radio || []" [dataLink]="followup.radio" [groupkey]="'radio'"
+                            [modelName]="'radio'" [flow]="mediaFlow" [placeholder]="'Radio'"
+                            (notify)="notifyHandler($event)" #radioElRef>
+                        </mdc-lookup-input-advanced>
+
+                        <media-file-list fxFlex="50" [fxFlex.xs]="100" [flow]="mediaFlow" [files]="activityFiles.radio"
+                            [autoTagName]="FileSystemTagsEnum.radio" [headerName]="'Radio'"
+                            (onDeleteSelected)="onDeleteSelectedFiles($event)"
+                            (onAttachedFiles)="onAttachedFiles($event)"></media-file-list>
+                    </div>
+                    <!-- / RADIO-->
+
+                    <!-- LABORATORY-->
+                    <div class="mb-20" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start"
+                        fxLayoutAlign.xs="start unset" fxLayoutGap="30px">
+
+                        <mdc-lookup-input-advanced fxFlex="50" [fxFlex.xs]="100"
+                            [lookupsCollection]="lookups.laboratory || []" [dataLink]="followup.laboratory"
+                            [groupkey]="'laboratory'" [modelName]="'laboratory'" [flow]="mediaFlow"
+                            [placeholder]="'Laboratory'" (notify)="notifyHandler($event)" #laboratoryElRef>
+                        </mdc-lookup-input-advanced>
+
+                        <media-file-list fxFlex="50" [fxFlex.xs]="100" [flow]="mediaFlow"
+                            [files]="activityFiles.laboratory" [autoTagName]="FileSystemTagsEnum.laboratory"
+                            [headerName]="'Laboratory'" (onDeleteSelected)="onDeleteSelectedFiles($event)"
+                            (onAttachedFiles)="onAttachedFiles($event)"></media-file-list>
+                    </div>
+                    <!-- / LABORATORY-->
+
+                    <!-- CONSULTATION-->
+                    <div class="mb-20" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start"
+                        fxLayoutAlign.xs="start unset" fxLayoutGap="30px">
+                        <mdc-lookup-input-advanced fxFlex="50" [fxFlex.xs]="100"
+                            [lookupsCollection]="lookups.consultation || []" [dataLink]="followup.consultation"
+                            [groupkey]="'consultation'" [modelName]="'consultation'" [placeholder]="'Consultation'"
+                            (notify)="notifyHandler($event)" #consultationElRef>
+                        </mdc-lookup-input-advanced>
+                    </div>
+                    <!-- / CONSULTATION-->
+
+                </div>
+
+            </div>
+        </mdc-form-group>
+        <!-- / OBJECTIVE -->
+
+        <!-- ASSESSMENT && DIAGNOSIS -->
+        <div fxLayout="row" fxLayout.xs="column" fxLayoutGap.gt-xs="30px">
+
+            <div [fxFlex.xs]="100" [fxFlex]="50">
+
+                <!-- ASSESSMENT -->
+                <mdc-form-group class="mdc-form-group">
+                    <!-- HEADER -->
+                    <ng-container class="form-group-header-selector">
+                        <span class="m-0 h3">Assessment</span>
+                        <span class="mdc-card-mark">
+                        </span>
+                    </ng-container>
+                    <!-- / HEADER -->
+
+                    <!-- FRONT -->
+                    <div class="form-group-front-selector">
+                        <mdc-lookup-input-advanced [lookupsCollection]="lookups.assessment || []"
+                            [dataLink]="followup.assessment" [groupkey]="'assessment'" [modelName]="'assessment'"
+                            [placeholder]="'Assessment'" (notify)="notifyHandler($event)" #assessmentElRef>
+
+                        </mdc-lookup-input-advanced>
+                    </div>
+                    <!-- / FRONT -->
+
+                </mdc-form-group>
+                <!-- / ASSESSMENT && DIAGNOSIS-->
+
+            </div>
+
+            <div [fxFlex.xs]="100" [fxFlex]="50">
+
+                <!-- DIAGNOSIS -->
+                <mdc-form-group class="mdc-form-group">
+                    <!-- HEADER -->
+                    <ng-container class="form-group-header-selector">
+                        <span class="m-0 h3">Diagnosis</span>
+                        <span class="mdc-card-mark">
+                        </span>
+                    </ng-container>
+                    <!-- / HEADER -->
+
+                    <!-- FRONT -->
+                    <div class="form-group-front-selector">
+                        <mdc-lookup-input-advanced [lookupsCollection]="lookups.diagnosis || []"
+                            [dataLink]="followup.diagnosis" [groupkey]="'diagnosis'" [modelName]="'diagnosis'"
+                            [placeholder]="'Diagnosis'" (notify)="notifyHandler($event)" #diagnosisElRef>
+                        </mdc-lookup-input-advanced>
+                    </div>
+                    <!-- / FRONT -->
+
+                </mdc-form-group>
+                <!-- / DIAGNOSIS -->
+            </div>
+
+        </div>
+        <!-- / ASSESSMENT -->
+
+        <!-- TREATMENT & NOTE -->
+        <div fxLayout="row" fxLayout.xs="column" fxLayoutGap.gt-xs="30px">
+
+            <div [fxFlex.xs]="100" [fxFlex]="50">
+
+                <!-- TREATMENT -->
+                <mdc-form-group class="mdc-form-group">
+
+                    <!-- HEADER -->
+                    <ng-container class="form-group-header-selector">
+                        <span class="m-0 h3">Treatment plan</span>
+                    </ng-container>
+                    <!-- / HEADER -->
+
+                    <!-- FRONT -->
+                    <div class="form-group-front-selector">
+
+                        <div fxLayout="column">
+
+                            <mdc-medication-input [dataLink]="followup.medications" [modelName]="'medications'"
+                                (notifyMedication)="notifyMedicationHandler($event)"></mdc-medication-input>
+
+                            <mdc-lookup-input-advanced [lookupsCollection]="lookups.other_treatments || []"
+                                [dataLink]="followup.otherTreatments" [groupkey]="'other_treatments'"
+                                [modelName]="'otherTreatments'" [placeholder]="'Other'" (notify)="notifyHandler($event)"
+                                #otherTreatmentsElRef>
+                            </mdc-lookup-input-advanced>
+                        </div>
+                    </div>
+
+                    <!-- / FRONT -->
+
+                </mdc-form-group>
+                <!-- / TREATMENT -->
+
+            </div>
+
+            <div class="" [fxFlex.xs]="100" [fxFlex]="50">
+
+                <!-- NOTE -->
+                <mdc-form-group class="mdc-form-group">
+
+                    <!-- HEADER -->
+                    <ng-container class="form-group-header-selector">
+                        <span class="m-0 h3">Note</span>
+                    </ng-container>
+                    <!-- / HEADER -->
+
+                    <!-- FRONT -->
+                    <div class="form-group-front-selector">
+                        <mdc-lookup-input-advanced [lookupsCollection]="lookups.note || []" [dataLink]="followup.note"
+                            [groupkey]="'note'" [modelName]="'note'" [placeholder]="'Note'"
+                            (notify)="notifyHandler($event)" #noteElRef>
+                        </mdc-lookup-input-advanced>
+                    </div>
+                    <!-- / FRONT -->
+
+                </mdc-form-group>
+                <!-- / NOTE -->
+
+            </div>
+
+        </div>
+        <!-- / TREATMENT & NOTES -->
+        
+        <!-- MEDICATION PROTOTYPE -->
+        <div fxLayout="row" class="medication">
+
+            <div [fxFlex]="100">
+
+                <div class="m-section">
+                    <div class="m-header h3 blue-grey-500-bg">
+                        Medication
+                        <div class="flex flex-align-center cursor-pointer" (click)="newMedication()">
+                            <mat-icon class="mr-4">add_box</mat-icon>New medication
+                        </div>
+                    </div>
+
+                    <div class="m-body mt-12 mb-12" *ngIf="patientIdExist">
+
+                        <app-medications [patientId]="patient.id" [conditionId]="conditionId" [followupId]="followup.id"></app-medications>
+                      
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+        <!-- / MEDICATION PROTOTYPE -->
+
+        <!-- MEDIA -->
+        <div class="media-file-list-container">
+            <media-file-list [flow]="mediaFlow" [files]="activityFiles.other" [autoTagName]="''" [headerName]="'Media'"
+                (onDeleteSelected)="onDeleteSelectedFiles($event)" (onAttachedFiles)="onAttachedFiles($event)">
+            </media-file-list>
+        </div>
+        <!-- MEDIA -->
+
+
+    </form>
+</div>
+
+
+<upload-file-popup *ngIf="isUploadPopupOpened" [flow]="mediaFlow" [isOpened]="isUploadPopupOpened"
+    (onClose)="isUploadPopupOpened= false"></upload-file-popup>

@@ -1,0 +1,6 @@
+mutation updateGrantor($grantor: GrantorInput!){
+    updateGrantor(grantor: $grantor){
+        id
+        name
+    }
+}

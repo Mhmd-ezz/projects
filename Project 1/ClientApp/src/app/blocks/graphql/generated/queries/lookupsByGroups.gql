@@ -1,0 +1,18 @@
+query lookupsByGroups($groups: [String]!, $filterPredefined: Boolean){
+    lookupsByGroups(groups: $groups, filterPredefined: $filterPredefined){
+        id
+        tenantId
+        groupKey
+        value
+        symbol
+        text
+        description
+        cultureName
+        parentValue
+        parentId
+        createdDate
+        modifiedDate
+        order
+        predefined
+    }
+}

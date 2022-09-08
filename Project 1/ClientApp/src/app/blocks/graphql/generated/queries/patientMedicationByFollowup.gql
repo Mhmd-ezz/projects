@@ -1,0 +1,25 @@
+query patientMedicationByFollowup($patientId: String!, $followupId: String){
+    patientMedicationByFollowup(patientId: $patientId, followupId: $followupId){
+        medicationId
+        patientId
+        conditionId
+        followupId
+        startTime
+        endTime
+        drug{
+            id
+            name
+            dosage
+        }
+        isActive
+        reason
+        history{
+            startDate
+            endDate
+            duration
+            frequency
+            note
+            status
+        }
+    }
+}

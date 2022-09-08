@@ -1,0 +1,93 @@
+<div class="content">
+    <div class="header-tool accent mb-24">
+        <div class="flex-center">
+            <mat-icon class="mr-8 s-22" (click)="$event.stopPropagation()" matSuffix>format_list_bulleted</mat-icon>
+            <span class="h2">Drugs</span>
+        </div>
+        <div>
+            <button mat-flat-button type="button" [routerLink]="['/settings/drugs/new-drug']">New Drug</button>
+        </div>
+    </div>
+    <div fxHide fxShow.gt-sm>
+        <span class="mat-caption">
+            A prescription drug (also prescription medication or prescription medicine) is a pharmaceutical drug that legally
+            requires a medical prescription to be dispensed.
+        </span>
+    </div>
+    <!-- <div *ngIf="rowData.length === 0">
+        <span class="mat-body-2 warn-fg">Your system has no drugs, try adding some.</span>
+    </div> -->
+    <div class="content mdc-table-container" style="height: 100%;">
+
+        <div>
+            <mat-form-field appearance="outline" fxFlex.xs="100" fxFlex="300px">
+                <mat-label>Search drug</mat-label>
+                <input matInput placeholder="Search drug" #input [formControl]="search">
+                <mat-icon matSuffix class="secondary-text">search</mat-icon>
+            </mat-form-field>
+        </div>
+
+        <div class="mat-elevation-z8 responsive-table">
+
+            <mat-table class="lessons-table text-capitalize" [dataSource]="dataSource"
+                matSort matSortActive="seqNo" matSortDirection="asc" matSortDisableClear>
+
+                <ng-container matColumnDef="index">
+                    <mat-header-cell *matHeaderCellDef>#</mat-header-cell>
+                    <mat-cell *matCellDef="let drug; let i= index">
+                        {{ paginator?.pageIndex > 0 ? (i + 1) + paginator?.pageIndex * paginator?.pageSize : i + 1 }}
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="name">
+                    <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+                    <mat-cell class="name-cell" *matCellDef="let drug">{{drug.name}}</mat-cell>
+                </ng-container>
+
+                <!-- <ng-container matColumnDef="dosage">
+                    <mat-header-cell *matHeaderCellDef>Dosage</mat-header-cell>
+                    <mat-cell class="" *matCellDef="let drug">{{drug.dosage}}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="route">
+                    <mat-header-cell *matHeaderCellDef>Route</mat-header-cell>
+                    <mat-cell class="" *matCellDef="let drug">{{drug.route}}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="form">
+                    <mat-header-cell *matHeaderCellDef>Form</mat-header-cell>
+                    <mat-cell class="" *matCellDef="let drug">{{drug.form}}</mat-cell>
+                </ng-container> -->
+
+                <ng-container matColumnDef="action">
+                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-cell class="flex-center" *matCellDef="let drug">
+
+                        <mat-icon class="cursor-pointer blue-grey-600-fg mr-16"
+                            [routerLink]="['/settings/drugs/edit-drug', drug.id ]"
+                            matSuffix>edit</mat-icon>
+
+                        <mat-icon
+                            class="cursor-pointer red-400-fg"
+                            (click)="deleteDrug(drug.id)">remove_circle_outline</mat-icon>
+
+                    </mat-cell>
+                </ng-container>
+
+
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+
+            </mat-table>
+
+            <div *ngIf="noData | async" class="no-records">
+                No <span *ngIf="noMoreRecords$ | async">&nbsp; more &nbsp;</span> records found
+                <!-- No <span *ngIf="_drugsDataSource.noMoreRecords$ | async">&nbsp; more &nbsp;</span> records found -->
+            </div>
+
+            <mat-paginator [length]="total$ | async" [pageSize]="pageSizeOptions[0]" [pageSizeOptions]="pageSizeOptions"></mat-paginator>
+
+            <!-- <mat-paginator [length]="_drugsDataSource.total$ | async" [pageSize]="pageSizeOptions[0]" [pageSizeOptions]="pageSizeOptions"></mat-paginator> -->
+
+        </div>
+    </div>

@@ -1,0 +1,12 @@
+<div class="mdc-form-infobox-error" *ngIf="!hidden">
+    <div class="left">
+        <mat-icon class="mat-icon material-icons fuse-white-fg" matsuffix>error_outline</mat-icon>
+    </div>
+    <div class="right">
+        <ul>
+            <li *ngFor="let error of errors">
+                {{error}}
+            </li>          
+        </ul>
+    </div>
+</div>

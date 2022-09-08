@@ -1,0 +1,11 @@
+fragment Subscriptions on Subscriptions{
+id
+amount
+dayCount
+edition
+expireDate
+grossAmount
+paymentMethod
+processTime
+status    
+}
